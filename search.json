@@ -1,0 +1,102 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "musy",
+    "section": "",
+    "text": "pip install musy",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#note",
+    "href": "index.html#note",
+    "title": "musy",
+    "section": "Note",
+    "text": "Note\n\nfrom musy import Note\n\nThe Note is the basic building block from which you can create chords and songs.\n\nc_sharp = Note(\"C#\")\nc_sharp\n\nmusy.core.Note(note='C#')\n\n\nNotes can be added and subtracted to form new notes. Each added integer represents a semitone.\n\nc_sharp + 1\n\nmusy.core.Note(note='D')\n\n\n\nc_sharp - 1\n\nmusy.core.Note(note='C')\n\n\n\nc_sharp + 14\n\nmusy.core.Note(note='D#')\n\n\nIntervals can be obtained by comparing a note with a different note or string.\n\nc_sharp.interval(\"F#\")\n\n'perfect fourth'\n\n\nShorthand is also available for intervals.\n\nc_sharp.interval(\"B\", short=True)\n\n'b7'\n\n\nNotes can be converted to its relative major or minor.\n\nNote(\"C\").minor()\n\nmusy.core.Note(note='A')\n\n\n\nNote(\"C#\").major()\n\nmusy.core.Note(note='E')\n\n\nNote methods can be chained together.\n\nNote(\"C\").minor().major().augment().diminish().diminish()\n\nmusy.core.Note(note='B')",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "core",
+    "section": "",
+    "text": "These variables contain the basic orderings for Western music theory.",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#adding-to-note",
+    "href": "core.html#adding-to-note",
+    "title": "core",
+    "section": "Adding to Note",
+    "text": "Adding to Note\nAdding semitones to a note will return a new note with n semitones added above the original note.\nFor example, adding 1 semitone to A# will return B.\n\nsource\n\nNote.__add__\n\n Note.__add__ (semitones:int)\n\nAdd n semitones to a note.\n\nfor i in range(1, 13):\n    print(a_sharp+i)\n\nB\nC\nC#\nD\nD#\nE\nF\nF#\nG\nG#\nA\nA#\n\n\n\nassert str(a_sharp+1) == \"B\"\nassert str(a_sharp+11) == \"A\"\nassert str(a_sharp+12) == \"A#\"\nassert str(a_sharp+13) == \"B\"",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#subtracting-from-note",
+    "href": "core.html#subtracting-from-note",
+    "title": "core",
+    "section": "Subtracting from Note",
+    "text": "Subtracting from Note\nSubtracting semitones from a note will return a new note with n semitones subtracted from the original note.\nFor example, subtracting 1 semitone from C will return B. subtracting 1 semitone from A# will return A.\n\nsource\n\nNote.__sub__\n\n Note.__sub__ (semitones:int)\n\n\nfor i in range(1, 13):\n    print(a_sharp-i)\n\nA\nG#\nG\nF#\nF\nE\nD#\nD\nC#\nC\nB\nA#\n\n\n\nassert str(a_sharp-1) == \"A\"\nassert str(a_sharp-11) == \"B\"\nassert str(a_sharp-12) == \"A#\"\nassert str(a_sharp-13) == \"A\"",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#augment",
+    "href": "core.html#augment",
+    "title": "core",
+    "section": "Augment",
+    "text": "Augment\nAugmenting adds a sharp to a note.\nFor example, augmenting A# will return B.\n\nsource\n\nNote.augment\n\n Note.augment ()\n\n\nassert str(a_sharp.augment()) == \"B\"\na_sharp.augment()\n\nNote(note='B')\n\n\naugment operations can be chained together.\n\nassert str(a_sharp.augment().augment().augment().augment()) == \"D\"\na_sharp.augment().augment().augment().augment()\n\nNote(note='D')",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#diminish",
+    "href": "core.html#diminish",
+    "title": "core",
+    "section": "Diminish",
+    "text": "Diminish\nDiminishing a note is the inverse of augmenting a note and removes a sharp from a note.\nFor example, diminishing A# will return A.\n\nsource\n\nNote.diminish\n\n Note.diminish ()\n\n\nassert str(a_sharp.diminish()) == \"A\"\na_sharp.diminish()\n\nNote(note='A')\n\n\nAs with augment, diminish operations can be chained together.\n\nassert str(a_sharp.diminish().diminish()) == \"Ab\"\na_sharp.diminish().diminish()\n\nNote(note='Ab')\n\n\nLastly, augment and diminish can be chained together.\n\nassert str(a_sharp.diminish().augment()) == str(a_sharp)\na_sharp.diminish().augment()\n\nNote(note='A#')",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#interval",
+    "href": "core.html#interval",
+    "title": "core",
+    "section": "Interval",
+    "text": "Interval\nTwo notes can be combined to form an interval. interval returns the name of the interval between two notes.\n\nsource\n\nNote.interval\n\n Note.interval (other:__main__.Note, short=False)\n\nThe intervals between A# and C# is a minor third (b3).\n\nc_sharp = Note(\"C#\")\ninterval = a_sharp.interval(c_sharp)\nassert interval == \"minor third\"\ninterval\n\n'minor third'\n\n\nShorthand can be retrieved from interval by setting short=True.\n\nshort_interval = a_sharp.interval(c_sharp, short=True)\nassert short_interval == \"b3\"\nshort_interval\n\n'b3'",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#convert-to-major-or-minor",
+    "href": "core.html#convert-to-major-or-minor",
+    "title": "core",
+    "section": "Convert to Major or Minor",
+    "text": "Convert to Major or Minor\nA note can be converted to its relative major or minor. How this is converted can be visualized on the circle of fifths.\n\nFor example, the relative minor of C is A. The relative major of C# is E.\nminor converts an arbitrary note to its relative minor. This is done by subtracting 3 semitones from the note.\n\nsource\n\nNote.minor\n\n Note.minor ()\n\n\nc = Note(\"C\")\nassert str(c.minor()) == \"A\"\nc.minor()\n\nNote(note='A')\n\n\nmajor converts an arbitrary note to its relative major. We add 3 semitones to the note.\n\nsource\n\n\nNote.major\n\n Note.major ()\n\n\nassert str(c_sharp.major()) == \"E\"\nc_sharp.major()\n\nNote(note='E')",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "midi.html",
+    "href": "midi.html",
+    "title": "midi",
+    "section": "",
+    "text": ".mid files can loaded locally or from a URL and played in a Jupyter notebook with MIDIPlayer.\nThis tests loads a basic sequence of notes from a URL.\n\nsource\n\ntest_midi\n\n test_midi ()\n\n\ntest_midi()\n\n'\n            \n\n\n\n# TODO: MIDI tools for converting Notes, Chords, Scales and Songs to MIDI.",
+    "crumbs": [
+      "midi"
+    ]
+  }
+]
