@@ -5,5 +5,5 @@ website:
   title: "musy"
   site-url: "https://CarloLepelaars.github.io/musy"
   description: "Toolbox for analyzing, creating and visualizing music"
-  repo-branch: main
+  repo-branch: master
   repo-url: "https://github.com/CarloLepelaars/musy"
