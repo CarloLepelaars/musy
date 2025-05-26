@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "musy"
+  site-url: "https://CarloLepelaars.github.io/musy"
+  description: "Toolbox for analyzing, creating and visualizing music"
+  repo-branch: main
+  repo-url: "https://github.com/CarloLepelaars/musy"
