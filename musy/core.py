@@ -6,7 +6,11 @@
 __all__ = ['BASE_NOTES', 'CHROMATIC_NOTES', 'ENHARMONIC_NOTES', 'INTERVALS', 'Note']
 
 # %% ../nbs/00_core.ipynb 3
+import io
+import numpy as np
 from fastcore.all import *
+import scipy.io.wavfile as wav
+from IPython.display import Audio
 from mingus.core import chords, notes, intervals
 
 # %% ../nbs/00_core.ipynb 6
@@ -19,6 +23,7 @@ INTERVALS = ["1", "b2", "2", "b3", "3", "4", "#4", "5", "b6", "6", "b7", "7"]
 # %% ../nbs/00_core.ipynb 9
 class Note(BasicRepr):
     def __init__(self, note: str):
+        store_attr()
         # Transform note to uppercase
         note = note[0].upper() + note[1:]
         assert notes.is_valid_note(note), f"Note '{note}' is not valid"
@@ -74,3 +79,7 @@ def minor(self:Note): return self - 3
 # %% ../nbs/00_core.ipynb 46
 @patch
 def major(self:Note): return self + 3
+
+# %% ../nbs/00_core.ipynb 53
+@patch
+def play(self:Note, oct=4, length=1): return Audio(data=self.get_audio(oct, length))

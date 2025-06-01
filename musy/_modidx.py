@@ -17,5 +17,6 @@ d = { 'settings': { 'branch': 'master',
                            'musy.core.Note.interval': ('core.html#note.interval', 'musy/core.py'),
                            'musy.core.Note.major': ('core.html#note.major', 'musy/core.py'),
                            'musy.core.Note.minor': ('core.html#note.minor', 'musy/core.py'),
+                           'musy.core.Note.play': ('core.html#note.play', 'musy/core.py'),
                            'musy.core.Note.postprocess_note': ('core.html#note.postprocess_note', 'musy/core.py')},
             'musy.midi': {'musy.midi.test_midi': ('midi.html#test_midi', 'musy/midi.py')}}}
