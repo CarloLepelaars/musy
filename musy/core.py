@@ -4,7 +4,7 @@
 
 # %% auto 0
 __all__ = ['BASE_NOTES', 'CHROMATIC_NOTES', 'ENHARMONIC_NOTES', 'INTERVALS', 'INTERVAL_NAMES', 'INTERVAL_HALF_STEPS', 'SCALES',
-           'Note', 'Chord', 'PolyChord', 'Scale']
+           'INV_SCALES', 'Note', 'Chord', 'PolyChord', 'Scale']
 
 # %% ../nbs/00_core.ipynb 3
 import io
@@ -12,6 +12,7 @@ import numpy as np
 from fastcore.all import *
 import scipy.io.wavfile as wav
 from IPython.display import Audio
+from itertools import combinations
 from mingus.core import chords, notes, intervals
 
 # %% ../nbs/00_core.ipynb 6
@@ -77,8 +78,10 @@ SCALES = {"major": ["1", "2", "3", "4", "5", "6", "7"],
           "blues": ["1", "b3", "4", "5", "b7"],
           }
 
+INV_SCALES = {tuple(intervals): [name for name, scale_intervals in SCALES.items() if scale_intervals == intervals] 
+               for intervals in SCALES.values()}
 
-# %% ../nbs/00_core.ipynb 10
+# %% ../nbs/00_core.ipynb 11
 class Note(BasicRepr):
     def __init__(self, note: str, oct: int = 4):
         assert isinstance(oct, int) and oct > 0, f"Octave must be a positive integer, got oct={oct}."
@@ -106,37 +109,37 @@ class Note(BasicRepr):
     def __eq__(self, other): return str(self) == str(other)
     def __ne__(self, other): return not str(self) == str(other) 
 
-# %% ../nbs/00_core.ipynb 16
+# %% ../nbs/00_core.ipynb 17
 @patch
 def __add__(self:Note, other):
     """Add n semitones to a note."""
     octave_change = (other + CHROMATIC_NOTES.index(str(self))) // 12
     return Note(intervals.from_shorthand(str(self), INTERVALS[(other)%12]), oct=self.oct + octave_change)
 
-# %% ../nbs/00_core.ipynb 22
+# %% ../nbs/00_core.ipynb 23
 @patch
 def __sub__(self:Note, other):
     octave_change = (other + CHROMATIC_NOTES.index(str(self)) - 1) // 12
     return Note(intervals.from_shorthand(str(self), INTERVALS[(other)%12], False), oct=self.oct - octave_change)
 
-# %% ../nbs/00_core.ipynb 27
+# %% ../nbs/00_core.ipynb 28
 @patch
 def interval(self:Note, other:Note, short=False):
     return intervals.determine(str(self), str(other), short)
 
-# %% ../nbs/00_core.ipynb 34
+# %% ../nbs/00_core.ipynb 35
 @patch
 def minor(self:Note): return self - 3
 
-# %% ../nbs/00_core.ipynb 37
+# %% ../nbs/00_core.ipynb 38
 @patch
 def major(self:Note): return self + 3
 
-# %% ../nbs/00_core.ipynb 44
+# %% ../nbs/00_core.ipynb 45
 @patch
 def play(self:Note, length=1): return Audio(data=self.get_audio_bytes(length))
 
-# %% ../nbs/00_core.ipynb 53
+# %% ../nbs/00_core.ipynb 54
 class Chord(BasicRepr):
     def __init__(self, notes: List[Note]):
         self.notes = [Note(n) if isinstance(n, str) else n for n in notes]
@@ -163,7 +166,7 @@ class PolyChord(Chord):
         super().__init__([note for chord in chords for note in chord.notes])
     def __repr__(self): return f"PolyChord: '{'|'.join([c.name() for c in self.chords])}'. Notes: {self.short_s_notes}"
 
-# %% ../nbs/00_core.ipynb 60
+# %% ../nbs/00_core.ipynb 61
 @patch
 def __mul__(self:Note, other: Note):
     return Chord([self, other])
@@ -172,12 +175,12 @@ def __mul__(self:Note, other: Note):
 def __mul__(self:Chord, other: Note):
     return Chord(self.notes + [other])
 
-# %% ../nbs/00_core.ipynb 63
+# %% ../nbs/00_core.ipynb 64
 @patch
 def __mod__(self:Chord, other: Chord):
     return PolyChord([self, other])
 
-# %% ../nbs/00_core.ipynb 66
+# %% ../nbs/00_core.ipynb 67
 @patch
 def invert(self:Chord, n: int = 1):
     assert n > 0 and n < len(self.s_notes), f"Invalid inversion '{n}' for chord with '{len(self.s_notes)}' notes."
@@ -187,7 +190,7 @@ def invert(self:Chord, n: int = 1):
 def invert(self:PolyChord, n: int = 1):
     return PolyChord([c.invert(n) for c in self.chords])
 
-# %% ../nbs/00_core.ipynb 70
+# %% ../nbs/00_core.ipynb 71
 @patch
 def get_audio_array(self:Chord, length=1):
     return np.sum([n.get_audio_array(length) for n in self.notes], axis=0)
@@ -196,16 +199,11 @@ def get_audio_array(self:Chord, length=1):
 def play(self:Chord, length=1): 
     return Audio(self.get_audio_array(length), rate=44100)
 
-# %% ../nbs/00_core.ipynb 79
+# %% ../nbs/00_core.ipynb 80
 class Scale:
     def __init__(self, name: str):
         self.name = name.lower()
         self.intervals = SCALES.get(self.name, "scale not found.")
-
-    def __repr__(self): return f"{self.name.title()}. {self.intervals}"
-
-    def __eq__(self, other): return self.intervals == other.intervals
-    def __ne__(self, other): return not self == other
 
     @classmethod
     def available_scales(cls): return list(SCALES.keys())
@@ -218,20 +216,31 @@ class Scale:
         custom_scale = cls(name)
         custom_scale.intervals = intervals
         return custom_scale
+    
+    def __repr__(self): return f"Scale: {self.name.title()}. Intervals: {self.intervals}"
+    def __eq__(self, other): return self.intervals == other.intervals
+    def __ne__(self, other): return not self == other
 
-# %% ../nbs/00_core.ipynb 92
+# %% ../nbs/00_core.ipynb 93
 @patch
 def get_notes(self:Scale, root, oct=4):
     """Get the notes of a scale from a root note."""
     root = Note(root, oct=oct) if isinstance(root, str) else root
     return [root + int(INTERVAL_HALF_STEPS[i]) for i in self.intervals]
 
-# %% ../nbs/00_core.ipynb 97
+# %% ../nbs/00_core.ipynb 99
+@patch
+def get_diatonic_chords(self:Scale, root, min_notes=3):
+    assert min_notes > 1, "min_notes must be greater than 1."
+    notes = self.get_notes(root)
+    return [Chord(combo) for n in range(min_notes, len(notes)+1) for combo in combinations(notes, n)]
+
+# %% ../nbs/00_core.ipynb 103
 @patch
 def get_interval_names(self:Scale, short=False):
     return self.intervals if short else [INTERVAL_NAMES[i] for i in self.intervals]
 
-# %% ../nbs/00_core.ipynb 103
+# %% ../nbs/00_core.ipynb 109
 @patch
 def get_audio_array(self:Scale, root, oct=4, length=0.3):
     notes = self.get_notes(root, oct=oct)
@@ -242,7 +251,7 @@ def get_audio_array(self:Scale, root, oct=4, length=0.3):
 def play(self:Scale, root, oct=4, length=0.3): 
     return Audio(self.get_audio_array(root, oct=oct, length=length), rate=44100)
 
-# %% ../nbs/00_core.ipynb 109
+# %% ../nbs/00_core.ipynb 115
 @patch
 def get_triads(self:Scale, root):
     """Get all triads in scale starting from root note."""
@@ -252,13 +261,13 @@ def get_triads(self:Scale, root):
                   Note(str(notes[(i+4)%7]), oct=notes[i].oct + (i+4)//7)]) 
             for i in range(len(notes))]
 
-# %% ../nbs/00_core.ipynb 111
+# %% ../nbs/00_core.ipynb 117
 @patch
 def play_triads(self:Scale, root):
     """Play all triads in scale starting from root note."""
     return Audio(np.concatenate([c.get_audio_array() for c in self.get_triads(root)]), rate=44100)
 
-# %% ../nbs/00_core.ipynb 116
+# %% ../nbs/00_core.ipynb 122
 @patch
 def get_sevenths(self:Scale, root):
     """Get all seventh chords in scale starting from root note."""
@@ -269,7 +278,7 @@ def get_sevenths(self:Scale, root):
                   Note(str(notes[(i+6)%7]), oct=notes[i].oct + (i+6)//7)]) 
             for i in range(len(notes))]
 
-# %% ../nbs/00_core.ipynb 119
+# %% ../nbs/00_core.ipynb 125
 @patch
 def play_sevenths(self:Scale, root):
     """Play all seventh chords in scale starting from root note."""
