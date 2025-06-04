@@ -14,7 +14,7 @@ pip install musy
 ## Note
 
 ``` python
-from musy import Note
+from musy import Note, Chord, Scale
 ```
 
 The [`Note`](https://CarloLepelaars.github.io/musy/core.html#note) is
@@ -25,7 +25,7 @@ c_sharp = Note("C#")
 c_sharp
 ```
 
-    musy.core.Note(note='C#')
+    musy.core.Note(note='C#', oct=4)
 
 Notes can be added and subtracted to form new notes. Each added integer
 represents a semitone.
@@ -34,19 +34,19 @@ represents a semitone.
 c_sharp + 1
 ```
 
-    musy.core.Note(note='D')
+    musy.core.Note(note='D', oct=4)
 
 ``` python
 c_sharp - 1
 ```
 
-    musy.core.Note(note='C')
+    musy.core.Note(note='C', oct=4)
 
 ``` python
 c_sharp + 14
 ```
 
-    musy.core.Note(note='D#')
+    musy.core.Note(note='D#', oct=5)
 
 Intervals can be obtained by comparing a note with a different note or
 string.
@@ -71,22 +71,139 @@ Notes can be converted to its relative major or minor.
 Note("C").minor()
 ```
 
-    musy.core.Note(note='A')
+    musy.core.Note(note='A', oct=4)
 
 ``` python
 Note("C#").major()
 ```
 
-    musy.core.Note(note='E')
-
-Note methods can be chained together.
-
-``` python
-Note("C").minor().major().augment().diminish().diminish()
-```
-
-    musy.core.Note(note='B')
+    musy.core.Note(note='E', oct=4)
 
 # Chord
 
-TODO: Docs for chord.
+The [`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord) is
+a collection of
+[`Note`](https://CarloLepelaars.github.io/musy/core.html#note) objects
+played together.
+
+``` python
+c_major = Chord(["C", "E", "G"])
+c_major
+```
+
+    Chord: 'C major triad'. Notes: ['C4', 'E4', 'G4']
+
+[`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord) objects
+can be initialized from shorthand notation.
+
+``` python
+cmaj7 = Chord.from_short("Cmaj7")
+cmaj7
+```
+
+    Chord: 'C major seventh'. Notes: ['C4', 'E4', 'G4', 'B4']
+
+Like [`Note`](https://CarloLepelaars.github.io/musy/core.html#note)
+objects,
+[`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord) objects
+can be added and subtracted to transpose them.
+
+``` python
+cmaj7 + 2
+```
+
+    Chord: 'D major seventh'. Notes: ['D4', 'F#4', 'A4', 'C#5']
+
+# Scale
+
+[`Scale`](https://CarloLepelaars.github.io/musy/core.html#scale) objects
+are collections of intervals from which we can generate notes and chords
+around a root note.
+
+``` python
+dorian = Scale("dorian")
+dorian
+```
+
+    Dorian. ['1', '2', 'b3', '4', '5', '6', 'b7']
+
+When given a root note,
+[`Scale`](https://CarloLepelaars.github.io/musy/core.html#scale)
+generates the notes of the scale.
+
+``` python
+dorian.get_notes("C")
+```
+
+    [musy.core.Note(note='C', oct=4),
+     musy.core.Note(note='D', oct=4),
+     musy.core.Note(note='Eb', oct=4),
+     musy.core.Note(note='F', oct=4),
+     musy.core.Note(note='G', oct=4),
+     musy.core.Note(note='A', oct=4),
+     musy.core.Note(note='Bb', oct=4)]
+
+Intervals can be obtained.
+
+``` python
+dorian.get_interval_names()
+```
+
+    ['unison',
+     'major second',
+     'minor third',
+     'perfect fourth',
+     'perfect fifth',
+     'major sixth',
+     'minor seventh']
+
+Triads and seventh chords in the scale can be generated around a root
+note.
+
+``` python
+dorian.get_triads("D")
+```
+
+    [Chord: 'D minor triad'. Notes: ['D4', 'F4', 'A4'],
+     Chord: 'E minor triad'. Notes: ['E4', 'G4', 'B4'],
+     Chord: 'F major triad'. Notes: ['F4', 'A4', 'C4'],
+     Chord: 'G major triad'. Notes: ['G4', 'B4', 'D5'],
+     Chord: 'A minor triad'. Notes: ['A4', 'C4', 'E5'],
+     Chord: 'B diminished triad'. Notes: ['B4', 'D5', 'F5'],
+     Chord: 'C major triad'. Notes: ['C5', 'E6', 'G6']]
+
+``` python
+dorian.get_sevenths("E")
+```
+
+    [Chord: 'E minor seventh'. Notes: ['E4', 'G4', 'B4', 'D4'],
+     Chord: 'F# minor seventh'. Notes: ['F#4', 'A4', 'C#4', 'E5'],
+     Chord: 'G major seventh'. Notes: ['G4', 'B4', 'D4', 'F#5'],
+     Chord: 'A dominant seventh'. Notes: ['A4', 'C#4', 'E5', 'G5'],
+     Chord: 'B minor seventh'. Notes: ['B4', 'D4', 'F#5', 'A5'],
+     Chord: 'C# half diminished seventh'. Notes: ['C#5', 'E6', 'G6', 'B6'],
+     Chord: 'D major seventh'. Notes: ['D5', 'F#6', 'A6', 'C#6']]
+
+Consult
+[`Scale.available_scales`](https://CarloLepelaars.github.io/musy/core.html#scale.available_scales)
+for a list of available scales. If a scale is not available, you can
+create your own scale from intervals.
+
+``` python
+persian = Scale.from_intervals("persian", ["1", "b2", "3", "4", "b5", "b6", "7"])
+persian
+```
+
+    Persian. ['1', 'b2', '3', '4', 'b5', 'b6', '7']
+
+``` python
+persian.get_notes("C")
+```
+
+    [musy.core.Note(note='C', oct=4),
+     musy.core.Note(note='Db', oct=4),
+     musy.core.Note(note='E', oct=4),
+     musy.core.Note(note='F', oct=4),
+     musy.core.Note(note='F#', oct=4),
+     musy.core.Note(note='Ab', oct=4),
+     musy.core.Note(note='B', oct=4)]
