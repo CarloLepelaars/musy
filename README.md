@@ -122,6 +122,26 @@ cmaj7 + 2
 
     Chord: 'D major seventh'. Notes: ['D4', 'F#4', 'A4', 'C#5']
 
+Notes can be multiplied to create chords.
+
+``` python
+Note("C") * Note("E") * Note("G")
+```
+
+    Chord: 'C major triad'. Notes: ['C4', 'E4', 'G4']
+
+For advanced usage there is even a way to create
+[`PolyChord`](https://CarloLepelaars.github.io/musy/core.html#polychord)
+objects, which have much of the same functionality as
+[`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord) objects
+and more.
+
+``` python
+Chord.from_short("C") % Chord.from_short("Bbmaj7").invert(3)
+```
+
+    PolyChord: 'C major triad|Bb major seventh, third inversion'. Notes: ['C4', 'E4', 'G4', 'A4', 'Bb5', 'D5', 'F5']
+
 # Scale
 
 [`Scale`](https://CarloLepelaars.github.io/musy/core.html#scale) objects
@@ -215,3 +235,9 @@ persian.get_notes("C")
      musy.core.Note(note='F#', oct=4),
      musy.core.Note(note='Ab', oct=4),
      musy.core.Note(note='B', oct=4)]
+
+[`Note`](https://CarloLepelaars.github.io/musy/core.html#note),
+[`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord),
+[`PolyChord`](https://CarloLepelaars.github.io/musy/core.html#polychord)
+and [`Scale`](https://CarloLepelaars.github.io/musy/core.html#scale)
+objects can all be heard by calling the `play` method on them.
