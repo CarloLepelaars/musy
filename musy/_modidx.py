@@ -48,5 +48,7 @@ d = { 'settings': { 'branch': 'master',
                            'musy.core.Scale.get_notes': ('core.html#scale.get_notes', 'musy/core.py'),
                            'musy.core.Scale.get_sevenths': ('core.html#scale.get_sevenths', 'musy/core.py'),
                            'musy.core.Scale.get_triads': ('core.html#scale.get_triads', 'musy/core.py'),
-                           'musy.core.Scale.play': ('core.html#scale.play', 'musy/core.py')},
+                           'musy.core.Scale.play': ('core.html#scale.play', 'musy/core.py'),
+                           'musy.core.Scale.play_sevenths': ('core.html#scale.play_sevenths', 'musy/core.py'),
+                           'musy.core.Scale.play_triads': ('core.html#scale.play_triads', 'musy/core.py')},
             'musy.midi': {'musy.midi.test_midi': ('midi.html#test_midi', 'musy/midi.py')}}}

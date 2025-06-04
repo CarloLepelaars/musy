@@ -68,8 +68,15 @@ SCALES = {"major": ["1", "2", "3", "4", "5", "6", "7"],
           "altered": ["1", "b2", "b3", "3", "b5", "b6", "b7"],
           "aeolian dominant": ["1", "2", "3", "4", "5", "b6", "b7"],
           "phrygian dominant": ["1", "b2", "3", "4", "5", "b6", "b7"],
+          "harmonic minor": ["1", "2", "b3", "4", "5", "b6", "7"],
           # TODO Harmonic minor/major and modes
+          "pentatonic major": ["1", "2", "3", "5", "6"],
+          "pentatonic minor": ["1", "b3", "4", "5", "b7"],
+          "pentatonic blues": ["1", "b3", "4", "b5", "5", "b7"],
+          "pentatonic neutral": ["1", "2", "4", "5", "b7"],
+          "blues": ["1", "b3", "4", "5", "b7"],
           }
+
 
 # %% ../nbs/00_core.ipynb 10
 class Note(BasicRepr):
@@ -245,7 +252,13 @@ def get_triads(self:Scale, root):
                   Note(str(notes[(i+4)%7]), oct=notes[i].oct + (i+4)//7)]) 
             for i in range(len(notes))]
 
-# %% ../nbs/00_core.ipynb 114
+# %% ../nbs/00_core.ipynb 111
+@patch
+def play_triads(self:Scale, root):
+    """Play all triads in scale starting from root note."""
+    return Audio(np.concatenate([c.get_audio_array() for c in self.get_triads(root)]), rate=44100)
+
+# %% ../nbs/00_core.ipynb 116
 @patch
 def get_sevenths(self:Scale, root):
     """Get all seventh chords in scale starting from root note."""
@@ -255,3 +268,9 @@ def get_sevenths(self:Scale, root):
                   Note(str(notes[(i+4)%7]), oct=notes[i].oct + (i+4)//7),
                   Note(str(notes[(i+6)%7]), oct=notes[i].oct + (i+6)//7)]) 
             for i in range(len(notes))]
+
+# %% ../nbs/00_core.ipynb 119
+@patch
+def play_sevenths(self:Scale, root):
+    """Play all seventh chords in scale starting from root note."""
+    return Audio(np.concatenate([c.get_audio_array() for c in self.get_sevenths(root)]), rate=44100)
