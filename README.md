@@ -103,6 +103,14 @@ cmaj7
 
     Chord: 'C major seventh'. Notes: ['C4', 'E4', 'G4', 'B4']
 
+Chords can also be inverted with `invert`.
+
+``` python
+cmaj7.invert(1)
+```
+
+    Chord: 'C major seventh, first inversion'. Notes: ['E4', 'G4', 'B4', 'C5']
+
 Like [`Note`](https://CarloLepelaars.github.io/musy/core.html#note)
 objects,
 [`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord) objects
