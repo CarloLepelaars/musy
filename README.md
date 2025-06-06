@@ -153,7 +153,7 @@ dorian = Scale("dorian")
 dorian
 ```
 
-    Dorian. ['1', '2', 'b3', '4', '5', '6', 'b7']
+    Scale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7']
 
 When given a root note,
 [`Scale`](https://CarloLepelaars.github.io/musy/core.html#scale)
@@ -222,7 +222,7 @@ persian = Scale.from_intervals("persian", ["1", "b2", "3", "4", "b5", "b6", "7"]
 persian
 ```
 
-    Persian. ['1', 'b2', '3', '4', 'b5', 'b6', '7']
+    Scale: Persian. Intervals: ['1', 'b2', '3', '4', 'b5', 'b6', '7']
 
 ``` python
 persian.get_notes("C")
@@ -241,3 +241,38 @@ persian.get_notes("C")
 [`PolyChord`](https://CarloLepelaars.github.io/musy/core.html#polychord)
 and [`Scale`](https://CarloLepelaars.github.io/musy/core.html#scale)
 objects can all be heard by calling the `play` method on them.
+
+# Visualization
+
+`musy` objects can be visualized on a piano or guitar by providing a
+list of [`Note`](https://CarloLepelaars.github.io/musy/core.html#note)
+objects to the rendering method. Notes can easily be retrieved from
+[`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord) and
+[`Scale`](https://CarloLepelaars.github.io/musy/core.html#scale)
+objects.
+
+``` python
+from musy import Piano
+
+Piano().__ft__(Note("C#"))
+```
+
+    <style>
+    .piano { background: #222; padding: 20px 0; position: relative; width: 480px; }
+    .white-keys { display: flex; }
+    .white-key {
+        width: 40px; height: 125px; background: #fff;
+        border: 1px solid #000;
+        color: #111; font-size: 18px; text-align: center; line-height: 200px; font-family: Arial;
+        position: relative; z-index: 1;
+    }
+    .black-key {
+        width: 20px; height: 80px; background: #000; color: #fff;
+        border: 1px solid #333; position: absolute; z-index: 2;
+        text-align: center; line-height: 100px; font-family: Arial; font-size: 14px;
+        left: 0; top: 20px; pointer-events: none;
+    }
+    .highlight { background: #ff0 !important; color: #000 !important; }
+    .highlight-black { background: #ff0 !important; color: #000 !important; }
+    </style>
+    <div class="piano" style="width:440px"><div class="white-keys"><div class="white-key">C</div><div class="white-key">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="white-key">G</div><div class="white-key">A</div><div class="white-key">B</div><div class="white-key">C</div><div class="white-key">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="black-key highlight-black" style="left:26px">C#</div><div class="black-key" style="left:66px">D#</div><div class="black-key" style="left:146px">F#</div><div class="black-key" style="left:186px">G#</div><div class="black-key" style="left:226px">A#</div><div class="black-key highlight-black" style="left:306px">C#</div><div class="black-key" style="left:346px">D#</div><div class="black-key" style="left:426px">F#</div>
