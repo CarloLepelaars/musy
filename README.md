@@ -48,24 +48,73 @@ c_sharp + 14
 
     musy.core.Note(note='D#', oct=5)
 
-Intervals can be obtained by comparing a note with a different note or
-string.
+Notes can be compared using familiar Python operators.
 
 ``` python
-c_sharp.interval("F#")
+c = Note("C")
+g = Note("G")
+
+c < g
 ```
 
-    'perfect fourth'
+    True
 
-Shorthand is also available for intervals.
+Octaves can make a difference in comparisons.
 
 ``` python
-c_sharp.interval("B", short=True)
+Note("C", oct=4) >= Note("G", oct=3)
 ```
 
-    'b7'
+    True
 
-Notes can be converted to its relative major or minor.
+[`Interval`](https://CarloLepelaars.github.io/musy/core.html#interval)
+objects can be obtained by calling `interval` on two notes or using the
+`&` operator.
+
+``` python
+f_sharp = Note("F#")
+
+P4 = c_sharp & f_sharp
+P4
+```
+
+    perfect fourth (4)
+
+``` python
+P4.semitones, P4.long, P4.short, P4.type()
+```
+
+    (5, 'perfect fourth', '4', 'Contextual')
+
+Intervals can also be compared.
+
+``` python
+P5 = c & g
+P5
+```
+
+    perfect fifth (5)
+
+``` python
+P5.semitones, P5.long, P5.short, P5.type()
+```
+
+    (7, 'perfect fifth', '5', 'Perfect Consonant')
+
+``` python
+P4 != P5
+```
+
+    True
+
+``` python
+P4 < P5
+```
+
+    True
+
+Notes can be converted to its relative major or minor. As can be found
+on the circle of fifths.
 
 ``` python
 Note("C").minor()
@@ -106,6 +155,7 @@ cmaj7
 Chords can also be inverted with `invert`.
 
 ``` python
+# Get 1st inversion chord of C major 7th
 cmaj7.invert(1)
 ```
 
@@ -132,12 +182,12 @@ Note("C") * Note("E") * Note("G")
 
 For advanced usage there is even a way to create
 [`PolyChord`](https://CarloLepelaars.github.io/musy/core.html#polychord)
-objects, which have much of the same functionality as
-[`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord) objects
-and more.
+objects. These are most naturally created by multiplying
+[`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord)
+objects.
 
 ``` python
-Chord.from_short("C") % Chord.from_short("Bbmaj7").invert(3)
+Chord.from_short("C") * Chord.from_short("Bbmaj7").invert(3)
 ```
 
     PolyChord: 'C major triad|Bb major seventh, third inversion'. Notes: ['C4', 'E4', 'G4', 'A4', 'Bb5', 'D5', 'F5']
@@ -165,11 +215,11 @@ dorian.get_notes("C")
 
     [musy.core.Note(note='C', oct=4),
      musy.core.Note(note='D', oct=4),
-     musy.core.Note(note='Eb', oct=4),
+     musy.core.Note(note='D#', oct=4),
      musy.core.Note(note='F', oct=4),
      musy.core.Note(note='G', oct=4),
      musy.core.Note(note='A', oct=4),
-     musy.core.Note(note='Bb', oct=4)]
+     musy.core.Note(note='A#', oct=4)]
 
 Intervals can be obtained.
 
@@ -229,11 +279,11 @@ persian.get_notes("C")
 ```
 
     [musy.core.Note(note='C', oct=4),
-     musy.core.Note(note='Db', oct=4),
+     musy.core.Note(note='C#', oct=4),
      musy.core.Note(note='E', oct=4),
      musy.core.Note(note='F', oct=4),
      musy.core.Note(note='F#', oct=4),
-     musy.core.Note(note='Ab', oct=4),
+     musy.core.Note(note='G#', oct=4),
      musy.core.Note(note='B', oct=4)]
 
 [`Note`](https://CarloLepelaars.github.io/musy/core.html#note),
