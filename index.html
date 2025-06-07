@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Python toolbox for analyzing, creating and visualizing music.">
+
+<title>musy</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-fe8f458f31a467b51aeabd2275c1e88a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="musy">
+<meta property="og:description" content="Python toolbox for analyzing, creating and visualizing music.">
+<meta property="og:site_name" content="musy">
+<meta name="twitter:title" content="musy">
+<meta name="twitter:description" content="Python toolbox for analyzing, creating and visualizing music.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">musy</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">musy</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">musy</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">core</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./midi.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">midi</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./viz.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">viz</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a></li>
+  <li><a href="#how-to-use" id="toc-how-to-use" class="nav-link" data-scroll-target="#how-to-use">How to use</a>
+  <ul class="collapse">
+  <li><a href="#note" id="toc-note" class="nav-link" data-scroll-target="#note">Note</a></li>
+  </ul></li>
+  <li><a href="#chord" id="toc-chord" class="nav-link" data-scroll-target="#chord">Chord</a></li>
+  <li><a href="#scale" id="toc-scale" class="nav-link" data-scroll-target="#scale">Scale</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/CarloLepelaars/musy/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">musy</h1>
+</div>
+
+<div>
+  <div class="description">
+    Python toolbox for analyzing, creating and visualizing music.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="installation" class="level1">
+<h1>Installation</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install musy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="how-to-use" class="level1">
+<h1>How to use</h1>
+<section id="note" class="level2">
+<h2 class="anchored" data-anchor-id="note">Note</h2>
+<div id="cell-6" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> musy <span class="im">import</span> Note, Chord, Scale</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <a href="https://CarloLepelaars.github.io/musy/core.html#note"><code>Note</code></a> is the basic building block from which you can create chords and songs.</p>
+<div id="cell-8" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>c_sharp <span class="op">=</span> Note(<span class="st">"C#"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>c_sharp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>musy.core.Note(note='C#', oct=4)</code></pre>
+</div>
+</div>
+<p>Notes can be added and subtracted to form new notes. Each added integer represents a semitone.</p>
+<div id="cell-10" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>c_sharp <span class="op">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>musy.core.Note(note='D', oct=4)</code></pre>
+</div>
+</div>
+<div id="cell-11" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>c_sharp <span class="op">-</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>musy.core.Note(note='C', oct=4)</code></pre>
+</div>
+</div>
+<div id="cell-12" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>c_sharp <span class="op">+</span> <span class="dv">14</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>musy.core.Note(note='D#', oct=5)</code></pre>
+</div>
+</div>
+<p>Notes can be compared using familiar Python operators.</p>
+<div id="cell-14" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> Note(<span class="st">"C"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> Note(<span class="st">"G"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>c <span class="op">&lt;</span> g</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p>Octaves can make a difference in comparisons.</p>
+<div id="cell-16" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>Note(<span class="st">"C"</span>, <span class="bu">oct</span><span class="op">=</span><span class="dv">4</span>) <span class="op">&gt;=</span> Note(<span class="st">"G"</span>, <span class="bu">oct</span><span class="op">=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p><a href="https://CarloLepelaars.github.io/musy/core.html#interval"><code>Interval</code></a> objects can be obtained by calling <code>interval</code> on two notes or using the <code>&amp;</code> operator.</p>
+<div id="cell-18" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>f_sharp <span class="op">=</span> Note(<span class="st">"F#"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>P4 <span class="op">=</span> c_sharp <span class="op">&amp;</span> f_sharp</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>P4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>perfect fourth (4)</code></pre>
+</div>
+</div>
+<div id="cell-19" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>P4.semitones, P4.<span class="bu">long</span>, P4.short, P4.<span class="bu">type</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(5, 'perfect fourth', '4', 'Contextual')</code></pre>
+</div>
+</div>
+<p>Intervals can also be compared.</p>
+<div id="cell-21" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>P5 <span class="op">=</span> c <span class="op">&amp;</span> g</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>P5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>perfect fifth (5)</code></pre>
+</div>
+</div>
+<div id="cell-22" class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>P5.semitones, P5.<span class="bu">long</span>, P5.short, P5.<span class="bu">type</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(7, 'perfect fifth', '5', 'Perfect Consonant')</code></pre>
+</div>
+</div>
+<div id="cell-23" class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>P4 <span class="op">!=</span> P5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>True</code></pre>
+</div>
+</div>
+<div id="cell-24" class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>P4 <span class="op">&lt;</span> P5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p>Notes can be converted to its relative major or minor. As can be found on the circle of fifths.</p>
+<div id="cell-26" class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>Note(<span class="st">"C"</span>).minor()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>musy.core.Note(note='A', oct=4)</code></pre>
+</div>
+</div>
+<div id="cell-27" class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>Note(<span class="st">"C#"</span>).major()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>musy.core.Note(note='E', oct=4)</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="chord" class="level1">
+<h1>Chord</h1>
+<p>The <a href="https://CarloLepelaars.github.io/musy/core.html#chord"><code>Chord</code></a> is a collection of <a href="https://CarloLepelaars.github.io/musy/core.html#note"><code>Note</code></a> objects played together.</p>
+<div id="cell-30" class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>c_major <span class="op">=</span> Chord([<span class="st">"C"</span>, <span class="st">"E"</span>, <span class="st">"G"</span>])</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>c_major</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'C major triad'. Notes: ['C4', 'E4', 'G4']</code></pre>
+</div>
+</div>
+<p><a href="https://CarloLepelaars.github.io/musy/core.html#chord"><code>Chord</code></a> objects can be initialized from shorthand notation.</p>
+<div id="cell-32" class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>cmaj7 <span class="op">=</span> Chord.from_short(<span class="st">"Cmaj7"</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>cmaj7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'C major seventh'. Notes: ['C4', 'E4', 'G4', 'B4']</code></pre>
+</div>
+</div>
+<p>Chords can also be inverted with <code>invert</code>.</p>
+<div id="cell-34" class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get 1st inversion chord of C major 7th</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>cmaj7.invert(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'C major seventh, first inversion'. Notes: ['E4', 'G4', 'B4', 'C5']</code></pre>
+</div>
+</div>
+<p>Like <a href="https://CarloLepelaars.github.io/musy/core.html#note"><code>Note</code></a> objects, <a href="https://CarloLepelaars.github.io/musy/core.html#chord"><code>Chord</code></a> objects can be added and subtracted to transpose them.</p>
+<div id="cell-36" class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>cmaj7 <span class="op">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'D major seventh'. Notes: ['D4', 'F#4', 'A4', 'C#5']</code></pre>
+</div>
+</div>
+<p>Notes can be multiplied to create chords.</p>
+<div id="cell-38" class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>Note(<span class="st">"C"</span>) <span class="op">*</span> Note(<span class="st">"E"</span>) <span class="op">*</span> Note(<span class="st">"G"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'C major triad'. Notes: ['C4', 'E4', 'G4']</code></pre>
+</div>
+</div>
+<p>For advanced usage there is even a way to create <a href="https://CarloLepelaars.github.io/musy/core.html#polychord"><code>PolyChord</code></a> objects. These are most naturally created by multiplying <a href="https://CarloLepelaars.github.io/musy/core.html#chord"><code>Chord</code></a> objects.</p>
+<div id="cell-40" class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>Chord.from_short(<span class="st">"C"</span>) <span class="op">*</span> Chord.from_short(<span class="st">"Bbmaj7"</span>).invert(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>PolyChord: 'C major triad|Bb major seventh, third inversion'. Notes: ['C4', 'E4', 'G4', 'A4', 'Bb5', 'D5', 'F5']</code></pre>
+</div>
+</div>
+</section>
+<section id="scale" class="level1">
+<h1>Scale</h1>
+<p><a href="https://CarloLepelaars.github.io/musy/core.html#scale"><code>Scale</code></a> objects are collections of intervals from which we can generate notes and chords around a root note.</p>
+<div id="cell-42" class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>dorian <span class="op">=</span> Scale(<span class="st">"dorian"</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>dorian</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Scale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7']</code></pre>
+</div>
+</div>
+<p>When given a root note, <a href="https://CarloLepelaars.github.io/musy/core.html#scale"><code>Scale</code></a> generates the notes of the scale.</p>
+<div id="cell-44" class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>dorian.get_notes(<span class="st">"C"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[musy.core.Note(note='C', oct=4),
+ musy.core.Note(note='D', oct=4),
+ musy.core.Note(note='D#', oct=4),
+ musy.core.Note(note='F', oct=4),
+ musy.core.Note(note='G', oct=4),
+ musy.core.Note(note='A', oct=4),
+ musy.core.Note(note='A#', oct=4)]</code></pre>
+</div>
+</div>
+<p>Intervals can be obtained.</p>
+<div id="cell-46" class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>dorian.get_interval_names()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>['unison',
+ 'major second',
+ 'minor third',
+ 'perfect fourth',
+ 'perfect fifth',
+ 'major sixth',
+ 'minor seventh']</code></pre>
+</div>
+</div>
+<p>Triads and seventh chords in the scale can be generated around a root note.</p>
+<div id="cell-48" class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>dorian.get_triads(<span class="st">"D"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[Chord: 'D minor triad'. Notes: ['D4', 'F4', 'A4'],
+ Chord: 'E minor triad'. Notes: ['E4', 'G4', 'B4'],
+ Chord: 'F major triad'. Notes: ['F4', 'A4', 'C4'],
+ Chord: 'G major triad'. Notes: ['G4', 'B4', 'D5'],
+ Chord: 'A minor triad'. Notes: ['A4', 'C4', 'E5'],
+ Chord: 'B diminished triad'. Notes: ['B4', 'D5', 'F5'],
+ Chord: 'C major triad'. Notes: ['C5', 'E6', 'G6']]</code></pre>
+</div>
+</div>
+<div id="cell-49" class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>dorian.get_sevenths(<span class="st">"E"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[Chord: 'E minor seventh'. Notes: ['E4', 'G4', 'B4', 'D4'],
+ Chord: 'F# minor seventh'. Notes: ['F#4', 'A4', 'C#4', 'E5'],
+ Chord: 'G major seventh'. Notes: ['G4', 'B4', 'D4', 'F#5'],
+ Chord: 'A dominant seventh'. Notes: ['A4', 'C#4', 'E5', 'G5'],
+ Chord: 'B minor seventh'. Notes: ['B4', 'D4', 'F#5', 'A5'],
+ Chord: 'C# half diminished seventh'. Notes: ['C#5', 'E6', 'G6', 'B6'],
+ Chord: 'D major seventh'. Notes: ['D5', 'F#6', 'A6', 'C#6']]</code></pre>
+</div>
+</div>
+<p>Consult <a href="https://CarloLepelaars.github.io/musy/core.html#scale.available_scales"><code>Scale.available_scales</code></a> for a list of available scales. If a scale is not available, you can create your own scale from intervals.</p>
+<div id="cell-51" class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>persian <span class="op">=</span> Scale.from_intervals(<span class="st">"persian"</span>, [<span class="st">"1"</span>, <span class="st">"b2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"b5"</span>, <span class="st">"b6"</span>, <span class="st">"7"</span>])</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>persian</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Scale: Persian. Intervals: ['1', 'b2', '3', '4', 'b5', 'b6', '7']</code></pre>
+</div>
+</div>
+<div id="cell-52" class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>persian.get_notes(<span class="st">"C"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[musy.core.Note(note='C', oct=4),
+ musy.core.Note(note='C#', oct=4),
+ musy.core.Note(note='E', oct=4),
+ musy.core.Note(note='F', oct=4),
+ musy.core.Note(note='F#', oct=4),
+ musy.core.Note(note='G#', oct=4),
+ musy.core.Note(note='B', oct=4)]</code></pre>
+</div>
+</div>
+<p><a href="https://CarloLepelaars.github.io/musy/core.html#note"><code>Note</code></a>, <a href="https://CarloLepelaars.github.io/musy/core.html#chord"><code>Chord</code></a>, <a href="https://CarloLepelaars.github.io/musy/core.html#polychord"><code>PolyChord</code></a> and <a href="https://CarloLepelaars.github.io/musy/core.html#scale"><code>Scale</code></a> objects can all be heard by calling the <code>play</code> method on them.</p>
+</section>
+<section id="visualization" class="level1">
+<h1>Visualization</h1>
+<p><code>musy</code> objects can be visualized on a piano or guitar by providing a list of <a href="https://CarloLepelaars.github.io/musy/core.html#note"><code>Note</code></a> objects to the rendering method. Notes can easily be retrieved from <a href="https://CarloLepelaars.github.io/musy/core.html#chord"><code>Chord</code></a> and <a href="https://CarloLepelaars.github.io/musy/core.html#scale"><code>Scale</code></a> objects.</p>
+<div id="cell-55" class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> musy <span class="im">import</span> Piano, Guitar</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>Piano()(Note(<span class="st">"C#"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+    <style>
+    .piano { background: #222; padding: 20px 0; position: relative; width: 480px; }
+    .white-keys { display: flex; }
+    .white-key {
+        width: 40px; height: 125px; background: #fff;
+        border: 1px solid #000;
+        color: #111; font-size: 18px; text-align: center; line-height: 200px; font-family: Arial;
+        position: relative; z-index: 1;
+    }
+    .black-key {
+        width: 20px; height: 80px; background: #000; color: #fff;
+        border: 1px solid #333; position: absolute; z-index: 2;
+        text-align: center; line-height: 100px; font-family: Arial; font-size: 14px;
+        left: 0; top: 20px; pointer-events: none;
+    }
+    .highlight { background: #ff0 !important; color: #000 !important; }
+    .highlight-black { background: #ff0 !important; color: #000 !important; }
+    </style>
+    <div class="piano" style="width:440px"><div class="white-keys"><div class="white-key">C</div><div class="white-key">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="white-key">G</div><div class="white-key">A</div><div class="white-key">B</div><div class="white-key">C</div><div class="white-key">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="black-key highlight-black" style="left:26px">C#</div><div class="black-key" style="left:66px">D#</div><div class="black-key" style="left:146px">F#</div><div class="black-key" style="left:186px">G#</div><div class="black-key" style="left:226px">A#</div><div class="black-key highlight-black" style="left:306px">C#</div><div class="black-key" style="left:346px">D#</div><div class="black-key" style="left:426px">F#</div></div>
+</div>
+</div>
+<div id="cell-56" class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>Piano()(<span class="bu">list</span>(Chord.from_short(<span class="st">"Cmaj7"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+    <style>
+    .piano { background: #222; padding: 20px 0; position: relative; width: 480px; }
+    .white-keys { display: flex; }
+    .white-key {
+        width: 40px; height: 125px; background: #fff;
+        border: 1px solid #000;
+        color: #111; font-size: 18px; text-align: center; line-height: 200px; font-family: Arial;
+        position: relative; z-index: 1;
+    }
+    .black-key {
+        width: 20px; height: 80px; background: #000; color: #fff;
+        border: 1px solid #333; position: absolute; z-index: 2;
+        text-align: center; line-height: 100px; font-family: Arial; font-size: 14px;
+        left: 0; top: 20px; pointer-events: none;
+    }
+    .highlight { background: #ff0 !important; color: #000 !important; }
+    .highlight-black { background: #ff0 !important; color: #000 !important; }
+    </style>
+    <div class="piano" style="width:440px"><div class="white-keys"><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key highlight">G</div><div class="white-key">A</div><div class="white-key highlight">B</div><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="black-key" style="left:26px">C#</div><div class="black-key" style="left:66px">D#</div><div class="black-key" style="left:146px">F#</div><div class="black-key" style="left:186px">G#</div><div class="black-key" style="left:226px">A#</div><div class="black-key" style="left:306px">C#</div><div class="black-key" style="left:346px">D#</div><div class="black-key" style="left:426px">F#</div></div>
+</div>
+</div>
+<div id="cell-57" class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>Piano()(Scale(<span class="st">"major"</span>).get_notes(<span class="st">"D"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+    <style>
+    .piano { background: #222; padding: 20px 0; position: relative; width: 480px; }
+    .white-keys { display: flex; }
+    .white-key {
+        width: 40px; height: 125px; background: #fff;
+        border: 1px solid #000;
+        color: #111; font-size: 18px; text-align: center; line-height: 200px; font-family: Arial;
+        position: relative; z-index: 1;
+    }
+    .black-key {
+        width: 20px; height: 80px; background: #000; color: #fff;
+        border: 1px solid #333; position: absolute; z-index: 2;
+        text-align: center; line-height: 100px; font-family: Arial; font-size: 14px;
+        left: 0; top: 20px; pointer-events: none;
+    }
+    .highlight { background: #ff0 !important; color: #000 !important; }
+    .highlight-black { background: #ff0 !important; color: #000 !important; }
+    </style>
+    <div class="piano" style="width:440px"><div class="white-keys"><div class="white-key">C</div><div class="white-key highlight">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key highlight">G</div><div class="white-key highlight">A</div><div class="white-key highlight">B</div><div class="white-key">C</div><div class="white-key highlight">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="black-key highlight-black" style="left:26px">C#</div><div class="black-key" style="left:66px">D#</div><div class="black-key highlight-black" style="left:146px">F#</div><div class="black-key" style="left:186px">G#</div><div class="black-key" style="left:226px">A#</div><div class="black-key highlight-black" style="left:306px">C#</div><div class="black-key" style="left:346px">D#</div><div class="black-key highlight-black" style="left:426px">F#</div></div>
+</div>
+</div>
+<div id="cell-58" class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>Piano()(Scale(<span class="st">"phrygian dominant"</span>).get_notes(<span class="st">"D"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+    <style>
+    .piano { background: #222; padding: 20px 0; position: relative; width: 480px; }
+    .white-keys { display: flex; }
+    .white-key {
+        width: 40px; height: 125px; background: #fff;
+        border: 1px solid #000;
+        color: #111; font-size: 18px; text-align: center; line-height: 200px; font-family: Arial;
+        position: relative; z-index: 1;
+    }
+    .black-key {
+        width: 20px; height: 80px; background: #000; color: #fff;
+        border: 1px solid #333; position: absolute; z-index: 2;
+        text-align: center; line-height: 100px; font-family: Arial; font-size: 14px;
+        left: 0; top: 20px; pointer-events: none;
+    }
+    .highlight { background: #ff0 !important; color: #000 !important; }
+    .highlight-black { background: #ff0 !important; color: #000 !important; }
+    </style>
+    <div class="piano" style="width:440px"><div class="white-keys"><div class="white-key highlight">C</div><div class="white-key highlight">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="white-key highlight">G</div><div class="white-key highlight">A</div><div class="white-key">B</div><div class="white-key highlight">C</div><div class="white-key highlight">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="black-key" style="left:26px">C#</div><div class="black-key highlight-black" style="left:66px">D#</div><div class="black-key highlight-black" style="left:146px">F#</div><div class="black-key" style="left:186px">G#</div><div class="black-key highlight-black" style="left:226px">A#</div><div class="black-key" style="left:306px">C#</div><div class="black-key highlight-black" style="left:346px">D#</div><div class="black-key highlight-black" style="left:426px">F#</div></div>
+</div>
+</div>
+<div id="cell-59" class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>Piano()(PolyChord([Chord.from_short(<span class="st">"E"</span>), Chord.from_short(<span class="st">"Am"</span>)]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+    <style>
+    .piano { background: #222; padding: 20px 0; position: relative; width: 480px; }
+    .white-keys { display: flex; }
+    .white-key {
+        width: 40px; height: 125px; background: #fff;
+        border: 1px solid #000;
+        color: #111; font-size: 18px; text-align: center; line-height: 200px; font-family: Arial;
+        position: relative; z-index: 1;
+    }
+    .black-key {
+        width: 20px; height: 80px; background: #000; color: #fff;
+        border: 1px solid #333; position: absolute; z-index: 2;
+        text-align: center; line-height: 100px; font-family: Arial; font-size: 14px;
+        left: 0; top: 20px; pointer-events: none;
+    }
+    .highlight { background: #ff0 !important; color: #000 !important; }
+    .highlight-black { background: #ff0 !important; color: #000 !important; }
+    </style>
+    <div class="piano" style="width:440px"><div class="white-keys"><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key">G</div><div class="white-key highlight">A</div><div class="white-key highlight">B</div><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="black-key" style="left:26px">C#</div><div class="black-key" style="left:66px">D#</div><div class="black-key" style="left:146px">F#</div><div class="black-key highlight-black" style="left:186px">G#</div><div class="black-key" style="left:226px">A#</div><div class="black-key" style="left:306px">C#</div><div class="black-key" style="left:346px">D#</div><div class="black-key" style="left:426px">F#</div></div>
+</div>
+</div>
+
+
+</div></div></div></div></div></section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/CarloLepelaars\.github\.io\/musy");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/CarloLepelaars/musy/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

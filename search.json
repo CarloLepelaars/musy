@@ -1,0 +1,102 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "musy",
+    "section": "",
+    "text": "pip install musy",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#note",
+    "href": "index.html#note",
+    "title": "musy",
+    "section": "Note",
+    "text": "Note\n\nfrom musy import Note, Chord, Scale\n\nThe Note is the basic building block from which you can create chords and songs.\n\nc_sharp = Note(\"C#\")\nc_sharp\n\nmusy.core.Note(note='C#', oct=4)\n\n\nNotes can be added and subtracted to form new notes. Each added integer represents a semitone.\n\nc_sharp + 1\n\nmusy.core.Note(note='D', oct=4)\n\n\n\nc_sharp - 1\n\nmusy.core.Note(note='C', oct=4)\n\n\n\nc_sharp + 14\n\nmusy.core.Note(note='D#', oct=5)\n\n\nNotes can be compared using familiar Python operators.\n\nc = Note(\"C\")\ng = Note(\"G\")\n\nc &lt; g\n\nTrue\n\n\nOctaves can make a difference in comparisons.\n\nNote(\"C\", oct=4) &gt;= Note(\"G\", oct=3)\n\nTrue\n\n\nInterval objects can be obtained by calling interval on two notes or using the & operator.\n\nf_sharp = Note(\"F#\")\n\nP4 = c_sharp & f_sharp\nP4\n\nperfect fourth (4)\n\n\n\nP4.semitones, P4.long, P4.short, P4.type()\n\n(5, 'perfect fourth', '4', 'Contextual')\n\n\nIntervals can also be compared.\n\nP5 = c & g\nP5\n\nperfect fifth (5)\n\n\n\nP5.semitones, P5.long, P5.short, P5.type()\n\n(7, 'perfect fifth', '5', 'Perfect Consonant')\n\n\n\nP4 != P5\n\nTrue\n\n\n\nP4 &lt; P5\n\nTrue\n\n\nNotes can be converted to its relative major or minor. As can be found on the circle of fifths.\n\nNote(\"C\").minor()\n\nmusy.core.Note(note='A', oct=4)\n\n\n\nNote(\"C#\").major()\n\nmusy.core.Note(note='E', oct=4)",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "midi.html",
+    "href": "midi.html",
+    "title": "midi",
+    "section": "",
+    "text": ".mid files can be loaded locally or from a URL and played in a Jupyter notebook with MIDIPlayer.\nThis tests loads a basic sequence of notes from a URL.\n\nsource\n\ntest_midi\n\n test_midi ()\n\n\ntest_midi()\n\n'\n            \n\n\n\n# TODO: MIDI tools for converting Notes, Chords, Scales and Songs to MIDI.",
+    "crumbs": [
+      "midi"
+    ]
+  },
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "core",
+    "section": "",
+    "text": "These variables contain the basic orderings for Western music theory.",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#adding-to-note",
+    "href": "core.html#adding-to-note",
+    "title": "core",
+    "section": "Adding to Note",
+    "text": "Adding to Note\nAdding semitones to a note will return a new note with n semitones added above the original note.\nFor example, adding 1 semitone to A# (A Sharp) will return B.\nAdding Note objects together will form a Chord. More on that in the Chord section.\n\nsource\n\nNote.__mod__\n\n Note.__mod__ (other)\n\nAdd n whole notes.\n\nsource\n\n\nNote.__add__\n\n Note.__add__ (other)\n\nAdd n semitones to a note.\n\nfor i in range(1, 13):\n    print(a_sharp+i)\n\nB\nC\nC#\nD\nD#\nE\nF\nF#\nG\nG#\nA\nA#\n\n\nThe octave of the note is automatically updated when adding.\n\nassert (a_sharp+1).oct == a_sharp.oct\nassert (a_sharp+2).oct == a_sharp.oct + 1\nassert (Note(\"C\")+11).oct == Note(\"C\").oct\n\n\nassert str(a_sharp+1) == \"B\"\nassert str(a_sharp+11) == \"A\"\nassert str(a_sharp+12) == \"A#\"\nassert str(a_sharp+13) == \"B\"\nassert str(a_sharp+47) == \"A\"\nassert str(a_sharp+0) == \"A#\"\n\nThe % operator is a shortcut for adding whole notes.\n\nassert a_sharp % 1 == Note(\"C\", oct=5)\na_sharp % 1\n\nNote(note='C', oct=5)\n\n\n\nfor i in range(1, 7):\n    print(a_sharp % i)\n\nC\nD\nE\nF#\nG#\nA#\n\n\n\nassert str(a_sharp % 1) == \"C\"\nassert str(a_sharp % 0) == \"A#\"\nassert str(a_sharp % 6) == \"A#\"\nassert str(a_sharp % 6 + 1) == \"B\"",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#subtracting-from-note",
+    "href": "core.html#subtracting-from-note",
+    "title": "core",
+    "section": "Subtracting from Note",
+    "text": "Subtracting from Note\nSubtracting semitones from a Note returns a new note with n semitones subtracted from the original note.\nFor example, subtracting 1 semitone from C returns B. Subtracting 1 semitone from A# returns A.\n\nsource\n\nNote.__floordiv__\n\n Note.__floordiv__ (other)\n\nSubtract n whole notes\n\nsource\n\n\nNote.__sub__\n\n Note.__sub__ (other)\n\nSubtract n semitones from a note.\n\nfor i in range(1, 13):\n    print(a_sharp-i)\n\nA\nG#\nG\nF#\nF\nE\nD#\nD\nC#\nC\nB\nA#\n\n\n\nassert (a_sharp-1).oct == a_sharp.oct\nassert (a_sharp-10).oct == a_sharp.oct - 1\nassert (a_sharp-6).oct == a_sharp.oct - 1\nassert (a_sharp-12).oct == a_sharp.oct - 1\n\n\nassert str(a_sharp-0) == \"A#\"\nassert str(a_sharp-1) == \"A\"\nassert str(a_sharp-11) == \"B\"\nassert str(a_sharp-12) == \"A#\"\nassert str(a_sharp-13) == \"A\"\nassert str(a_sharp-25) == \"A\"\n\nThe // operator is a shortcut for subtracting whole notes.\n\nassert a_sharp // 1 == Note(\"G#\", oct=3)\na_sharp // 1\n\nNote(note='G#', oct=3)\n\n\n\nfor i in range(1, 7):\n    print(a_sharp // i)\n\nG#\nF#\nE\nD\nC\nA#\n\n\n\nassert str(a_sharp // 1) == \"G#\"\nassert str(a_sharp // 0) == \"A#\"\nassert str(a_sharp // 6) == \"A#\"\nassert str(a_sharp // 6 + 1) == \"B\"",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#interval",
+    "href": "core.html#interval",
+    "title": "core",
+    "section": "Interval",
+    "text": "Interval\nTwo notes can be combined to form an interval. interval returns an Interval object from which you can get the long or short name.\n\nsource\n\nInterval\n\n Interval (note1:__main__.Note, note2:__main__.Note)\n\nInitialize self. See help(type(self)) for accurate signature.\nCalling interval on a Note object requires providing another Note object and returns an Interval object. A shortcut is to use the & operator and has the same effect.\n\nsource\n\n\nNote.__and__\n\n Note.__and__ (other:__main__.Note)\n\n\nsource\n\n\nNote.interval\n\n Note.interval (other:__main__.Note)\n\nThe full name of the interval between A# and C# is a minor third.\n\nc_sharp = Note(\"C#\")\nm3 = a_sharp.interval(c_sharp)\nm3\n\nminor third (b3)\n\n\nFrom here on in these docs we’ll use the more compact & syntax, but feel free to use what works best for you.\n\nassert m3 == a_sharp & c_sharp\na_sharp & c_sharp\n\nminor third (b3)\n\n\nA minor third is 3 semitones apart.\n\nassert m3.semitones == 3\nm3.semitones\n\n3\n\n\nThe shorthand for a minor third interval is b3.\n\nassert m3.long == \"minor third\"\nm3.long\n\n'minor third'\n\n\n\nassert m3.short == \"b3\"\nm3.short\n\n'b3'\n\n\nInterval can handle upper extensions up to 2 octaves, like 9’ths, 11th’s and 13th’s. This occurs if there is a difference in octaves (oct) between Note objects.\n\nninth = Note(\"G#\", oct=5) & Note(\"A\", oct=6)\nassert ninth.semitones == 13\nninth\n\nminor ninth (b9)\n\n\nInterval objects van be compared with each other. For example a ninth is larger than a minor third.\n\nassert m3 &lt;= ninth\nassert m3 != ninth\nassert not m3 &gt; ninth\n\nNote that with negative intervals its a different story. C# compared with A# in lower octave is a minor 14th.\n\nlow_a_sharp = Note(\"A#\", oct=3)\nneg_m3 = c_sharp & low_a_sharp\nneg_m3\n\nminor fourteenth (b14)\n\n\n\nassert neg_m3 &gt; m3\nassert neg_m3 != m3\n\nAn Interval can also determine its type. An interval can be:\n\nPerfect consonant (Unison, Octave and 5th)\nSoft consonant (3rds and 6ths),\nMild Dissonant (Minor 7th and Major 2nd),\nSharp Dissonant (Major 7th and Minor 2nd),\nContextual (4th)\nNeutral (Tritone).\n\n\nsource\n\n\nInterval.type\n\n Interval.type ()\n\nA fifth is a Perfect Consonant.\n\nfifth = Note(\"C\") & Note(\"G\")\nassert fifth.type() == \"Perfect Consonant\"\nfifth.type()\n\n'Perfect Consonant'\n\n\nA minor second is Sharp Dissonant.\n\nm2 = Note(\"C\") & Note(\"C#\")\nassert m2.type() == \"Sharp Dissonant\"\nm2.type()\n\n'Sharp Dissonant'\n\n\nA special case is the fourth which is Contextual. This can be soft consonant or dissonant depending on the context of harmonic movement and is not feasible to determine within one interval.\n\nfourth = Note(\"C\") & Note(\"F\")\nassert fourth.type() == \"Contextual\"\nfourth.type()\n\n'Contextual'\n\n\nThe Interval.type method handles upper extensions by comparing it within the same octave. For example a flat 9 (b9) is treated as a minor second and therefore Sharp Dissonant.\n\nninth = Note(\"B\", oct=4) & Note(\"C\", oct=5)\nninth.type()\n\n'Sharp Dissonant'",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#convert-to-major-or-minor",
+    "href": "core.html#convert-to-major-or-minor",
+    "title": "core",
+    "section": "Convert to Major or Minor",
+    "text": "Convert to Major or Minor\nA note can be converted to its relative major or minor. How this is converted is visualized on the circle of fifths.\n\nFor example, the relative minor of C is A. The relative major of C# is E.\nminor converts an arbitrary note to its relative minor. This means 3 semitones are subtracted from the note.\n\nsource\n\nNote.minor\n\n Note.minor ()\n\n\nc = Note(\"C\")\nassert str(c.minor()) == \"A\"\nc.minor()\n\nNote(note='A', oct=4)\n\n\nmajor converts an arbitrary note to its relative major. This means 3 semitones are added to the note.\n\nsource\n\n\nNote.major\n\n Note.major ()\n\n\nassert str(c_sharp.major()) == \"E\"\nc_sharp.major()\n\nNote(note='E', oct=4)",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#play-audio",
+    "href": "core.html#play-audio",
+    "title": "core",
+    "section": "Play Audio",
+    "text": "Play Audio\nEvery Note can be played as audio. A Note is first transformed into a bytestring.\n\n#export\n@patch \ndef get_audio_array(self:Note, length=1, sr=44100):\n    a = {'C':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':4,'F':5,\n         'F#':6,'Gb':6,'G':7,'G#':8,'Ab':8,'A':9,'A#':10,'Bb':10,'B':11}\n    t = np.linspace(0, length, int(sr * length), False)\n    def freq(n): return 440 * 2**((12 * (int(n[-1])+1) + a[n[:-1]] - 69)/12)\n    wave = np.sin(2 * np.pi * freq(f\"{self.note}{self.oct}\") * t)\n    wave = (wave / np.max(np.abs(wave)) * 32767).astype(np.int16)\n    return wave\n\n@patch\ndef get_audio_bytes(self:Note, length=1, sr=44100):\n    buf = io.BytesIO(); wav.write(buf, sr, self.get_audio_array(length, sr))\n    return buf.getvalue()\n\n\nc.get_audio_bytes(length=5)[:50]\n\nb'RIFF\\xcc\\xba\\x06\\x00WAVEfmt \\x10\\x00\\x00\\x00\\x01\\x00\\x01\\x00D\\xac\\x00\\x00\\x88X\\x01\\x00\\x02\\x00\\x10\\x00data\\xa8\\xba\\x06\\x00\\x00\\x00\\xc5\\x04\\x88\\t'\n\n\nFor convenience, we can also play the audio directly.\n\nsource\n\nNote.play\n\n Note.play (length=1)\n\n\nc.play()\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\nTHe length of a specific note can be specified for the audio.\n\nc.play(length=2)\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\n\na_sharp.play()\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\nAlso here, method chaining is possible.\n\n(a_sharp - 6).play()\n\n\n                \n                    \n                    Your browser does not support the audio element.",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "viz.html",
+    "href": "viz.html",
+    "title": "viz",
+    "section": "",
+    "text": "Piano\nThe Piano object is the basic piano visualization on which we will place Note, Chord and Scale objects.\n\nScale('major').get_notes(\"C\")\n\n[musy.core.Note(note='C', oct=4),\n musy.core.Note(note='D', oct=4),\n musy.core.Note(note='E', oct=4),\n musy.core.Note(note='F', oct=4),\n musy.core.Note(note='G', oct=4),\n musy.core.Note(note='A', oct=4),\n musy.core.Note(note='B', oct=4)]\n\n\n\nsource\n\nPiano\n\n Piano ()\n\nInitialize self. See help(type(self)) for accurate signature.\n\npiano = Piano()\npiano()\n\n\n    \n    CDEFGABCDEFC#D#F#G#A#C#D#F#\n\n\nWe can highlight objects on the piano by providing a list of Note objects.\nFor example, here we highlight the C# notes on the piano.\n\npiano(Note(\"C#\"))\n\n\n    \n    CDEFGABCDEFC#D#F#G#A#C#D#F#\n\n\nChord objects can be visualized on the piano by providing the underlying Note objects. We can provide Note.notes to the rendering method.\n\n# Notes for a Cmaj7 chord\nchord = Chord.from_short(\"Cmaj7\")\nchord.notes\n\n[musy.core.Note(note='C', oct=4),\n musy.core.Note(note='E', oct=4),\n musy.core.Note(note='G', oct=4),\n musy.core.Note(note='B', oct=4)]\n\n\n\npiano(chord.notes)\n\n\n    \n    CDEFGABCDEFC#D#F#G#A#C#D#F#\n\n\nA scale can be highlighted by calling the get_notes method on a Scale object. This will return a list of Note objects for a given root note which the rendering method accepts.\n\nscale_notes = Scale('major').get_notes(\"D\")\nscale_notes\n\n[musy.core.Note(note='D', oct=4),\n musy.core.Note(note='E', oct=4),\n musy.core.Note(note='F#', oct=4),\n musy.core.Note(note='G', oct=4),\n musy.core.Note(note='A', oct=4),\n musy.core.Note(note='B', oct=4),\n musy.core.Note(note='C#', oct=5)]\n\n\n\npiano(scale_notes)\n\n\n    \n    CDEFGABCDEFC#D#F#G#A#C#D#F#\n\n\n\nphry_dom_notes = Scale(\"phrygian dominant\").get_notes(\"D\")\nphry_dom_notes\n\n[musy.core.Note(note='D', oct=4),\n musy.core.Note(note='Eb', oct=4),\n musy.core.Note(note='F#', oct=4),\n musy.core.Note(note='G', oct=4),\n musy.core.Note(note='A', oct=4),\n musy.core.Note(note='Bb', oct=4),\n musy.core.Note(note='C', oct=5)]\n\n\n\npiano(phry_dom_notes)\n\n\n    \n    CDEFGABCDEFC#D#F#G#A#C#D#F#\n\n\n\n\n\nGuitar\n\nsource\n\nGuitar\n\n Guitar ()\n\nInitialize self. See help(type(self)) for accurate signature.",
+    "crumbs": [
+      "viz"
+    ]
+  }
+]
