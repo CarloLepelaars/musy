@@ -248,7 +248,10 @@ INV_SCALES_BY_NAME = {k: d[tuple(v)] for k,v in SCALES.items()}
 class Scale:
     def __init__(self, name: str):
         self.name = name.lower()
-        self.intervals = SCALES.get(self.name, "scale not found.")
+        self.intervals = SCALES.get(self.name, [])
+        self.flats = sum(1 for i in self.intervals if i.startswith("b"))
+        self.sharps = sum(1 for i in self.intervals if i.startswith("#"))
+        self.naturals = len(self.intervals) - self.flats - self.sharps
 
     @classmethod
     def available_scales(cls): return list(SCALES.keys())
@@ -285,31 +288,31 @@ class Scale:
     def __ne__(self, other): return not self == other
     def __iter__(self) -> list[str]: return iter(self.intervals)
 
-# %% ../nbs/02_scale.ipynb 22
+# %% ../nbs/02_scale.ipynb 29
 @patch
 def get_notes(self:Scale, root, oct=4):
     """Get the notes of a scale from a root note."""
     root = Note(root, oct=oct) if isinstance(root, str) else root
     return [root + int(INTERVAL_HALF_STEPS[i]) for i in self.intervals]
 
-# %% ../nbs/02_scale.ipynb 27
+# %% ../nbs/02_scale.ipynb 34
 @patch
 def get_diatonic_chords(self:Scale, root, min_notes=3):
     assert min_notes > 1, "min_notes must be greater than 1."
     notes = self.get_notes(root)
     return [Chord(combo) for n in range(min_notes, len(notes)+1) for combo in combinations(notes, n)]
 
-# %% ../nbs/02_scale.ipynb 31
+# %% ../nbs/02_scale.ipynb 38
 @patch
 def get_interval_names(self:Scale, short=False):
     return self.intervals if short else self.interval_names
 
-# %% ../nbs/02_scale.ipynb 36
+# %% ../nbs/02_scale.ipynb 43
 @patch
 def get_scale_names(self:Scale):
     return INV_SCALES_BY_INTERVAL.get(tuple(self.intervals), [])
 
-# %% ../nbs/02_scale.ipynb 42
+# %% ../nbs/02_scale.ipynb 49
 @patch
 def get_audio_array(self:Scale, root, oct=4, length=0.3):
     notes = self.get_notes(root, oct=oct)
@@ -320,7 +323,7 @@ def get_audio_array(self:Scale, root, oct=4, length=0.3):
 def play(self:Scale, root, oct=4, length=0.3): 
     return Audio(self.get_audio_array(root, oct=oct, length=length), rate=44100)
 
-# %% ../nbs/02_scale.ipynb 52
+# %% ../nbs/02_scale.ipynb 59
 @patch
 def get_triads(self:Scale, root):
     """Get all triads in scale starting from root note."""
@@ -330,13 +333,13 @@ def get_triads(self:Scale, root):
                   Note(str(notes[(i+4)%7]), oct=notes[i].oct + (i+4)//7)]) 
             for i in range(len(notes))]
 
-# %% ../nbs/02_scale.ipynb 56
+# %% ../nbs/02_scale.ipynb 63
 @patch
 def play_triads(self:Scale, root):
     """Play all triads in scale starting from root note."""
     return Audio(np.concatenate([c.get_audio_array() for c in self.get_triads(root)]), rate=44100)
 
-# %% ../nbs/02_scale.ipynb 59
+# %% ../nbs/02_scale.ipynb 66
 @patch
 def get_sevenths(self:Scale, root):
     """Get all seventh chords in scale starting from root note."""
@@ -347,13 +350,13 @@ def get_sevenths(self:Scale, root):
                   Note(str(notes[(i+6)%7]), oct=notes[i].oct + (i+6)//7)]) 
             for i in range(len(notes))]
 
-# %% ../nbs/02_scale.ipynb 62
+# %% ../nbs/02_scale.ipynb 69
 @patch
 def play_sevenths(self:Scale, root):
     """Play all seventh chords in scale starting from root note."""
     return Audio(np.concatenate([c.get_audio_array() for c in self.get_sevenths(root)]), rate=44100)
 
-# %% ../nbs/02_scale.ipynb 66
+# %% ../nbs/02_scale.ipynb 73
 @patch
 def to_frame(self:Scale, root=None):
     d = {
