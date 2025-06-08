@@ -9,9 +9,7 @@
 pip install musy
 ```
 
-# How to use
-
-## Note
+# Note
 
 ``` python
 from musy import Note, Chord, Scale, PolyChord
@@ -130,6 +128,8 @@ Note("C#").major()
 
 # Chord
 
+## Initialization
+
 The [`Chord`](https://CarloLepelaars.github.io/musy/chord.html#chord) is
 a collection of
 [`Note`](https://CarloLepelaars.github.io/musy/note.html#note) objects
@@ -152,6 +152,8 @@ cmaj7
 
     Chord: 'C major seventh'. Notes: ['C4', 'E4', 'G4', 'B4']
 
+## Inversion
+
 Chords can also be inverted with `invert`.
 
 ``` python
@@ -160,6 +162,8 @@ cmaj7.invert(1)
 ```
 
     Chord: 'C major seventh, first inversion'. Notes: ['E4', 'G4', 'B4', 'C5']
+
+## Transposition
 
 Like [`Note`](https://CarloLepelaars.github.io/musy/note.html#note)
 objects,
@@ -182,6 +186,8 @@ Note("C") * Note("E") * Note("G")
 
 # PolyChord
 
+## Initialization
+
 For polyphonic use cases you can create
 [`PolyChord`](https://CarloLepelaars.github.io/musy/chord.html#polychord)
 objects. This objects inherits the same functionality as
@@ -200,6 +206,8 @@ poly_chord
 
 # Scale
 
+## Initialization
+
 [`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale)
 objects are collections of intervals from which we can generate notes
 and chords around a root note.
@@ -210,6 +218,8 @@ dorian
 ```
 
     Scale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7']
+
+## Note Generation
 
 When given a root note,
 [`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale)
@@ -227,6 +237,8 @@ dorian.get_notes("C")
      musy.note.Note(note='A', oct=4),
      musy.note.Note(note='A#', oct=4)]
 
+## Intervals
+
 Intervals can be obtained.
 
 ``` python
@@ -239,6 +251,8 @@ dorian.get_interval_names()
      'perfect fifth',
      'major sixth',
      'minor seventh']
+
+## Triad Generation
 
 Triads and seventh chords in the scale can be generated around a root
 note.
@@ -255,6 +269,8 @@ dorian.get_triads("D")
      Chord: 'B diminished triad'. Notes: ['B4', 'D5', 'F5'],
      Chord: 'C major triad'. Notes: ['C5', 'E6', 'G6']]
 
+## Seventh Chord Generation
+
 ``` python
 dorian.get_sevenths("E")
 ```
@@ -269,6 +285,8 @@ dorian.get_sevenths("E")
 
 All information can be conveniently retrieved and displayed as a Pandas
 DataFrame with `to_frame`.
+
+## Table
 
 ``` python
 dorian.to_frame(root="E")
@@ -299,6 +317,8 @@ dorian.to_frame(root="E")
 
 </div>
 
+## Custom Scales
+
 Consult
 [`Scale.available_scales`](https://CarloLepelaars.github.io/musy/scale.html#scale.available_scales)
 for a list of available scales. If a scale is not available, you can
@@ -323,11 +343,19 @@ persian.get_notes("C")
      musy.note.Note(note='G#', oct=4),
      musy.note.Note(note='B', oct=4)]
 
+## Listening
+
 [`Note`](https://CarloLepelaars.github.io/musy/note.html#note),
 [`Chord`](https://CarloLepelaars.github.io/musy/chord.html#chord),
 [`PolyChord`](https://CarloLepelaars.github.io/musy/chord.html#polychord)
 and [`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale)
-objects can all be heard by calling the `play` method on them.
+objects can all be heard by calling the `play` method on them. Check out
+the [musy documentation](https://carlolepelaars.github.io/musy) on
+[`Note`](https://CarloLepelaars.github.io/musy/note.html#note),
+[`Chord`](https://CarloLepelaars.github.io/musy/chord.html#chord),
+[`PolyChord`](https://CarloLepelaars.github.io/musy/chord.html#polychord)
+and [`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale)
+for example code and audio playbacks.
 
 # Visualization
 
@@ -338,8 +366,10 @@ objects to the rendering method. Notes can easily be retrieved from
 [`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale)
 objects.
 
+## Piano
+
 ``` python
-from musy import Piano, Guitar
+from musy import Piano
 
 Piano()(Note("C#"))
 ```
@@ -459,3 +489,9 @@ Piano()(PolyChord([Chord.from_short("E"), Chord.from_short("Am")]))
     .highlight-black { background: #ff0 !important; color: #000 !important; }
     </style>
     <div class="piano" style="width:440px"><div class="white-keys"><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key">G</div><div class="white-key highlight">A</div><div class="white-key highlight">B</div><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="black-key" style="left:26px">C#</div><div class="black-key" style="left:66px">D#</div><div class="black-key" style="left:146px">F#</div><div class="black-key highlight-black" style="left:186px">G#</div><div class="black-key" style="left:226px">A#</div><div class="black-key" style="left:306px">C#</div><div class="black-key" style="left:346px">D#</div><div class="black-key" style="left:426px">F#</div></div>
+
+## Guitar
+
+``` python
+from musy import Guitar
+```

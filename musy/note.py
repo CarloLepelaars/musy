@@ -14,7 +14,7 @@ import scipy.io.wavfile as wav
 from IPython.display import Audio
 from mingus.core import notes as mingus_notes
 
-# %% ../nbs/00_note.ipynb 6
+# %% ../nbs/00_note.ipynb 4
 BASE_NOTES = ["C", "D", "E", "F", "G", "A", "B"]
 CHROMATIC_NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 INTERVALS = ["1", "b2", "2", "b3", "3", "4", "#4", "5", "b6", "6", "b7", "7"]
@@ -85,7 +85,7 @@ INTERVAL_TYPES = {
     11: "Sharp Dissonant", # Major Seventh
 }
 
-# %% ../nbs/00_note.ipynb 10
+# %% ../nbs/00_note.ipynb 7
 class Note(BasicRepr):
     def __init__(self, note: str, oct: int = 4):
         assert isinstance(oct, int) and oct > 0, f"Octave must be a positive integer, got oct={oct}."
@@ -119,31 +119,61 @@ class Note(BasicRepr):
     def __gt__(self, other): return self.rel() > other.rel()
     def __ge__(self, other): return self.rel() >= other.rel()
 
-# %% ../nbs/00_note.ipynb 20
+# %% ../nbs/00_note.ipynb 21
 @patch
 def __add__(self:Note, other):
     """Add n semitones to a note."""
     octave_change = (other + int(self)) // 12
     return Note(CHROMATIC_NOTES[(int(self) + other) % 12], oct=self.oct + octave_change)
 
+# %% ../nbs/00_note.ipynb 28
 @patch
 def __mod__(self:Note, other):
     """Add n whole notes."""
     return self + other * 2
 
-# %% ../nbs/00_note.ipynb 30
+# %% ../nbs/00_note.ipynb 33
 @patch
 def __sub__(self:Note, other):
     """Subtract n semitones from a note."""
     octave_change = (other + int(self)) // 12
     return Note(CHROMATIC_NOTES[(int(self) - other) % 12], oct=self.oct - octave_change)
 
+# %% ../nbs/00_note.ipynb 38
 @patch
 def __floordiv__(self:Note, other):
     """Subtract n whole notes"""
     return self - other * 2
 
-# %% ../nbs/00_note.ipynb 39
+# %% ../nbs/00_note.ipynb 44
+@patch
+def minor(self:Note): return self - 3
+
+# %% ../nbs/00_note.ipynb 47
+@patch
+def major(self:Note): return self + 3
+
+# %% ../nbs/00_note.ipynb 51
+@patch 
+def get_audio_array(self:Note, length=1, sr=44100):
+    a = {'C':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':4,'F':5,
+         'F#':6,'Gb':6,'G':7,'G#':8,'Ab':8,'A':9,'A#':10,'Bb':10,'B':11}
+    t = np.linspace(0, length, int(sr * length), False)
+    def freq(n): return 440 * 2**((12 * (int(n[-1])+1) + a[n[:-1]] - 69)/12)
+    wave = np.sin(2 * np.pi * freq(f"{self.note}{self.oct}") * t)
+    wave = (wave / np.max(np.abs(wave)) * 32767).astype(np.int16)
+    return wave
+
+@patch
+def get_audio_bytes(self:Note, length=1, sr=44100):
+    buf = io.BytesIO(); wav.write(buf, sr, self.get_audio_array(length, sr))
+    return buf.getvalue()
+
+# %% ../nbs/00_note.ipynb 54
+@patch
+def play(self:Note, length=1): return Audio(data=self.get_audio_bytes(length))
+
+# %% ../nbs/00_note.ipynb 63
 class Interval:
     def __init__(self, note1: Note, note2: Note):
         store_attr()
@@ -171,18 +201,18 @@ class Interval:
         c.semitones = abs(c.semitones)
         return c
 
-# %% ../nbs/00_note.ipynb 41
+# %% ../nbs/00_note.ipynb 65
 @patch
 def interval(self:Note, other:Note): return Interval(self, other)
 
 @patch
 def __and__(self:Note, other:Note): return self.interval(other)
 
-# %% ../nbs/00_note.ipynb 59
+# %% ../nbs/00_note.ipynb 84
 @patch
 def type(self:Interval): return INTERVAL_TYPES[abs(self.semitones) % 12]
 
-# %% ../nbs/00_note.ipynb 69
+# %% ../nbs/00_note.ipynb 95
 @patch
 def __add__(self:Interval, other):
     return Interval(self.note1, self.note2+other)
@@ -190,31 +220,3 @@ def __add__(self:Interval, other):
 @patch 
 def __sub__(self:Interval, other):
     return Interval(self.note1, self.note2-other)
-
-# %% ../nbs/00_note.ipynb 77
-@patch
-def minor(self:Note): return self - 3
-
-# %% ../nbs/00_note.ipynb 80
-@patch
-def major(self:Note): return self + 3
-
-# %% ../nbs/00_note.ipynb 84
-@patch 
-def get_audio_array(self:Note, length=1, sr=44100):
-    a = {'C':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':4,'F':5,
-         'F#':6,'Gb':6,'G':7,'G#':8,'Ab':8,'A':9,'A#':10,'Bb':10,'B':11}
-    t = np.linspace(0, length, int(sr * length), False)
-    def freq(n): return 440 * 2**((12 * (int(n[-1])+1) + a[n[:-1]] - 69)/12)
-    wave = np.sin(2 * np.pi * freq(f"{self.note}{self.oct}") * t)
-    wave = (wave / np.max(np.abs(wave)) * 32767).astype(np.int16)
-    return wave
-
-@patch
-def get_audio_bytes(self:Note, length=1, sr=44100):
-    buf = io.BytesIO(); wav.write(buf, sr, self.get_audio_array(length, sr))
-    return buf.getvalue()
-
-# %% ../nbs/00_note.ipynb 87
-@patch
-def play(self:Note, length=1): return Audio(data=self.get_audio_bytes(length))
