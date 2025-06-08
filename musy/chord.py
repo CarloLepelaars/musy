@@ -43,7 +43,7 @@ class Chord(BasicRepr):
     def __gt__(self, other): return self.first > other.first or (self.first == other.first and self._compare_notes(other, lambda x, y: x > y))
     def __ge__(self, other): return self.first > other.first or (self.first == other.first and self._compare_notes(other, lambda x, y: x >= y))
 
-# %% ../nbs/01_chord.ipynb 20
+# %% ../nbs/01_chord.ipynb 22
 @patch
 def __mul__(self:Note, other: Note):
     """ Multiply two notes to form a chord. """
@@ -56,18 +56,18 @@ def __mul__(self:Chord, other):
     else:
         raise ValueError("Chord objects can only be multiplied with Note or other Chord objects")
 
-# %% ../nbs/01_chord.ipynb 23
+# %% ../nbs/01_chord.ipynb 25
 @patch
 def invert(self:Chord, n: int = 1):
     assert n > 0 and n < len(self.s_notes), f"Invalid inversion '{n}' for chord with '{len(self.s_notes)}' notes."
     return Chord(self.notes[n:] + [Note(str(note), oct=note.oct + 1) for note in self.notes[:n]])
 
-# %% ../nbs/01_chord.ipynb 26
+# %% ../nbs/01_chord.ipynb 28
 @patch
 def intervals(self:Chord):
     return [Interval(n1, n2) for n1, n2 in zip(self.notes, self.notes[1:])]
 
-# %% ../nbs/01_chord.ipynb 29
+# %% ../nbs/01_chord.ipynb 31
 @patch
 def get_audio_array(self:Chord, length=1):
     return np.sum([n.get_audio_array(length) for n in self.notes], axis=0)
@@ -76,14 +76,14 @@ def get_audio_array(self:Chord, length=1):
 def play(self:Chord, length=1): 
     return Audio(self.get_audio_array(length), rate=44100)
 
-# %% ../nbs/01_chord.ipynb 35
+# %% ../nbs/01_chord.ipynb 37
 class PolyChord(Chord):
     def __init__(self, chords: list[Chord]):
         self.chords = chords
         super().__init__([note for chord in chords for note in chord.notes])
     def __repr__(self): return f"PolyChord: '{'|'.join([c.name() for c in self.chords])}'. Notes: {self.short_s_notes}"
 
-# %% ../nbs/01_chord.ipynb 38
+# %% ../nbs/01_chord.ipynb 41
 @patch
 def invert(self:PolyChord, n: int = 1):
     return PolyChord([c.invert(n) for c in self.chords])
