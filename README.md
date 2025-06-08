@@ -227,8 +227,7 @@ Intervals can be obtained.
 dorian.get_interval_names()
 ```
 
-    ['unison',
-     'major second',
+    ['major second',
      'minor third',
      'perfect fourth',
      'perfect fifth',
@@ -261,6 +260,38 @@ dorian.get_sevenths("E")
      Chord: 'B minor seventh'. Notes: ['B4', 'D4', 'F#5', 'A5'],
      Chord: 'C# half diminished seventh'. Notes: ['C#5', 'E6', 'G6', 'B6'],
      Chord: 'D major seventh'. Notes: ['D5', 'F#6', 'A6', 'C#6']]
+
+All information can be conveniently retrieved and displayed as a Pandas
+DataFrame with `to_frame`.
+
+``` python
+dorian.to_frame(root="E")
+```
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+&#10;    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+&#10;    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+|  | Intervals | Relative Semitones | Absolute Semitones | Notes | Triads | Seventh Chords |
+|----|----|----|----|----|----|----|
+| 0 | 1 | 0 | 0 | E | E minor triad | E minor seventh |
+| 1 | 2 | 2 | 2 | F# | F# minor triad | F# minor seventh |
+| 2 | b3 | 3 | 1 | G | G major triad | G major seventh |
+| 3 | 4 | 5 | 2 | A | A major triad | A dominant seventh |
+| 4 | 5 | 7 | 2 | B | B minor triad | B minor seventh |
+| 5 | 6 | 9 | 2 | C# | C# diminished triad | C# half diminished seventh |
+| 6 | b7 | 10 | 1 | D | D major triad | D major seventh |
+
+</div>
 
 Consult
 [`Scale.available_scales`](https://CarloLepelaars.github.io/musy/core.html#scale.available_scales)
