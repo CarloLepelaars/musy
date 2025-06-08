@@ -14,10 +14,10 @@ pip install musy
 ## Note
 
 ``` python
-from musy import Note, Chord, Scale
+from musy import Note, Chord, Scale, PolyChord
 ```
 
-The [`Note`](https://CarloLepelaars.github.io/musy/core.html#note) is
+The [`Note`](https://CarloLepelaars.github.io/musy/note.html#note) is
 the basic building block from which you can create chords and songs.
 
 ``` python
@@ -25,7 +25,7 @@ c_sharp = Note("C#")
 c_sharp
 ```
 
-    musy.core.Note(note='C#', oct=4)
+    musy.note.Note(note='C#', oct=4)
 
 Notes can be added and subtracted to form new notes. Each added integer
 represents a semitone.
@@ -34,19 +34,19 @@ represents a semitone.
 c_sharp + 1
 ```
 
-    musy.core.Note(note='D', oct=4)
+    musy.note.Note(note='D', oct=4)
 
 ``` python
 c_sharp - 1
 ```
 
-    musy.core.Note(note='C', oct=4)
+    musy.note.Note(note='C', oct=4)
 
 ``` python
 c_sharp + 14
 ```
 
-    musy.core.Note(note='D#', oct=5)
+    musy.note.Note(note='D#', oct=5)
 
 Notes can be compared using familiar Python operators.
 
@@ -67,7 +67,7 @@ Note("C", oct=4) >= Note("G", oct=3)
 
     True
 
-[`Interval`](https://CarloLepelaars.github.io/musy/core.html#interval)
+[`Interval`](https://CarloLepelaars.github.io/musy/note.html#interval)
 objects can be obtained by calling `interval` on two notes or using the
 `&` operator.
 
@@ -120,19 +120,19 @@ on the circle of fifths.
 Note("C").minor()
 ```
 
-    musy.core.Note(note='A', oct=4)
+    musy.note.Note(note='A', oct=4)
 
 ``` python
 Note("C#").major()
 ```
 
-    musy.core.Note(note='E', oct=4)
+    musy.note.Note(note='E', oct=4)
 
 # Chord
 
-The [`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord) is
+The [`Chord`](https://CarloLepelaars.github.io/musy/chord.html#chord) is
 a collection of
-[`Note`](https://CarloLepelaars.github.io/musy/core.html#note) objects
+[`Note`](https://CarloLepelaars.github.io/musy/note.html#note) objects
 played together.
 
 ``` python
@@ -142,8 +142,8 @@ c_major
 
     Chord: 'C major triad'. Notes: ['C4', 'E4', 'G4']
 
-[`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord) objects
-can be initialized from shorthand notation.
+[`Chord`](https://CarloLepelaars.github.io/musy/chord.html#chord)
+objects can be initialized from shorthand notation.
 
 ``` python
 cmaj7 = Chord.from_short("Cmaj7")
@@ -161,10 +161,10 @@ cmaj7.invert(1)
 
     Chord: 'C major seventh, first inversion'. Notes: ['E4', 'G4', 'B4', 'C5']
 
-Like [`Note`](https://CarloLepelaars.github.io/musy/core.html#note)
+Like [`Note`](https://CarloLepelaars.github.io/musy/note.html#note)
 objects,
-[`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord) objects
-can be added and subtracted to transpose them.
+[`Chord`](https://CarloLepelaars.github.io/musy/chord.html#chord)
+objects can be added and subtracted to transpose them.
 
 ``` python
 cmaj7 + 2
@@ -180,23 +180,29 @@ Note("C") * Note("E") * Note("G")
 
     Chord: 'C major triad'. Notes: ['C4', 'E4', 'G4']
 
-For advanced usage there is even a way to create
-[`PolyChord`](https://CarloLepelaars.github.io/musy/core.html#polychord)
-objects. These are most naturally created by multiplying
-[`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord)
+# PolyChord
+
+For polyphonic use cases you can create
+[`PolyChord`](https://CarloLepelaars.github.io/musy/chord.html#polychord)
+objects. This objects inherits the same functionality as
+[`Chord`](https://CarloLepelaars.github.io/musy/chord.html#chord)
 objects.
 
 ``` python
-Chord.from_short("C") * Chord.from_short("Bbmaj7").invert(3)
+c = Chord.from_short("C")
+bbmaj7_3_inv = Chord.from_short("Bbmaj7").invert(3)
+
+poly_chord = PolyChord([c, bbmaj7_3_inv])
+poly_chord
 ```
 
     PolyChord: 'C major triad|Bb major seventh, third inversion'. Notes: ['C4', 'E4', 'G4', 'A4', 'Bb5', 'D5', 'F5']
 
 # Scale
 
-[`Scale`](https://CarloLepelaars.github.io/musy/core.html#scale) objects
-are collections of intervals from which we can generate notes and chords
-around a root note.
+[`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale)
+objects are collections of intervals from which we can generate notes
+and chords around a root note.
 
 ``` python
 dorian = Scale("dorian")
@@ -206,20 +212,20 @@ dorian
     Scale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7']
 
 When given a root note,
-[`Scale`](https://CarloLepelaars.github.io/musy/core.html#scale)
+[`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale)
 generates the notes of the scale.
 
 ``` python
 dorian.get_notes("C")
 ```
 
-    [musy.core.Note(note='C', oct=4),
-     musy.core.Note(note='D', oct=4),
-     musy.core.Note(note='D#', oct=4),
-     musy.core.Note(note='F', oct=4),
-     musy.core.Note(note='G', oct=4),
-     musy.core.Note(note='A', oct=4),
-     musy.core.Note(note='A#', oct=4)]
+    [musy.note.Note(note='C', oct=4),
+     musy.note.Note(note='D', oct=4),
+     musy.note.Note(note='D#', oct=4),
+     musy.note.Note(note='F', oct=4),
+     musy.note.Note(note='G', oct=4),
+     musy.note.Note(note='A', oct=4),
+     musy.note.Note(note='A#', oct=4)]
 
 Intervals can be obtained.
 
@@ -294,7 +300,7 @@ dorian.to_frame(root="E")
 </div>
 
 Consult
-[`Scale.available_scales`](https://CarloLepelaars.github.io/musy/core.html#scale.available_scales)
+[`Scale.available_scales`](https://CarloLepelaars.github.io/musy/scale.html#scale.available_scales)
 for a list of available scales. If a scale is not available, you can
 create your own scale from intervals.
 
@@ -309,27 +315,27 @@ persian
 persian.get_notes("C")
 ```
 
-    [musy.core.Note(note='C', oct=4),
-     musy.core.Note(note='C#', oct=4),
-     musy.core.Note(note='E', oct=4),
-     musy.core.Note(note='F', oct=4),
-     musy.core.Note(note='F#', oct=4),
-     musy.core.Note(note='G#', oct=4),
-     musy.core.Note(note='B', oct=4)]
+    [musy.note.Note(note='C', oct=4),
+     musy.note.Note(note='C#', oct=4),
+     musy.note.Note(note='E', oct=4),
+     musy.note.Note(note='F', oct=4),
+     musy.note.Note(note='F#', oct=4),
+     musy.note.Note(note='G#', oct=4),
+     musy.note.Note(note='B', oct=4)]
 
-[`Note`](https://CarloLepelaars.github.io/musy/core.html#note),
-[`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord),
-[`PolyChord`](https://CarloLepelaars.github.io/musy/core.html#polychord)
-and [`Scale`](https://CarloLepelaars.github.io/musy/core.html#scale)
+[`Note`](https://CarloLepelaars.github.io/musy/note.html#note),
+[`Chord`](https://CarloLepelaars.github.io/musy/chord.html#chord),
+[`PolyChord`](https://CarloLepelaars.github.io/musy/chord.html#polychord)
+and [`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale)
 objects can all be heard by calling the `play` method on them.
 
 # Visualization
 
 `musy` objects can be visualized on a piano or guitar by providing a
-list of [`Note`](https://CarloLepelaars.github.io/musy/core.html#note)
+list of [`Note`](https://CarloLepelaars.github.io/musy/note.html#note)
 objects to the rendering method. Notes can easily be retrieved from
-[`Chord`](https://CarloLepelaars.github.io/musy/core.html#chord) and
-[`Scale`](https://CarloLepelaars.github.io/musy/core.html#scale)
+[`Chord`](https://CarloLepelaars.github.io/musy/chord.html#chord) and
+[`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale)
 objects.
 
 ``` python
