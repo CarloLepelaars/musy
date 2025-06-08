@@ -4,8 +4,8 @@
 
 # %% auto 0
 __all__ = ['BASE_NOTES', 'CHROMATIC_NOTES', 'INTERVALS', 'NOTE_MAPPING', 'INTERVAL_NAMES', 'INTERVAL_HALF_STEPS',
-           'STEPS_TO_INTERVAL', 'STEPS_TO_INTERVAL_FULL', 'INTERVAL_TYPES', 'SCALES', 'INV_SCALES', 'Note', 'Interval',
-           'Chord', 'PolyChord', 'Scale']
+           'STEPS_TO_INTERVAL', 'STEPS_TO_INTERVAL_FULL', 'INTERVAL_TYPES', 'SCALES', 'd', 'INV_SCALES_BY_INTERVAL',
+           'INV_SCALES_BY_NAME', 'Note', 'Interval', 'Chord', 'PolyChord', 'Scale']
 
 # %% ../nbs/00_core.ipynb 3
 import io
@@ -15,6 +15,7 @@ from fastcore.all import *
 import scipy.io.wavfile as wav
 from IPython.display import Audio
 from itertools import combinations
+from collections import defaultdict
 from mingus.core import chords as mingus_chords, notes as mingus_notes
 
 # %% ../nbs/00_core.ipynb 6
@@ -79,6 +80,7 @@ INTERVAL_NAMES = {
 }
 INTERVAL_HALF_STEPS = {
     "1": 0,
+    "#1": 1,
     "b2": 1,
     "2": 2,
     "#2": 3,
@@ -163,14 +165,16 @@ SCALES = {# Major modes
           "lydian": ["1", "2", "3", "#4", "5", "6", "7"],
           "mixolydian": ["1", "2", "3", "4", "5", "6", "b7"],
           "aeolian": ["1", "2", "b3", "4", "5", "b6", "b7"],
-          "locrian": ["1", "b2", "b3", "4", "5", "b6", "b7"],
+          "locrian": ["1", "b2", "b3", "4", "b5", "b6", "b7"],
           # Melodic Minor modes
           "melodic minor": ["1", "2", "b3", "4", "5", "6", "7"],
           "dorian b2": ["1", "b2", "b3", "4", "5", "6", "b7"],
           "lydian augmented": ["1", "2", "3", "#4", "#5", "6", "7"],
           "lydian b7": ["1", "2", "3", "#4", "5", "6", "b7"],
+          "lydian dominant": ["1", "2", "3", "#4", "5", "6", "b7"],
+          "acoustic": ["1", "2", "3", "#4", "5", "6", "b7"],
           "mixolydian #11": ["1", "2", "3", "#4", "5", "6", "b7"],
-          "locrian n2": ["1", "2", "b3", "4", "5", "b6", "7"],
+          "locrian n2": ["1", "2", "b3", "4", "b5", "b6", "7"],
           "altered": ["1", "b2", "b3", "b4", "b5", "b6", "b7"],
           "altered dominant": ["1", "b2", "b3", "b4", "b5", "b6", "b7"],
           "diminished whole-tone": ["1", "b2", "b3", "b4", "b5", "b6", "b7"],
@@ -183,28 +187,135 @@ SCALES = {# Major modes
           "dorian #4": ["1", "2", "b3", "#4", "5", "6", "b7"],
           "phrygian major": ["1", "b2", "3", "4", "5", "b6", "b7"],
           "phrygian dominant": ["1", "b2", "3", "4", "5", "b6", "b7"],
+          "spanish phrygian": ["1", "b2", "3", "4", "5", "b6", "b7"],
+          "spanish major": ["1", "b2", "3", "4", "5", "b6", "b7"],
+          "spanish": ["1", "b2", "3", "4", "5", "b6", "b7"],
           "lydian #2": ["1", "#2", "3", "#4", "5", "6", "7"],
           "lydian #9": ["1", "#2", "3", "#4", "5", "6", "7"],
           "altered dominant bb7": ["1", "b2", "b3", "b4", "b5", "b6", "6"],
+          "altered 13": ["1", "b2", "b3", "b4", "b5", "b6", "6"],
           # Harmonic major modes
           "harmonic major": ["1", "2", "3", "4", "5", "b6", "7"],
           "ionian b6": ["1", "2", "3", "4", "5", "b6", "7"],
           "dorian b5": ["1", "2", "b3", "4", "b5", "6", "b7"],
-
+          "phrygian b4": ["1", "b2", "b3", "b4", "5", "b6", "b7"],
+          "lydian b3": ["1", "2", "b3", "#4", "5", "6", "7"],
+          "melodic minor #4": ["1", "2", "b3", "#4", "5", "6", "7"],
+          "mixolydian b2": ["1", "b2", "3", "4", "5", "6", "b7"],
+          # Lydian augmented already defined in melodic minor modes
+          "locrian bb7": ["1", "b2", "b3", "4", "b5", "b6", "6"],
+          # Double harmonic major modes
+          "double harmonic major": ["1", "b2", "3", "4", "5", "b6", "7"],
+          "double harmonic": ["1", "b2", "3", "4", "5", "b6", "7"],
+          "lydian #2#6": ["1", "#2", "3", "#4", "5", "#6", "7"],
+          "ultraphrygian": ["1", "b2", "b3", "b4", "5", "b6", "6"],
+          "hungarian minor": ["1", "2", "b3", "#4", "5", "b6", "7"],
+          "oriental": ["1", "b2", "3", "4", "b5", "6", "b7"], # Mixolydian b2 with lowered 5
+          "ionian aug#2": ["1", "#2", "3", "4", "#5", "6", "7"],
+          "locrian bb3bb7": ["1", "b2", "2", "4", "b5", "b6", "6"],
+          # Bebop scales
+          "bebop dominant": ["1", "2", "3", "4", "5", "6", "#6", "7"],
+          "bebop major": ["1", "2", "3", "4", "5", "b6", "6", "7"],
+          "bebop blues": ["1", "2", "b3", "3", "4", "5", "6", "b7"],
+          "bebop melodic minor": ["1", "2", "b3", "4", "5", "b6", "6", "7"],
           # Pentatonic scales
           "pentatonic major": ["1", "2", "3", "5", "6"],
+          "major pentatonic": ["1", "2", "3", "5", "6"],
           "pentatonic minor": ["1", "b3", "4", "5", "b7"],
+          "minor pentatonic": ["1", "b3", "4", "5", "b7"],
           "pentatonic blues": ["1", "b3", "4", "b5", "5", "b7"],
+          "blues pentatonic": ["1", "b3", "4", "b5", "5", "b7"],
           "pentatonic neutral": ["1", "2", "4", "5", "b7"],
-          "blues": ["1", "b3", "4", "5", "b7"],
+          "neutral pentatonic": ["1", "2", "4", "5", "b7"],
+          "pentatonic rock": ["1", "b3", "4", "#5", "b7"],
+          "rock pentatonic": ["1", "b3", "4", "#5", "b7"],
+          "jue": ["1", "b3", "4", "#5", "b7"], # Same intervals as rock pentatonic
+          "pentatonic scottish": ["1", "2", "4", "5", "6"],
+          "scottish pentatonic": ["1", "2", "4", "5", "6"],
+          # Blues scales
+          "blues major": ["1", "2", "b3", "3", "5", "6"],
+          "blues minor": ["1", "b3", "4", "b5", "5", "b7"],
+          "blues": ["1", "b3", "4", "b5", "5", "b7"], # Shorthand for Blues Minor
+          "blues diminished": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"],
+          "aux diminished blues": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"], 
+          "half-whole": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"],
+          "balinese": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"], 
+          # Gypsy scales
+          "gypsy major": ["1", "b2", "3", "4", "5", "b6", "7"],
+          "gypsy minor": ["1", "2", "b3", "b5", "5", "b6", "7"],
+          "spanish gypsy": ["1", "b2", "3", "4", "5", "b6", "b7"], # Same as Phrygian dominant
+          "hungarian gypsy": ["1", "2", "b3", "#4", "5", "b6", "b7"], # Hungarian minor with lowered 7
+          # Diminished scales
+          "diminished": ["1", "2", "b3", "4", "b5", "b6", "6", "7"],
+          "tonic diminished": ["1", "2", "b3", "4", "b5", "b6", "6", "7"],
+          "whole-half": ["1", "2", "b3", "4", "#4", "#5", "6", "7"],
+          "dominant diminished": ["1", "b2", "b3", "3", "#4", "5", "6", "b7"],
+          "whole": ["1", "2", "3", "#4", "#5", "#6"],
+          "whole-tone": ["1", "2", "3", "#4", "#5", "#6"],
+          "aux augmented": ["1", "2", "3", "#4", "#5", "#6"],
+          # Maqam
+          "bayati shuri": ["1", "2", "b3", "4", "b5", "6", "b7"],
+          "hijaz": ["1", "b2", "3", "4", "5", "b6", "b7"],
+          "hijaz kar": ["1", "b2", "3", "4", "5", "6", "7"],
+          "huzam": ["1", "b2", "b3", "3", "5", "b6", "b7"],
+          "nikriz": ["1", "2", "3", "#4", "5", "6", "7"],
+          "tunisian": ["1", "2", "3", "#4", "5", "6", "7"],
+          "saba": ["1", "2", "b3", "3", "5", "b6", "b7"],
+          "sabah": ["1", "2", "b3", "3", "5", "b6", "b7"],
+          "suznak": ["1", "2", "3", "4", "5", "#5", "7"],
+          "neveseri": ["1", "b2", "b3", "3", "5", "b6", "b7", "7"],
+          # Greek
+          "pireaus": ["1", "b2", "3", "#4", "5", "#5", "7"],
+          "tsinganikos": ["1", "b2", "3", "4", "#4", "6", "#6"],
+          # Hindustani
+          "marwa": ["1", "b2", "3", "#4", "5", "6", "7"],
+          "poorvi": ["1", "b2", "3", "#4", "5", "6", "7"],
+          "segah": ["1", "#2", "3", "4", "5", "#5", "7"],
+          "todi": ["1", "b2", "b3", "#4", "5", "b6", "7"],
+          # Carnatic
+          "charukeshi": ["1", "2", "3", "4", "5", "b6", "b7"],
+          "dharmaavati": ["1", "2", "b3", "b5", "5", "6", "7"],
+          "lataangi": ["1", "2", "3", "#4", "5", "6", "7"],
+          "vachaspati": ["1", "2", "3", "#4", "5", "6", "#6"],
+          "natakpriya": ["1", "b2", "b3", "4", "5", "6", "b7"],
+          "rampriya": ["1", "b2", "3", "#4", "5", "6", "#6"],
+          "suryakant": ["1", "b2", "3", "4", "5", "6", "7"],
+          # Japanese
+          "joshi akikaze": ["1", "2", "b3", "5", "6"],
+          "akikaze joshi": ["1", "2", "b3", "5", "6"],
+          "joshi hira": ["1", "2", "b3", "5", "b6"],
+          "hira joshi": ["1", "2", "b3", "5", "b6"],
+          "joshi iwato": ["1", "b2", "4", "b5", "b7"],
+          "iwato joshi": ["1", "b2", "4", "b5", "b7"],
+          "joshi kokin": ["1", "2", "4", "5", "b6"],
+          "kokin joshi": ["1", "2", "4", "5", "b6"],
+          "joshi kumoi": ["1", "b2", "4", "5", "b6"],
+          "kumoi joshi": ["1", "b2", "4", "5", "b6"],
+          "joshi okinawa": ["1", "3", "4", "5", "7"],
+          "okinawa joshi": ["1", "3", "4", "5", "7"],
+          "sen in": ["1", "b2", "4", "5", "b7"],
+          "in sen": ["1", "b2", "4", "5", "b7"],
           # Misc.
-          "chromatic": ["1", "b2", "2", "b3", "3", "4", "#4", "5", "#5", "6", "b7", "7"]
+          "chromatic": ["1", "b2", "2", "b3", "3", "4", "#4", "5", "#5", "6", "b7", "7"],
+          "augmented": ["1", "#2", "3", "5", "#5", "7"],
+          "enigmatic ascending": ["1", "b2", "3", "#4", "#5", "#6", "7"],
+          "enigmatic descending": ["1", "b2", "3", "4", "b6", "b7", "7"],
+          "hungarian major": ["1", "b3", "3", "b5", "5", "6", "b7"],
+          "neapolitan major": ["1", "b2", "b3", "4", "5", "6", "7"],
+          "neapolitan minor": ["1", "b2", "b3", "4", "5", "b6", "7"],
+          "prometheus": ["1", "2", "3", "b5", "6", "b7"],
+          "mystic": ["1", "2", "3", "b5", "6", "b7"],
+          "prometheus neapolitan": ["1", "b2", "3", "b5", "6", "b7"], # Prometheus with lowered 2
+          "spanish 8 tone": ["1", "b2", "b3", "3", "4", "b5", "b6", "b7"],
           }
 
-INV_SCALES = {tuple(intervals): [name for name, scale_intervals in SCALES.items() if scale_intervals == intervals] 
-               for intervals in SCALES.values()}
+# Invert scales so alternative names can be identified by intervals or name
+d = defaultdict(list)
+[d[tuple(v)].append(k) for k,v in SCALES.items()]
+INV_SCALES_BY_INTERVAL = dict(d)
+INV_SCALES_BY_NAME = {k: d[tuple(v)] for k,v in SCALES.items()}
 
-# %% ../nbs/00_core.ipynb 11
+# %% ../nbs/00_core.ipynb 10
 class Note(BasicRepr):
     def __init__(self, note: str, oct: int = 4):
         assert isinstance(oct, int) and oct > 0, f"Octave must be a positive integer, got oct={oct}."
@@ -238,7 +349,7 @@ class Note(BasicRepr):
     def __gt__(self, other): return self.rel() > other.rel()
     def __ge__(self, other): return self.rel() >= other.rel()
 
-# %% ../nbs/00_core.ipynb 21
+# %% ../nbs/00_core.ipynb 20
 @patch
 def __add__(self:Note, other):
     """Add n semitones to a note."""
@@ -250,7 +361,7 @@ def __mod__(self:Note, other):
     """Add n whole notes."""
     return self + other * 2
 
-# %% ../nbs/00_core.ipynb 31
+# %% ../nbs/00_core.ipynb 30
 @patch
 def __sub__(self:Note, other):
     """Subtract n semitones from a note."""
@@ -262,7 +373,7 @@ def __floordiv__(self:Note, other):
     """Subtract n whole notes"""
     return self - other * 2
 
-# %% ../nbs/00_core.ipynb 40
+# %% ../nbs/00_core.ipynb 39
 class Interval:
     def __init__(self, note1: Note, note2: Note):
         store_attr()
@@ -290,18 +401,18 @@ class Interval:
         c.semitones = abs(c.semitones)
         return c
 
-# %% ../nbs/00_core.ipynb 42
+# %% ../nbs/00_core.ipynb 41
 @patch
 def interval(self:Note, other:Note): return Interval(self, other)
 
 @patch
 def __and__(self:Note, other:Note): return self.interval(other)
 
-# %% ../nbs/00_core.ipynb 60
+# %% ../nbs/00_core.ipynb 59
 @patch
 def type(self:Interval): return INTERVAL_TYPES[abs(self.semitones) % 12]
 
-# %% ../nbs/00_core.ipynb 70
+# %% ../nbs/00_core.ipynb 69
 @patch
 def __add__(self:Interval, other):
     return Interval(self.note1, self.note2+other)
@@ -310,19 +421,35 @@ def __add__(self:Interval, other):
 def __sub__(self:Interval, other):
     return Interval(self.note1, self.note2-other)
 
-# %% ../nbs/00_core.ipynb 78
+# %% ../nbs/00_core.ipynb 77
 @patch
 def minor(self:Note): return self - 3
 
-# %% ../nbs/00_core.ipynb 81
+# %% ../nbs/00_core.ipynb 80
 @patch
 def major(self:Note): return self + 3
 
-# %% ../nbs/00_core.ipynb 88
+# %% ../nbs/00_core.ipynb 84
+@patch 
+def get_audio_array(self:Note, length=1, sr=44100):
+    a = {'C':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':4,'F':5,
+         'F#':6,'Gb':6,'G':7,'G#':8,'Ab':8,'A':9,'A#':10,'Bb':10,'B':11}
+    t = np.linspace(0, length, int(sr * length), False)
+    def freq(n): return 440 * 2**((12 * (int(n[-1])+1) + a[n[:-1]] - 69)/12)
+    wave = np.sin(2 * np.pi * freq(f"{self.note}{self.oct}") * t)
+    wave = (wave / np.max(np.abs(wave)) * 32767).astype(np.int16)
+    return wave
+
+@patch
+def get_audio_bytes(self:Note, length=1, sr=44100):
+    buf = io.BytesIO(); wav.write(buf, sr, self.get_audio_array(length, sr))
+    return buf.getvalue()
+
+# %% ../nbs/00_core.ipynb 87
 @patch
 def play(self:Note, length=1): return Audio(data=self.get_audio_bytes(length))
 
-# %% ../nbs/00_core.ipynb 97
+# %% ../nbs/00_core.ipynb 96
 class Chord(BasicRepr):
     def __init__(self, notes: List[Note]):
         self.notes = [Note(n) if isinstance(n, str) else n for n in notes]
@@ -359,7 +486,7 @@ class PolyChord(Chord):
         super().__init__([note for chord in chords for note in chord.notes])
     def __repr__(self): return f"PolyChord: '{'|'.join([c.name() for c in self.chords])}'. Notes: {self.short_s_notes}"
 
-# %% ../nbs/00_core.ipynb 112
+# %% ../nbs/00_core.ipynb 111
 @patch
 def __mul__(self:Note, other: Note):
     return Chord([self, other])
@@ -373,7 +500,7 @@ def __mul__(self:Chord, other):
     else:
         raise ValueError("Chord objects can only be multiplied with Note or other Chord objects")
 
-# %% ../nbs/00_core.ipynb 117
+# %% ../nbs/00_core.ipynb 116
 @patch
 def invert(self:Chord, n: int = 1):
     assert n > 0 and n < len(self.s_notes), f"Invalid inversion '{n}' for chord with '{len(self.s_notes)}' notes."
@@ -383,12 +510,12 @@ def invert(self:Chord, n: int = 1):
 def invert(self:PolyChord, n: int = 1):
     return PolyChord([c.invert(n) for c in self.chords])
 
-# %% ../nbs/00_core.ipynb 121
+# %% ../nbs/00_core.ipynb 120
 @patch
 def intervals(self:Chord):
     return [Interval(n1, n2) for n1, n2 in zip(self.notes, self.notes[1:])]
 
-# %% ../nbs/00_core.ipynb 126
+# %% ../nbs/00_core.ipynb 125
 @patch
 def get_audio_array(self:Chord, length=1):
     return np.sum([n.get_audio_array(length) for n in self.notes], axis=0)
@@ -397,7 +524,7 @@ def get_audio_array(self:Chord, length=1):
 def play(self:Chord, length=1): 
     return Audio(self.get_audio_array(length), rate=44100)
 
-# %% ../nbs/00_core.ipynb 135
+# %% ../nbs/00_core.ipynb 134
 class Scale:
     def __init__(self, name: str):
         self.name = name.lower()
@@ -425,6 +552,8 @@ class Scale:
         abs = []
         for i, r in enumerate(rel[1:]):
             abs.append(r - rel[i])
+        # Last remaining interval
+        abs.append(12-sum(abs))
         return abs
     
     @property
@@ -436,31 +565,31 @@ class Scale:
     def __ne__(self, other): return not self == other
     def __iter__(self) -> list[str]: return iter(self.intervals)
 
-# %% ../nbs/00_core.ipynb 150
+# %% ../nbs/00_core.ipynb 149
 @patch
 def get_notes(self:Scale, root, oct=4):
     """Get the notes of a scale from a root note."""
     root = Note(root, oct=oct) if isinstance(root, str) else root
     return [root + int(INTERVAL_HALF_STEPS[i]) for i in self.intervals]
 
-# %% ../nbs/00_core.ipynb 156
+# %% ../nbs/00_core.ipynb 154
 @patch
 def get_diatonic_chords(self:Scale, root, min_notes=3):
     assert min_notes > 1, "min_notes must be greater than 1."
     notes = self.get_notes(root)
     return [Chord(combo) for n in range(min_notes, len(notes)+1) for combo in combinations(notes, n)]
 
-# %% ../nbs/00_core.ipynb 160
+# %% ../nbs/00_core.ipynb 158
 @patch
 def get_interval_names(self:Scale, short=False):
     return self.intervals if short else self.interval_names
 
-# %% ../nbs/00_core.ipynb 165
+# %% ../nbs/00_core.ipynb 163
 @patch
 def get_scale_names(self:Scale):
-    return INV_SCALES[tuple(self.intervals)]
+    return INV_SCALES_BY_INTERVAL.get(tuple(self.intervals), [])
 
-# %% ../nbs/00_core.ipynb 169
+# %% ../nbs/00_core.ipynb 168
 @patch
 def get_audio_array(self:Scale, root, oct=4, length=0.3):
     notes = self.get_notes(root, oct=oct)
@@ -510,7 +639,7 @@ def to_frame(self:Scale, root=None):
     d = {
         "Intervals": self.intervals,
         "Relative Semitones": self.rel_semitones,
-        "Absolute Semitones": [0] + self.abs_semitones,
+        "Absolute Semitones": self.abs_semitones,
     }
     if root:
         d.update({

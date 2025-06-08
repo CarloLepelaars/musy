@@ -283,13 +283,13 @@ dorian.to_frame(root="E")
 
 |  | Intervals | Relative Semitones | Absolute Semitones | Notes | Triads | Seventh Chords |
 |----|----|----|----|----|----|----|
-| 0 | 1 | 0 | 0 | E | E minor triad | E minor seventh |
-| 1 | 2 | 2 | 2 | F# | F# minor triad | F# minor seventh |
-| 2 | b3 | 3 | 1 | G | G major triad | G major seventh |
+| 0 | 1 | 0 | 2 | E | E minor triad | E minor seventh |
+| 1 | 2 | 2 | 1 | F# | F# minor triad | F# minor seventh |
+| 2 | b3 | 3 | 2 | G | G major triad | G major seventh |
 | 3 | 4 | 5 | 2 | A | A major triad | A dominant seventh |
 | 4 | 5 | 7 | 2 | B | B minor triad | B minor seventh |
-| 5 | 6 | 9 | 2 | C# | C# diminished triad | C# half diminished seventh |
-| 6 | b7 | 10 | 1 | D | D major triad | D major seventh |
+| 5 | 6 | 9 | 1 | C# | C# diminished triad | C# half diminished seventh |
+| 6 | b7 | 10 | 2 | D | D major triad | D major seventh |
 
 </div>
 
