@@ -15,7 +15,7 @@ from . import Note, Chord, Scale
 
 render_ft()
 
-# %% ../nbs/03_viz.ipynb 7
+# %% ../nbs/03_viz.ipynb 6
 class Piano:
     def __ft__(self, highlight: list[Note] = None):
         notes = [str(n) for n in listify(highlight)] if highlight else []
@@ -63,7 +63,7 @@ class Piano:
     def __call__(self, highlight=list[Note]):
         return self.__ft__(highlight)
 
-# %% ../nbs/03_viz.ipynb 21
+# %% ../nbs/03_viz.ipynb 20
 class Guitar:
     def __ft__(self, highlight: list[Note] = None):
         ...
