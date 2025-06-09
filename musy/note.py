@@ -188,6 +188,10 @@ class Interval:
     def set_semitones(self):
         # TODO Add upper extensions to semitone calculation and interval names (2+ octaves)
         return (12 + int(self.note2) - int(self.note1) + (self.note2.oct - self.note1.oct) * 12) % 12
+    
+    @classmethod
+    def from_semitones(cls, semitones: int):
+        return cls(Note("C"), Note("C")+semitones)
 
     def __repr__(self): return f"{str(self.long)} ({str(self.short)})"
     def __eq__(self, other): return self.semitones == other.semitones

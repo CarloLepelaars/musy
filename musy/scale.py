@@ -14,7 +14,7 @@ from IPython.display import Audio
 from itertools import combinations, accumulate
 from collections import defaultdict
 
-from . import Note, Chord
+from . import Note, Chord, Interval
 
 # %% ../nbs/02_scale.ipynb 4
 INTERVAL_NAMES = {
@@ -263,7 +263,7 @@ class Scale:
         """Create a custom scale from a list of intervals."""
         for i in intervals:
             assert i in list(INTERVAL_NAMES), f"Interval '{i}' not valid. Available intervals: '{list(INTERVAL_NAMES.keys())}'"
-        # Infer name if not given.
+        # Infer name if not given
         custom_scale = cls(INV_SCALES_BY_INTERVAL.get(tuple(intervals), ["unknown"])[0] if not name else name)
         custom_scale.intervals = intervals
         return custom_scale
@@ -281,10 +281,6 @@ class Scale:
         # Last remaining interval
         abs.append(12-sum(abs))
         return abs
-    
-    @property
-    def interval_names(self):
-        return [INTERVAL_NAMES[i] for i in self.intervals[1:]]
     
     def __repr__(self): return f"Scale: {self.name.title()}. Intervals: {self.intervals}"
     def __eq__(self, other): return self.intervals == other.intervals
@@ -308,15 +304,19 @@ def get_diatonic_chords(self:Scale, root, min_notes=3):
 
 # %% ../nbs/02_scale.ipynb 40
 @patch
-def get_interval_names(self:Scale, short=False):
-    return self.intervals if short else self.interval_names
+def rel_interval_names(self:Scale, short=False):
+        return self.intervals if short else [INTERVAL_NAMES[i] for i in self.intervals[1:]]
 
-# %% ../nbs/02_scale.ipynb 45
+@patch
+def abs_interval_names(self:Scale, short=False):
+    return [getattr(Interval.from_semitones(i), "long" if not short else "short") for i in self.abs_semitones]
+
+# %% ../nbs/02_scale.ipynb 44
 @patch
 def get_scale_names(self:Scale):
     return INV_SCALES_BY_INTERVAL.get(tuple(self.intervals), [])
 
-# %% ../nbs/02_scale.ipynb 48
+# %% ../nbs/02_scale.ipynb 47
 @patch
 def _shift_abs_semitones(self:Scale, n):
     """ Shift the absolute semitones of a scale by n steps. """
@@ -327,7 +327,7 @@ def _shift_rel_semitones(self:Scale, n:int):
     """ Shift relative semitones by n steps. """
     return [0] + list(accumulate(self._shift_abs_semitones(n)[:-1]))
 
-# %% ../nbs/02_scale.ipynb 53
+# %% ../nbs/02_scale.ipynb 52
 def semi_to_intvals(semitones):
     """Convert relative semitone values to interval names."""
     # Major scale is the baseline for accidentals
@@ -343,7 +343,7 @@ def semi_to_intvals(semitones):
         else: intervals.append(f'{acc.get(diff, "")}{deg}')
     return intervals
 
-# %% ../nbs/02_scale.ipynb 58
+# %% ../nbs/02_scale.ipynb 57
 @patch
 def shift_intvals(self:Scale, n:int) -> list[str]:
     """Shift the intervals of a scale by n steps."""
@@ -353,7 +353,7 @@ def shift_intvals(self:Scale, n:int) -> list[str]:
 def get_modes(self:Scale) -> list[Scale]:
     return [Scale.from_intervals(self.shift_intvals(i)) for i in range_of(self)]
 
-# %% ../nbs/02_scale.ipynb 68
+# %% ../nbs/02_scale.ipynb 67
 @patch
 def get_audio_array(self:Scale, root, oct=4, length=0.3):
     notes = self.get_notes(root, oct=oct)
@@ -364,7 +364,7 @@ def get_audio_array(self:Scale, root, oct=4, length=0.3):
 def play(self:Scale, root, oct=4, length=0.3): 
     return Audio(self.get_audio_array(root, oct=oct, length=length), rate=44100)
 
-# %% ../nbs/02_scale.ipynb 77
+# %% ../nbs/02_scale.ipynb 76
 @patch
 def get_triads(self:Scale, root):
     """Get all triads in scale starting from root note."""
@@ -374,13 +374,13 @@ def get_triads(self:Scale, root):
                   Note(str(notes[(i+4)%7]), oct=notes[i].oct + (i+4)//7)]) 
             for i in range(len(notes))]
 
-# %% ../nbs/02_scale.ipynb 81
+# %% ../nbs/02_scale.ipynb 80
 @patch
 def play_triads(self:Scale, root):
     """Play all triads in scale starting from root note."""
     return Audio(np.concatenate([c.get_audio_array() for c in self.get_triads(root)]), rate=44100)
 
-# %% ../nbs/02_scale.ipynb 84
+# %% ../nbs/02_scale.ipynb 83
 @patch
 def get_sevenths(self:Scale, root):
     """Get all seventh chords in scale starting from root note."""
@@ -391,24 +391,26 @@ def get_sevenths(self:Scale, root):
                   Note(str(notes[(i+6)%7]), oct=notes[i].oct + (i+6)//7)]) 
             for i in range(len(notes))]
 
-# %% ../nbs/02_scale.ipynb 87
+# %% ../nbs/02_scale.ipynb 86
 @patch
 def play_sevenths(self:Scale, root):
     """Play all seventh chords in scale starting from root note."""
     return Audio(np.concatenate([c.get_audio_array() for c in self.get_sevenths(root)]), rate=44100)
 
-# %% ../nbs/02_scale.ipynb 91
+# %% ../nbs/02_scale.ipynb 90
 @patch
 def to_frame(self:Scale, root=None):
     d = {
-        "Intervals": self.intervals,
+        "Degree": self.intervals,
+        "Relative Interval": ["unison"] + self.rel_interval_names(),
+        "Mode": [m.name for m in self.get_modes()],
         "Relative Semitones": self.rel_semitones,
         "Absolute Semitones": self.abs_semitones,
     }
     if root:
         d.update({
             "Notes": self.get_notes(root),
-            "Triads": [t.name() for t in self.get_triads(root)],
-            "Seventh Chords": [s.name() for s in self.get_sevenths(root)],
+            "Triad": [t.name() for t in self.get_triads(root)],
+            "Seventh Chord": [s.name() for s in self.get_sevenths(root)],
         })
     return pd.DataFrame(d)

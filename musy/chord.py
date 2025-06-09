@@ -7,6 +7,7 @@ __all__ = ['Chord', 'PolyChord']
 
 # %% ../nbs/01_chord.ipynb 3
 import numpy as np
+import pandas as pd
 from fastcore.all import *
 from IPython.display import Audio
 from mingus.core import chords as mingus_chords
@@ -32,6 +33,7 @@ class Chord(BasicRepr):
     def __add__(self, other): return Chord([n + other for n in self.notes])
     def __sub__(self, other): return Chord([n - other for n in self.notes])
     def __mod__(self, other): return Chord([n % other for n in self.notes])
+    def __len__(self): return len(self.notes)
     def __floordiv__(self, other): return Chord([n // other for n in self.notes])
     def __iter__(self) -> list[str]: return iter(self.notes)
     
@@ -64,10 +66,14 @@ def invert(self:Chord, n: int = 1):
 
 # %% ../nbs/01_chord.ipynb 28
 @patch
-def intervals(self:Chord):
+def rel_intervals(self:Chord):
+    return [Interval(self.notes[0], n) for n in self.notes[1:]]
+
+@patch
+def abs_intervals(self:Chord):
     return [Interval(n1, n2) for n1, n2 in zip(self.notes, self.notes[1:])]
 
-# %% ../nbs/01_chord.ipynb 31
+# %% ../nbs/01_chord.ipynb 32
 @patch
 def get_audio_array(self:Chord, length=1):
     return np.sum([n.get_audio_array(length) for n in self.notes], axis=0)
@@ -76,14 +82,38 @@ def get_audio_array(self:Chord, length=1):
 def play(self:Chord, length=1): 
     return Audio(self.get_audio_array(length), rate=44100)
 
-# %% ../nbs/01_chord.ipynb 37
+# %% ../nbs/01_chord.ipynb 38
+@patch
+def to_frame(self:Chord):
+    rel_intervals = self.rel_intervals()
+    rel_short_intvals = [i.short for i in rel_intervals]
+    rel_long_intvals = [i.long for i in rel_intervals]
+    abs_intervals = self.abs_intervals()
+    abs_short_intvals = [i.short for i in abs_intervals]
+    abs_long_intvals = [i.long for i in abs_intervals]
+    
+    d = {
+        "Notes": self.notes,
+        "Relative Degree": [1] + rel_short_intvals,
+        "Relative Interval": ["unison"] + rel_long_intvals,
+        "Absolute Interval": ["unison"] + abs_long_intvals,
+        "Absolute Degree": [1] + abs_short_intvals,
+    }
+    return pd.DataFrame(d)
+
+# %% ../nbs/01_chord.ipynb 43
 class PolyChord(Chord):
     def __init__(self, chords: list[Chord]):
         self.chords = chords
         super().__init__([note for chord in chords for note in chord.notes])
     def __repr__(self): return f"PolyChord: '{'|'.join([c.name() for c in self.chords])}'. Notes: {self.short_s_notes}"
 
-# %% ../nbs/01_chord.ipynb 41
+# %% ../nbs/01_chord.ipynb 47
 @patch
 def invert(self:PolyChord, n: int = 1):
     return PolyChord([c.invert(n) for c in self.chords])
+
+# %% ../nbs/01_chord.ipynb 52
+@patch
+def to_frame(self:PolyChord) -> list[pd.DataFrame]:
+    return [c.to_frame() for c in self.chords]

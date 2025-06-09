@@ -219,6 +219,73 @@ Note("C") * Note("E") * Note("G")
 
     Chord: 'C major triad'. Notes: ['C4', 'E4', 'G4']
 
+## Table
+
+Each chord can be displayed in a Pandas DataFrame table, which gives a
+quick overview of the notes and intervals in the chord.
+
+``` python
+cmaj7.to_frame()
+```
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+&#10;    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+&#10;    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+|     | Notes | Relative Degree | Relative Interval | Absolute Interval | Absolute Degree |
+|-----|-------|-----------------|-------------------|-------------------|-----------------|
+| 0   | C     | 1               | unison            | unison            | 1               |
+| 1   | E     | 3               | major third       | major third       | 3               |
+| 2   | G     | 5               | perfect fifth     | minor third       | b3              |
+| 3   | B     | 7               | major seventh     | major third       | 3               |
+
+</div>
+
+This get more interesting when we want to analyze more complicated
+chords and progressions. Take for example this chord:
+
+``` python
+Cdim6maj7 = Chord([Note("C"), Note("D#"), Note("F#"), Note("A"), Note("B")])
+Cdim6maj7.to_frame()
+```
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+&#10;    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+&#10;    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+|     | Notes | Relative Degree | Relative Interval | Absolute Interval | Absolute Degree |
+|-----|-------|-----------------|-------------------|-------------------|-----------------|
+| 0   | C     | 1               | unison            | unison            | 1               |
+| 1   | D#    | b3              | minor third       | minor third       | b3              |
+| 2   | F#    | b5              | tritone           | minor third       | b3              |
+| 3   | A     | 6               | major sixth       | minor third       | b3              |
+| 4   | B     | 7               | major seventh     | major second      | 2               |
+
+</div>
+
+We can immediately see that there are 2 minor 3rds (i.e. `b3` and `b5`)
+so the base is a diminished chord (`Cdim` or `C°`). It is extended with
+a major 6th (`6`) and a major 7th (`maj7`). So we can describe this as a
+`C°6maj7` chord.
+
 # PolyChord
 
 ## Initialization
@@ -240,6 +307,69 @@ poly_chord
 ```
 
     PolyChord: 'C major triad|Bb major seventh, third inversion'. Notes: ['C4', 'E4', 'G4', 'A4', 'Bb5', 'D5', 'F5']
+
+Within
+[`PolyChord`](https://CarloLepelaars.github.io/musy/chord.html#polychord)
+objects we can treat it as a single chord or analyze the underlying
+chords separately. For example, here we display 2 tables to analyze the
+underlying chords of the
+[`PolyChord`](https://CarloLepelaars.github.io/musy/chord.html#polychord)
+object.
+
+``` python
+poly_chord_tables = poly_chord.to_frame()
+print(f"Chord 1: {poly_chord.chords[0].name()}")
+display(poly_chord_tables[0])
+print(f"Chord 2: {poly_chord.chords[1].name()}")
+display(poly_chord_tables[1])
+```
+
+    Chord 1: C major triad
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+&#10;    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+&#10;    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+|     | Notes | Relative Degree | Relative Interval | Absolute Interval | Absolute Degree |
+|-----|-------|-----------------|-------------------|-------------------|-----------------|
+| 0   | C     | 1               | unison            | unison            | 1               |
+| 1   | E     | 3               | major third       | major third       | 3               |
+| 2   | G     | 5               | perfect fifth     | minor third       | b3              |
+
+</div>
+
+    Chord 2: Bb major seventh, third inversion
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+&#10;    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+&#10;    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+|     | Notes | Relative Degree | Relative Interval | Absolute Interval | Absolute Degree |
+|-----|-------|-----------------|-------------------|-------------------|-----------------|
+| 0   | A     | 1               | unison            | unison            | 1               |
+| 1   | Bb    | b2              | minor second      | minor second      | b2              |
+| 2   | D     | 4               | perfect fourth    | major third       | 3               |
+| 3   | F     | b6              | minor sixth       | minor third       | b3              |
+
+</div>
 
 # Scale
 
@@ -347,15 +477,15 @@ dorian.to_frame(root="E")
     }
 </style>
 
-|  | Intervals | Relative Semitones | Absolute Semitones | Notes | Triads | Seventh Chords |
-|----|----|----|----|----|----|----|
-| 0 | 1 | 0 | 2 | E | E minor triad | E minor seventh |
-| 1 | 2 | 2 | 1 | F# | F# minor triad | F# minor seventh |
-| 2 | b3 | 3 | 2 | G | G major triad | G major seventh |
-| 3 | 4 | 5 | 2 | A | A major triad | A dominant seventh |
-| 4 | 5 | 7 | 2 | B | B minor triad | B minor seventh |
-| 5 | 6 | 9 | 1 | C# | C# diminished triad | C# half diminished seventh |
-| 6 | b7 | 10 | 2 | D | D major triad | D major seventh |
+|  | Degree | Relative Interval | Mode | Relative Semitones | Absolute Semitones | Notes | Triad | Seventh Chord |
+|----|----|----|----|----|----|----|----|----|
+| 0 | 1 | unison | dorian | 0 | 2 | E | E minor triad | E minor seventh |
+| 1 | 2 | major second | phrygian | 2 | 1 | F# | F# minor triad | F# minor seventh |
+| 2 | b3 | minor third | lydian | 3 | 2 | G | G major triad | G major seventh |
+| 3 | 4 | perfect fourth | mixolydian | 5 | 2 | A | A major triad | A dominant seventh |
+| 4 | 5 | perfect fifth | minor | 7 | 2 | B | B minor triad | B minor seventh |
+| 5 | 6 | major sixth | locrian | 9 | 1 | C# | C# diminished triad | C# half diminished seventh |
+| 6 | b7 | minor seventh | ionian | 10 | 2 | D | D major triad | D major seventh |
 
 </div>
 
