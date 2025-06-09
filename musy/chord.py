@@ -20,13 +20,11 @@ class Chord(BasicRepr):
         self.notes = [Note(n) if isinstance(n, str) else n for n in notes]
         self.s_notes = [str(n) for n in self.notes]
         self.oct_s_notes = [f"{n.note}{n.oct}" for n in self.notes]
+        self.names = mingus_chords.determine(self.s_notes)
+        self.name = self.names[0] if self.names else "No chord found."
         self.first = self.notes[0]
         self.s_first = str(self.first)
-
-    @property
-    def names(self) -> list[str]: return mingus_chords.determine(self.s_notes)
-    @property
-    def name(self): return self.names[0] if self.names else "No chord found."
+        self.oct_s_first = f"{self.first.note}{self.first.oct}"
 
     @classmethod
     def from_short(cls, c: str): return cls(mingus_chords.from_shorthand(c)) 

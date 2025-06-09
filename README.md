@@ -334,7 +334,7 @@ print(f"Chord 2: {poly_chord.chords[1].name}")
 display(poly_chord_tables[1])
 ```
 
-    Chord 1: <bound method Chord.name of Chord: 'C major triad'. Notes: ['C4', 'E4', 'G4']>
+    Chord 1: C major triad
 
 <div>
 <style scoped>
@@ -357,7 +357,7 @@ display(poly_chord_tables[1])
 
 </div>
 
-    Chord 2: <bound method Chord.name of Chord: 'Bb major seventh, third inversion'. Notes: ['A4', 'Bb5', 'D5', 'F5']>
+    Chord 2: Bb major seventh, third inversion
 
 <div>
 <style scoped>
