@@ -44,7 +44,17 @@ c_sharp = Note("C#")
 c_sharp
 ```
 
-    musy.note.Note(note='C#', oct=4)
+    C#4
+
+You can get compact representations of
+[`Note`](https://CarloLepelaars.github.io/musy/note.html#note) objects.
+For example, their MIDI numbers and binary representations.
+
+``` python
+c_sharp.midi, bin(c_sharp), hex(c_sharp)
+```
+
+    (49, '0b110001', '0x31')
 
 ## Addition and subtraction
 
@@ -55,19 +65,19 @@ represents a semitone.
 c_sharp + 1
 ```
 
-    musy.note.Note(note='D', oct=4)
+    D4
 
 ``` python
 c_sharp - 1
 ```
 
-    musy.note.Note(note='C', oct=4)
+    C4
 
 ``` python
 c_sharp + 14
 ```
 
-    musy.note.Note(note='D#', oct=5)
+    D#5
 
 ## Comparison
 
@@ -99,13 +109,13 @@ on the circle of fifths.
 Note("C").minor()
 ```
 
-    musy.note.Note(note='A', oct=4)
+    A4
 
 ``` python
 Note("C#").major()
 ```
 
-    musy.note.Note(note='E', oct=4)
+    E4
 
 # Interval
 
@@ -125,10 +135,10 @@ P4
     perfect fourth (4)
 
 ``` python
-P4.semitones, P4.long, P4.short, P4.type()
+P4.semitones, P4.long, P4.short, P4.type(), P4.is_contextual(), P4.is_consonant()
 ```
 
-    (5, 'perfect fourth', '4', 'Contextual')
+    (5, 'perfect fourth', '4', 'Contextual', True, False)
 
 ## Comparison
 
@@ -142,10 +152,10 @@ P5
     perfect fifth (5)
 
 ``` python
-P5.semitones, P5.long, P5.short, P5.type()
+P5.semitones, P5.long, P5.short, P5.type(), P5.is_consonant(), P5.is_perfect()
 ```
 
-    (7, 'perfect fifth', '5', 'Perfect Consonant')
+    (7, 'perfect fifth', '5', 'Perfect Consonant', True, True)
 
 ``` python
 P4 != P5
@@ -398,13 +408,7 @@ generates the notes of the scale.
 dorian.get_notes("C")
 ```
 
-    [musy.note.Note(note='C', oct=4),
-     musy.note.Note(note='D', oct=4),
-     musy.note.Note(note='D#', oct=4),
-     musy.note.Note(note='F', oct=4),
-     musy.note.Note(note='G', oct=4),
-     musy.note.Note(note='A', oct=4),
-     musy.note.Note(note='A#', oct=4)]
+    [C4, D4, D#4, F4, G4, A4, A#4]
 
 ## Mode Generation
 
@@ -507,13 +511,7 @@ persian
 persian.get_notes("C")
 ```
 
-    [musy.note.Note(note='C', oct=4),
-     musy.note.Note(note='C#', oct=4),
-     musy.note.Note(note='E', oct=4),
-     musy.note.Note(note='F', oct=4),
-     musy.note.Note(note='F#', oct=4),
-     musy.note.Note(note='G#', oct=4),
-     musy.note.Note(note='B', oct=4)]
+    [C4, C#4, E4, F4, F#4, G#4, B4]
 
 ``` python
 persian.get_triads("C")
