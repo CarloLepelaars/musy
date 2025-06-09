@@ -4,7 +4,7 @@
 
 # %% auto 0
 __all__ = ['BASE_NOTES', 'CHROMATIC_NOTES', 'INTERVALS', 'NOTE_MAPPING', 'STEPS_TO_INTERVAL', 'STEPS_TO_INTERVAL_FULL',
-           'INTERVAL_TYPES', 'Note', 'Interval']
+           'INTERVAL_TYPES', 'INV_NOTE_MAPPING', 'Note', 'Interval']
 
 # %% ../nbs/00_note.ipynb 3
 import io
@@ -67,6 +67,19 @@ STEPS_TO_INTERVAL = {
     9: "6",
     10: "b7",
     11: "7",
+    12: "8", # Octave
+    13: "b9",
+    14: "9",
+    15: "#9",
+    16: "10",
+    17: "11",
+    18: "#11",
+    19: "12",
+    20: "#12",
+    21: "b13",
+    22: "13",
+    23: "b14",
+    24: "14",
 }
 
 STEPS_TO_INTERVAL_FULL = {
@@ -82,6 +95,19 @@ STEPS_TO_INTERVAL_FULL = {
     9: "major sixth",
     10: "minor seventh",
     11: "major seventh",
+    12: "octave",
+    13: "minor ninth",
+    14: "major ninth",
+    15: "minor tenth",
+    16: "major tenth",
+    17: "perfect eleventh",
+    18: "augmented eleventh",
+    19: "perfect twelfth",
+    20: "augmented twelfth",
+    21: "minor thirteenth",
+    22: "major thirteenth",
+    23: "minor fourteenth",
+    24: "double octave",
 }
 INTERVAL_TYPES = {
     0: "Perfect Consonant", # Unison
@@ -97,6 +123,8 @@ INTERVAL_TYPES = {
     10: "Mild Dissonant", # Minor Seventh
     11: "Sharp Dissonant", # Major Seventh
 }
+
+INV_NOTE_MAPPING = {v: k for k, v in NOTE_MAPPING.items()}
 
 # %% ../nbs/00_note.ipynb 7
 class Note(BasicRepr):
@@ -118,6 +146,19 @@ class Note(BasicRepr):
         self.double_accidental = self.double_flat or self.double_sharp
         self.num_flats = self.note.count("b")
         self.num_sharps = self.note.count("#")
+
+
+    @classmethod
+    def from_int(cls, note_int: int, oct: int = 4):
+        assert isinstance(oct, int) and oct > 0, f"Octave must be a positive integer, got oct={oct}."
+        assert 0 <= note_int < 12, f"Note must be an integer between 0 and 11, got note_int={note_int}."
+        return cls(CHROMATIC_NOTES[note_int % 12], oct=oct)
+    
+    @classmethod
+    def from_midi(cls, midi_note: int):
+        assert isinstance(midi_note, int), f"MIDI note must be an integer, got midi_note={midi_note}."
+        assert 0 <= midi_note < 128, f"MIDI note must be an integer between 0 and 127, got midi_note={midi_note}."
+        return cls.from_int(midi_note % 12, oct=midi_note // 12)
     
     def __index__(self): return self.oct * 12 + int(self) # MIDI Note number
     @property
@@ -133,41 +174,39 @@ class Note(BasicRepr):
 
     def __repr__(self): return f"{self.note}{self.oct}"
 
-# %% ../nbs/00_note.ipynb 33
+# %% ../nbs/00_note.ipynb 38
 @patch
-def __add__(self:Note, other):
-    """Add n semitones to a note."""
-    octave_change = (other + int(self)) // 12
-    return Note(CHROMATIC_NOTES[(int(self) + other) % 12], oct=self.oct + octave_change)
+def __add__(self:Note, other): 
+    """ Add n semitones. """
+    return Note.from_midi(self.midi + other)
 
-# %% ../nbs/00_note.ipynb 40
+# %% ../nbs/00_note.ipynb 45
 @patch
 def __mod__(self:Note, other):
     """Add n whole notes."""
     return self + other * 2
 
-# %% ../nbs/00_note.ipynb 45
+# %% ../nbs/00_note.ipynb 50
 @patch
 def __sub__(self:Note, other):
     """Subtract n semitones from a note."""
-    octave_change = (other + int(self)) // 12
-    return Note(CHROMATIC_NOTES[(int(self) - other) % 12], oct=self.oct - octave_change)
+    return Note.from_midi(self.midi - other)
 
-# %% ../nbs/00_note.ipynb 50
+# %% ../nbs/00_note.ipynb 55
 @patch
 def __floordiv__(self:Note, other):
     """Subtract n whole notes"""
     return self - other * 2
 
-# %% ../nbs/00_note.ipynb 56
+# %% ../nbs/00_note.ipynb 61
 @patch
 def minor(self:Note): return self - 3
 
-# %% ../nbs/00_note.ipynb 59
+# %% ../nbs/00_note.ipynb 64
 @patch
 def major(self:Note): return self + 3
 
-# %% ../nbs/00_note.ipynb 63
+# %% ../nbs/00_note.ipynb 68
 @patch 
 def get_audio_array(self:Note, length=1, sr=44100):
     t = np.linspace(0, length, int(sr * length), False)
@@ -181,11 +220,11 @@ def get_audio_bytes(self:Note, length=1, sr=44100):
     buf = io.BytesIO(); wav.write(buf, sr, self.get_audio_array(length, sr))
     return buf.getvalue()
 
-# %% ../nbs/00_note.ipynb 66
+# %% ../nbs/00_note.ipynb 71
 @patch
 def play(self:Note, length=1): return Audio(data=self.get_audio_bytes(length))
 
-# %% ../nbs/00_note.ipynb 75
+# %% ../nbs/00_note.ipynb 80
 class Interval:
     def __init__(self, note1: Note, note2: Note):
         store_attr()
@@ -193,18 +232,23 @@ class Interval:
         self.semitones = self.set_semitones()
     
     @property
-    def short(self): return STEPS_TO_INTERVAL[abs(self.semitones)]
+    def short(self): return STEPS_TO_INTERVAL[abs(self.semitones) % 24]
     @property
-    def long(self): return STEPS_TO_INTERVAL_FULL[abs(self.semitones)]
+    def long(self): return STEPS_TO_INTERVAL_FULL[abs(self.semitones) % 24]
 
-    def set_semitones(self):
-        # TODO Add upper extensions to semitone calculation and interval names (2+ octaves)
-        return (12 + int(self.note2) - int(self.note1) + (self.note2.oct - self.note1.oct) * 12) % 12
+    def set_semitones(self): return self.note2.midi - self.note1.midi
     
     @classmethod
-    def from_semitones(cls, semitones: int):
-        return cls(Note("C"), Note("C")+semitones)
-
+    def from_semitones(cls, semitones: int, root: Note = Note("C")):
+        return cls(root, root+semitones)
+    
+    def __index__(self):
+        mask = 0
+        for n in self.notes: mask |= 1 << n.midi
+        return mask
+    def __int__(self): return self.__index__()
+    @property
+    def midi(self): return [n.midi for n in self.notes]
     def __repr__(self): return f"{str(self.long)} ({str(self.short)})"
     def __eq__(self, other): return self.semitones == other.semitones
     def __ne__(self, other): return not self.semitones == other.semitones
@@ -217,14 +261,14 @@ class Interval:
         c.semitones = abs(c.semitones)
         return c
 
-# %% ../nbs/00_note.ipynb 77
+# %% ../nbs/00_note.ipynb 82
 @patch
 def interval(self:Note, other:Note): return Interval(self, other)
 
 @patch
 def __and__(self:Note, other:Note): return self.interval(other)
 
-# %% ../nbs/00_note.ipynb 96
+# %% ../nbs/00_note.ipynb 103
 @patch
 def type(self:Interval): return INTERVAL_TYPES[abs(self.semitones) % 12]
 
@@ -237,7 +281,7 @@ def is_perfect(self:Interval): return "Perfect" in self.type()
 @patch 
 def is_contextual(self:Interval): return "Contextual" in self.type()
 
-# %% ../nbs/00_note.ipynb 107
+# %% ../nbs/00_note.ipynb 114
 @patch
 def __add__(self:Interval, other):
     return Interval(self.note1, self.note2+other)
