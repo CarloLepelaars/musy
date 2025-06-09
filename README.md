@@ -109,7 +109,7 @@ on the circle of fifths.
 Note("C").minor()
 ```
 
-    A4
+    A3
 
 ``` python
 Note("C#").major()
@@ -328,13 +328,13 @@ object.
 
 ``` python
 poly_chord_tables = poly_chord.to_frame()
-print(f"Chord 1: {poly_chord.chords[0].name()}")
+print(f"Chord 1: {poly_chord.chords[0].name}")
 display(poly_chord_tables[0])
-print(f"Chord 2: {poly_chord.chords[1].name()}")
+print(f"Chord 2: {poly_chord.chords[1].name}")
 display(poly_chord_tables[1])
 ```
 
-    Chord 1: C major triad
+    Chord 1: <bound method Chord.name of Chord: 'C major triad'. Notes: ['C4', 'E4', 'G4']>
 
 <div>
 <style scoped>
@@ -357,7 +357,7 @@ display(poly_chord_tables[1])
 
 </div>
 
-    Chord 2: Bb major seventh, third inversion
+    Chord 2: <bound method Chord.name of Chord: 'Bb major seventh, third inversion'. Notes: ['A4', 'Bb5', 'D5', 'F5']>
 
 <div>
 <style scoped>
@@ -375,8 +375,8 @@ display(poly_chord_tables[1])
 |     | Notes | Relative Degree | Relative Interval | Absolute Interval | Absolute Degree |
 |-----|-------|-----------------|-------------------|-------------------|-----------------|
 | 0   | A     | 1               | unison            | unison            | 1               |
-| 1   | Bb    | b2              | minor second      | minor second      | b2              |
-| 2   | D     | 4               | perfect fourth    | major third       | 3               |
+| 1   | Bb    | b9              | minor ninth       | minor ninth       | b9              |
+| 2   | D     | 4               | perfect fourth    | minor sixth       | b6              |
 | 3   | F     | b6              | minor sixth       | minor third       | b3              |
 
 </div>

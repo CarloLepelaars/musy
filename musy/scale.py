@@ -410,7 +410,7 @@ def to_frame(self:Scale, root=None):
     if root:
         d.update({
             "Notes": self.get_notes(root),
-            "Triad": [t.name() for t in self.get_triads(root)],
-            "Seventh Chord": [s.name() for s in self.get_sevenths(root)],
+            "Triad": [t.name for t in self.get_triads(root)],
+            "Seventh Chord": [s.name for s in self.get_sevenths(root)],
         })
     return pd.DataFrame(d)
