@@ -276,20 +276,23 @@ dorian.get_notes("C")
      musy.note.Note(note='A', oct=4),
      musy.note.Note(note='A#', oct=4)]
 
-## Intervals
+## Mode Generation
 
-Intervals can be obtained.
+All the modes of any
+[`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale) can be
+generated.
 
 ``` python
-dorian.get_interval_names()
+dorian.get_modes()
 ```
 
-    ['major second',
-     'minor third',
-     'perfect fourth',
-     'perfect fifth',
-     'major sixth',
-     'minor seventh']
+    [Scale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7'],
+     Scale: Phrygian. Intervals: ['1', 'b2', 'b3', '4', '5', 'b6', 'b7'],
+     Scale: Lydian. Intervals: ['1', '2', '3', '#4', '5', '6', '7'],
+     Scale: Mixolydian. Intervals: ['1', '2', '3', '4', '5', '6', 'b7'],
+     Scale: Minor. Intervals: ['1', '2', 'b3', '4', '5', 'b6', 'b7'],
+     Scale: Locrian. Intervals: ['1', 'b2', 'b3', '4', 'b5', 'b6', 'b7'],
+     Scale: Ionian. Intervals: ['1', '2', '3', '4', '5', '6', '7']]
 
 ## Triad Generation
 
@@ -364,7 +367,7 @@ for a list of available scales. If a scale is not available, you can
 create your own scale from intervals.
 
 ``` python
-persian = Scale.from_intervals("persian", ["1", "b2", "3", "4", "b5", "b6", "7"])
+persian = Scale.from_intervals(["1", "b2", "3", "4", "b5", "b6", "7"], "persian")
 persian
 ```
 
@@ -381,6 +384,18 @@ persian.get_notes("C")
      musy.note.Note(note='F#', oct=4),
      musy.note.Note(note='G#', oct=4),
      musy.note.Note(note='B', oct=4)]
+
+``` python
+persian.get_triads("C")
+```
+
+    [Chord: 'No chord found.'. Notes: ['C4', 'E4', 'F#4'],
+     Chord: 'No chord found.'. Notes: ['C#4', 'F4', 'G#4'],
+     Chord: 'E suspended second triad'. Notes: ['E4', 'F#4', 'B4'],
+     Chord: 'No chord found.'. Notes: ['F4', 'G#4', 'C5'],
+     Chord: 'F# suspended fourth triad'. Notes: ['F#4', 'B4', 'C#5'],
+     Chord: 'C augmented triad, second inversion'. Notes: ['G#4', 'C5', 'E5'],
+     Chord: 'No chord found.'. Notes: ['B4', 'C#5', 'F5']]
 
 ## Listening
 
