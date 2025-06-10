@@ -189,7 +189,7 @@ SCALES = {# Major modes
           "dominant diminished": ["1", "b2", "b3", "3", "#4", "5", "6", "b7"],
           "whole": ["1", "2", "3", "#4", "#5", "#6"],
           "whole-tone": ["1", "2", "3", "#4", "#5", "#6"],
-          "whole-tone": ["1", "2", "3", "#4", "#5", "#6", "7"], # Whole-tone with 7th
+          "whole-tone 7": ["1", "2", "3", "#4", "#5", "#6", "7"], # Whole-tone with 7th
           "aux diminished": ["1", "2", "b3", "4", "#4", "#5", "6", "7"],
           "aux diminished blues": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"],
           "lydian diminished": ["1", "2", "b3", "#4", "5", "6", "7"], # Lydian with lowered 3rd.
