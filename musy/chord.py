@@ -67,13 +67,13 @@ def __mul__(self:Chord, other):
     else:
         raise ValueError("Chord objects can only be multiplied with Note or other Chord objects")
 
-# %% ../nbs/01_chord.ipynb 32
+# %% ../nbs/01_chord.ipynb 36
 @patch
 def invert(self:Chord, n: int = 1):
     assert n > 0 and n < len(self.s_notes), f"Invalid inversion '{n}' for chord with '{len(self.s_notes)}' notes."
     return Chord(self.notes[n:] + [Note(str(note), oct=note.oct + 1) for note in self.notes[:n]])
 
-# %% ../nbs/01_chord.ipynb 35
+# %% ../nbs/01_chord.ipynb 39
 @patch
 def rel_intervals(self:Chord):
     return [Interval(self.notes[0], n) for n in self.notes[1:]]
@@ -82,7 +82,7 @@ def rel_intervals(self:Chord):
 def abs_intervals(self:Chord):
     return [Interval(n1, n2) for n1, n2 in zip(self.notes, self.notes[1:])]
 
-# %% ../nbs/01_chord.ipynb 39
+# %% ../nbs/01_chord.ipynb 43
 @patch
 def get_audio_array(self:Chord, length=1):
     return np.sum([n.get_audio_array(length) for n in self.notes], axis=0)
@@ -91,7 +91,7 @@ def get_audio_array(self:Chord, length=1):
 def play(self:Chord, length=1): 
     return Audio(self.get_audio_array(length), rate=44100)
 
-# %% ../nbs/01_chord.ipynb 45
+# %% ../nbs/01_chord.ipynb 49
 @patch
 def to_frame(self:Chord):
     rel_intervals = self.rel_intervals()
@@ -110,19 +110,19 @@ def to_frame(self:Chord):
     }
     return pd.DataFrame(d)
 
-# %% ../nbs/01_chord.ipynb 50
+# %% ../nbs/01_chord.ipynb 54
 class PolyChord(Chord):
     def __init__(self, chords: list[Chord]):
         self.chords = chords
         super().__init__([note for chord in chords for note in chord.notes])
     def __repr__(self): return f"PolyChord: '{'|'.join([c.name for c in self.chords])}'. Notes: {self.oct_s_notes}"
 
-# %% ../nbs/01_chord.ipynb 54
+# %% ../nbs/01_chord.ipynb 58
 @patch
 def invert(self:PolyChord, n: int = 1):
     return PolyChord([c.invert(n) for c in self.chords])
 
-# %% ../nbs/01_chord.ipynb 59
+# %% ../nbs/01_chord.ipynb 63
 @patch
 def to_frame(self:PolyChord) -> list[pd.DataFrame]:
     return [c.to_frame() for c in self.chords]
