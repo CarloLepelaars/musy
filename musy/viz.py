@@ -33,7 +33,7 @@ class Instrument:
         """Visualize a chord on the instrument."""
         return self.__ft__([n.midi for n in chord.notes])
     
-    def visualize_scale(self, scale: Scale, root: str = "C", octs = 3):
+    def visualize_scale(self, scale: Scale, root: str = "C", octs = 2):
         """Visualize a scale on the instrument across multiple octaves."""
         return self.__ft__([n.midi for oct in range(1, octs+1) for n in scale.get_notes(root, oct=oct)])
     
@@ -94,8 +94,7 @@ class Guitar(Instrument):
             for fret in range(num_frets+1):
                 midi = open_midi + fret
                 if midi in midi_notes:
-                    note = Note.from_midi(midi)
-                    cells.append(Div(str(note), cls="guitar-note"))
+                    cells.append(Div(str(Note.from_midi(midi)), cls="guitar-note"))
                 else:
                     cells.append(Div("", cls="guitar-cell"))
             rows.append(Div(Div(name, cls="guitar-string-name"), *cells, cls="guitar-row"))
@@ -119,6 +118,8 @@ class Guitar(Instrument):
         )
         return HTML(css + board)
     
+    def visualize_chord(self, chord: Chord):
+        return self.__ft__([Note(str(n), oct).midi for oct in range(1, 8) for n in list(chord)])
+    
     def visualize_scale(self, scale: Scale, root: str = "C"):
-        """Visualize a scale on the instrument across multiple octaves."""
         return self.__ft__([n.midi for oct in range(1, 8) for n in scale.get_notes(root, oct=oct)])
