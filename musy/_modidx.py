@@ -122,4 +122,8 @@ d = { 'settings': { 'branch': 'master',
                           'musy.viz.Guitar.__ft__': ('viz.html#guitar.__ft__', 'musy/viz.py'),
                           'musy.viz.Piano': ('viz.html#piano', 'musy/viz.py'),
                           'musy.viz.Piano.__call__': ('viz.html#piano.__call__', 'musy/viz.py'),
-                          'musy.viz.Piano.__ft__': ('viz.html#piano.__ft__', 'musy/viz.py')}}}
+                          'musy.viz.Piano.__ft__': ('viz.html#piano.__ft__', 'musy/viz.py'),
+                          'musy.viz.Piano.visualize_chord': ('viz.html#piano.visualize_chord', 'musy/viz.py'),
+                          'musy.viz.Piano.visualize_note': ('viz.html#piano.visualize_note', 'musy/viz.py'),
+                          'musy.viz.Piano.visualize_notes': ('viz.html#piano.visualize_notes', 'musy/viz.py'),
+                          'musy.viz.Piano.visualize_scale': ('viz.html#piano.visualize_scale', 'musy/viz.py')}}}

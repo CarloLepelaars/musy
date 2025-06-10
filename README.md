@@ -553,7 +553,7 @@ objects.
 ``` python
 from musy import Piano
 
-Piano()(Note("C#"))
+Piano().visualize_note(Note("C#"))
 ```
 
     <style>
@@ -574,10 +574,10 @@ Piano()(Note("C#"))
     .highlight { background: #ff0 !important; color: #000 !important; }
     .highlight-black { background: #ff0 !important; color: #000 !important; }
     </style>
-    <div class="piano" style="width:440px"><div class="white-keys"><div class="white-key">C</div><div class="white-key">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="white-key">G</div><div class="white-key">A</div><div class="white-key">B</div><div class="white-key">C</div><div class="white-key">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="black-key highlight-black" style="left:26px">C#</div><div class="black-key" style="left:66px">D#</div><div class="black-key" style="left:146px">F#</div><div class="black-key" style="left:186px">G#</div><div class="black-key" style="left:226px">A#</div><div class="black-key highlight-black" style="left:306px">C#</div><div class="black-key" style="left:346px">D#</div><div class="black-key" style="left:426px">F#</div></div>
+    <div class="piano" style="width:280px"><div class="white-keys"><div class="white-key">C</div><div class="white-key">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="white-key">G</div><div class="white-key">A</div><div class="white-key">B</div><div class="black-key highlight-black" style="left:29px">C#</div><div class="black-key" style="left:69px">D#</div><div class="black-key" style="left:149px">F#</div><div class="black-key" style="left:189px">G#</div><div class="black-key" style="left:229px">A#</div></div>
 
 ``` python
-Piano()(list(Chord.from_short("Cmaj7")))
+Piano().visualize_chord(Chord.from_short("Cmaj7"))
 ```
 
     <style>
@@ -598,10 +598,10 @@ Piano()(list(Chord.from_short("Cmaj7")))
     .highlight { background: #ff0 !important; color: #000 !important; }
     .highlight-black { background: #ff0 !important; color: #000 !important; }
     </style>
-    <div class="piano" style="width:440px"><div class="white-keys"><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key highlight">G</div><div class="white-key">A</div><div class="white-key highlight">B</div><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="black-key" style="left:26px">C#</div><div class="black-key" style="left:66px">D#</div><div class="black-key" style="left:146px">F#</div><div class="black-key" style="left:186px">G#</div><div class="black-key" style="left:226px">A#</div><div class="black-key" style="left:306px">C#</div><div class="black-key" style="left:346px">D#</div><div class="black-key" style="left:426px">F#</div></div>
+    <div class="piano" style="width:280px"><div class="white-keys"><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key highlight">G</div><div class="white-key">A</div><div class="white-key highlight">B</div><div class="black-key" style="left:29px">C#</div><div class="black-key" style="left:69px">D#</div><div class="black-key" style="left:149px">F#</div><div class="black-key" style="left:189px">G#</div><div class="black-key" style="left:229px">A#</div></div>
 
 ``` python
-Piano()(Scale("major").get_notes("D"))
+Piano().visualize_scale(Scale("major"), root="D")
 ```
 
     <style>
@@ -622,10 +622,10 @@ Piano()(Scale("major").get_notes("D"))
     .highlight { background: #ff0 !important; color: #000 !important; }
     .highlight-black { background: #ff0 !important; color: #000 !important; }
     </style>
-    <div class="piano" style="width:440px"><div class="white-keys"><div class="white-key">C</div><div class="white-key highlight">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key highlight">G</div><div class="white-key highlight">A</div><div class="white-key highlight">B</div><div class="white-key">C</div><div class="white-key highlight">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="black-key highlight-black" style="left:26px">C#</div><div class="black-key" style="left:66px">D#</div><div class="black-key highlight-black" style="left:146px">F#</div><div class="black-key" style="left:186px">G#</div><div class="black-key" style="left:226px">A#</div><div class="black-key highlight-black" style="left:306px">C#</div><div class="black-key" style="left:346px">D#</div><div class="black-key highlight-black" style="left:426px">F#</div></div>
+    <div class="piano" style="width:840px"><div class="white-keys"><div class="white-key">C</div><div class="white-key highlight">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key highlight">G</div><div class="white-key highlight">A</div><div class="white-key highlight">B</div><div class="white-key">C</div><div class="white-key highlight">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key highlight">G</div><div class="white-key highlight">A</div><div class="white-key highlight">B</div><div class="white-key">C</div><div class="white-key">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="white-key">G</div><div class="white-key">A</div><div class="white-key">B</div><div class="black-key" style="left:29px">C#</div><div class="black-key" style="left:69px">D#</div><div class="black-key highlight-black" style="left:149px">F#</div><div class="black-key" style="left:189px">G#</div><div class="black-key" style="left:229px">A#</div><div class="black-key highlight-black" style="left:309px">C#</div><div class="black-key" style="left:349px">D#</div><div class="black-key highlight-black" style="left:429px">F#</div><div class="black-key" style="left:469px">G#</div><div class="black-key" style="left:509px">A#</div><div class="black-key highlight-black" style="left:589px">C#</div><div class="black-key" style="left:629px">D#</div><div class="black-key" style="left:709px">F#</div><div class="black-key" style="left:749px">G#</div><div class="black-key" style="left:789px">A#</div></div>
 
 ``` python
-Piano()(Scale("phrygian dominant").get_notes("D"))
+Piano().visualize_scale(Scale("double harmonic major"), root="C", octs=3)
 ```
 
     <style>
@@ -646,31 +646,7 @@ Piano()(Scale("phrygian dominant").get_notes("D"))
     .highlight { background: #ff0 !important; color: #000 !important; }
     .highlight-black { background: #ff0 !important; color: #000 !important; }
     </style>
-    <div class="piano" style="width:440px"><div class="white-keys"><div class="white-key highlight">C</div><div class="white-key highlight">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="white-key highlight">G</div><div class="white-key highlight">A</div><div class="white-key">B</div><div class="white-key highlight">C</div><div class="white-key highlight">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="black-key" style="left:26px">C#</div><div class="black-key highlight-black" style="left:66px">D#</div><div class="black-key highlight-black" style="left:146px">F#</div><div class="black-key" style="left:186px">G#</div><div class="black-key highlight-black" style="left:226px">A#</div><div class="black-key" style="left:306px">C#</div><div class="black-key highlight-black" style="left:346px">D#</div><div class="black-key highlight-black" style="left:426px">F#</div></div>
-
-``` python
-Piano()(PolyChord([Chord.from_short("E"), Chord.from_short("Am")]))
-```
-
-    <style>
-    .piano { background: #222; padding: 20px 0; position: relative; width: 480px; }
-    .white-keys { display: flex; }
-    .white-key {
-        width: 40px; height: 125px; background: #fff;
-        border: 1px solid #000;
-        color: #111; font-size: 18px; text-align: center; line-height: 200px; font-family: Arial;
-        position: relative; z-index: 1;
-    }
-    .black-key {
-        width: 20px; height: 80px; background: #000; color: #fff;
-        border: 1px solid #333; position: absolute; z-index: 2;
-        text-align: center; line-height: 100px; font-family: Arial; font-size: 14px;
-        left: 0; top: 20px; pointer-events: none;
-    }
-    .highlight { background: #ff0 !important; color: #000 !important; }
-    .highlight-black { background: #ff0 !important; color: #000 !important; }
-    </style>
-    <div class="piano" style="width:440px"><div class="white-keys"><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key">G</div><div class="white-key highlight">A</div><div class="white-key highlight">B</div><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="black-key" style="left:26px">C#</div><div class="black-key" style="left:66px">D#</div><div class="black-key" style="left:146px">F#</div><div class="black-key highlight-black" style="left:186px">G#</div><div class="black-key" style="left:226px">A#</div><div class="black-key" style="left:306px">C#</div><div class="black-key" style="left:346px">D#</div><div class="black-key" style="left:426px">F#</div></div>
+    <div class="piano" style="width:840px"><div class="white-keys"><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key highlight">F</div><div class="white-key highlight">G</div><div class="white-key">A</div><div class="white-key highlight">B</div><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key highlight">F</div><div class="white-key highlight">G</div><div class="white-key">A</div><div class="white-key highlight">B</div><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key highlight">F</div><div class="white-key highlight">G</div><div class="white-key">A</div><div class="white-key highlight">B</div><div class="black-key highlight-black" style="left:29px">C#</div><div class="black-key" style="left:69px">D#</div><div class="black-key" style="left:149px">F#</div><div class="black-key highlight-black" style="left:189px">G#</div><div class="black-key" style="left:229px">A#</div><div class="black-key highlight-black" style="left:309px">C#</div><div class="black-key" style="left:349px">D#</div><div class="black-key" style="left:429px">F#</div><div class="black-key highlight-black" style="left:469px">G#</div><div class="black-key" style="left:509px">A#</div><div class="black-key highlight-black" style="left:589px">C#</div><div class="black-key" style="left:629px">D#</div><div class="black-key" style="left:709px">F#</div><div class="black-key highlight-black" style="left:749px">G#</div><div class="black-key" style="left:789px">A#</div></div>
 
 ## Guitar
 

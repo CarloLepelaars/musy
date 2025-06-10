@@ -17,8 +17,7 @@ render_ft()
 
 # %% ../nbs/03_viz.ipynb 6
 class Piano:
-    def __ft__(self, highlight: list[Note] = None):
-        notes = [str(n) for n in listify(highlight)] if highlight else []
+    def __ft__(self, midi_notes: list[int] = []):
         css = """
     <style>
     .piano { background: #222; padding: 20px 0; position: relative; width: 480px; }
@@ -39,31 +38,77 @@ class Piano:
     .highlight-black { background: #ff0 !important; color: #000 !important; }
     </style>
     """
-        white_notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C', 'D', 'E', 'F']
-        black_keys = [
-            (0, ('C#', 'Db')), (1, ('D#', 'Eb')), (3, ('F#', 'Gb')), (4, ('G#', 'Ab')), (5, ('A#', 'Bb')),
-            (7, ('C#', 'Db')), (8, ('D#', 'Eb')), (10, ('F#', 'Gb'))
-        ]
+        max_midi = max(midi_notes) if midi_notes else 60 
+        min_midi = min(midi_notes) if midi_notes else 60
+        start_octave = (min_midi // 12)
+        end_octave = (max_midi // 12)
+        
+        # Generate white notes for all octaves
+        white_notes = []
+        for oct in range(start_octave, end_octave + 1):
+            for note in ['C', 'D', 'E', 'F', 'G', 'A', 'B']:
+                midi = Note(f"{note}", oct).midi
+                white_notes.append((note, midi))
+        
+        # Generate black keys for all octaves
+        black_keys = []
+        for oct in range(start_octave, end_octave + 1):
+            black_pattern = [
+                (0, ('C#', 'Db')), (1, ('D#', 'Eb')), (3, ('F#', 'Gb')), 
+                (4, ('G#', 'Ab')), (5, ('A#', 'Bb'))
+            ]
+            for idx, (sharp, flat) in black_pattern:
+                midi = Note(f"{sharp}", oct=oct).midi
+                black_keys.append((idx + (oct - start_octave) * 7, (sharp, midi)))
+        
         html = f'<div class="piano" style="width:{len(white_notes)*40}px">'
         html += '<div class="white-keys">'
-        for note in white_notes:
+        
+        # Render white keys
+        for note, midi in white_notes:
             cls = "white-key"
-            if note in notes:
+            if midi in midi_notes:
                 cls += " highlight"
             html += f'<div class="{cls}">{note}</div>'
-        for idx, (sharp, flat) in black_keys:
+        
+        # Render black keys
+        for idx, (sharp, midi) in black_keys:
             cls = "black-key"
-            if sharp in notes or flat in notes:
+            if midi in midi_notes:
                 cls += " highlight-black"
-            left = (idx + 1) * 40 - 14
+            left = (idx + 1) * 40 - 11
             html += f'<div class="{cls}" style="left:{left}px">{sharp}</div>'
+        
         html += '</div>'
         return HTML(css + html)
     
-    def __call__(self, highlight=list[Note]):
-        return self.__ft__(highlight)
+    def visualize_note(self, note: Note):
+        return self.__ft__([note.midi])
+    
+    def visualize_notes(self, notes: list[Note]):
+        return self.__ft__([n.midi for n in notes])
+    
+    def visualize_chord(self, chord: Chord):
+        return self.__ft__([n.midi for n in chord.notes])
+    
+    def visualize_scale(self, scale: Scale, root: str = "C", octs = 2):
+        return self.__ft__([n.midi for oct in range(1, octs+1) for n in scale.get_notes(root, oct=oct)])
+    
+    def __call__(self, highlight = None):
+        if not highlight:
+            return self.__ft__([])
+        elif isinstance(highlight, Note):
+            return self.visualize_note(highlight)
+        elif isinstance(highlight, Chord):
+            return self.visualize_chord(highlight)
+        elif isinstance(highlight, Scale):
+            return self.visualize_scale(highlight)
+        elif isinstance(highlight, list):
+            return self.__ft__([n.midi for n in highlight])
+        else:
+            raise ValueError(f"Unsupported type: {type(highlight)}")
 
-# %% ../nbs/03_viz.ipynb 20
+# %% ../nbs/03_viz.ipynb 19
 class Guitar:
     def __ft__(self, highlight: list[Note] = None):
         ...
