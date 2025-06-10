@@ -154,8 +154,6 @@ SCALES = {# Major modes
           "major pentatonic": ["1", "2", "3", "5", "6"],
           "pentatonic minor": ["1", "b3", "4", "5", "b7"],
           "minor pentatonic": ["1", "b3", "4", "5", "b7"],
-          "pentatonic blues": ["1", "b3", "4", "b5", "5", "b7"],
-          "blues pentatonic": ["1", "b3", "4", "b5", "5", "b7"],
           "pentatonic neutral": ["1", "2", "4", "5", "b7"],
           "neutral pentatonic": ["1", "2", "4", "5", "b7"],
           "pentatonic rock": ["1", "b3", "4", "#5", "b7"],
@@ -163,19 +161,27 @@ SCALES = {# Major modes
           "jue": ["1", "b3", "4", "#5", "b7"], # Same intervals as rock pentatonic
           "pentatonic scottish": ["1", "2", "4", "5", "6"],
           "scottish pentatonic": ["1", "2", "4", "5", "6"],
+          "pentatonic dominant": ["1", "2", "3", "5", "b7"],
+          "dominant pentatonic": ["1", "2", "3", "5", "b7"],
           # Blues scales
+          "pentatonic blues": ["1", "b3", "4", "b5", "5", "b7"],
+          "blues pentatonic": ["1", "b3", "4", "b5", "5", "b7"],
           "blues major": ["1", "2", "b3", "3", "5", "6"],
           "blues minor": ["1", "b3", "4", "b5", "5", "b7"],
           "blues": ["1", "b3", "4", "b5", "5", "b7"], # Shorthand for Blues Minor
+          "blues 2": ["1", "b3", "4", "b5", "5", "b7", "7"], # Blues minor with 7th added
+          "blues 3": ["1", "b3", "3", "4", "b5", "5", "b7", "7"], # Blues 2 with major 3rd added
+          "blues 4": ["1", "b3", "3", "4", "b5", "5", "6", "b7", "7"], # Blues 3 with 6th added
           "blues diminished": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"],
           "aux diminished blues": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"], 
           "half-whole": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"],
-          "balinese": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"], 
+          "mixo-blues": ["1", "b3", "3", "4", "b5", "5", "b7"],
           # Gypsy scales
           "gypsy major": ["1", "b2", "3", "4", "5", "b6", "7"],
           "gypsy minor": ["1", "2", "b3", "b5", "5", "b6", "7"],
           "spanish gypsy": ["1", "b2", "3", "4", "5", "b6", "b7"], # Same as Phrygian dominant
           "hungarian gypsy": ["1", "2", "b3", "#4", "5", "b6", "b7"], # Hungarian minor with lowered 7
+          "hungarian gypsy persian": ["1", "b2", "3", "4", "5", "b6", "b7"], # Same a Phrygian dominant
           # Diminished scales
           "diminished": ["1", "2", "b3", "4", "b5", "b6", "6", "7"],
           "tonic diminished": ["1", "2", "b3", "4", "b5", "b6", "6", "7"],
@@ -183,7 +189,11 @@ SCALES = {# Major modes
           "dominant diminished": ["1", "b2", "b3", "3", "#4", "5", "6", "b7"],
           "whole": ["1", "2", "3", "#4", "#5", "#6"],
           "whole-tone": ["1", "2", "3", "#4", "#5", "#6"],
-          "aux augmented": ["1", "2", "3", "#4", "#5", "#6"],
+          "whole-tone": ["1", "2", "3", "#4", "#5", "#6", "7"], # Whole-tone with 7th
+          "aux diminished": ["1", "2", "b3", "4", "#4", "#5", "6", "7"],
+          "aux diminished blues": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"],
+          "lydian diminished": ["1", "2", "b3", "#4", "5", "6", "7"], # Lydian with lowered 3rd.
+          "half diminished": ["1", "b2", "b3", "4", "b5", "b6", "b7"], # i.e. Locrian
           # Maqam
           "bayati shuri": ["1", "2", "b3", "4", "b5", "6", "b7"],
           "hijaz": ["1", "b2", "3", "4", "5", "b6", "b7"],
@@ -226,18 +236,57 @@ SCALES = {# Major modes
           "okinawa joshi": ["1", "3", "4", "5", "7"],
           "sen in": ["1", "b2", "4", "5", "b7"],
           "in sen": ["1", "b2", "4", "5", "b7"],
+          "ichikosucho": ["1", "2", "3", "4", "#4", "5", "6", "7"], # Ionian with added #4
+          "taishikicho": ["1", "2", "3", "4", "#4", "5", "6", "#6", "7"], # Ionian with added #4 and #6
+          # Jewish
+          "jewish": ["1", "b2", "3", "4", "b5", "6", "b7"],
+          "adonai malakh": ["1", "b2", "2", "b3", "4", "5", "6", "b7"],
+          "ahaba rabba": ["1", "b2", "3", "4", "5", "b6", "b7"],
+          "magen abot": ["1", "b2", "#2", "3", "#4", "#5", "#6", "7"],
           # Misc.
           "chromatic": ["1", "b2", "2", "b3", "3", "4", "#4", "5", "#5", "6", "b7", "7"],
-          "augmented": ["1", "#2", "3", "5", "#5", "7"],
+          "augmented": ["1", "#2", "3", "#4", "#5", "7"],
+          "aux augmented": ["1", "2", "3", "#4", "#5", "#6"],
+          "ionian #5": ["1", "2", "3", "4", "#5", "6", "7"],
+          "dominant 7th": ["1", "2", "3", "4", "5", "6", "b7"], # Major with b7. i.e. mixolydian.
+          "lydian minor": ["1", "2", "3", "#4", "5", "b6", "b7"], # Lydian with b6 and b7.
+          "major locrian": ["1", "2", "3", "4", "b5", "b6", "b7"],
+          "ultralocrian": ["1", "b2", "b3", "3", "b5", "b6", "6"],
+          "superlocrian": ["1", "b2", "#2", "3", "#4", "#5", "b7"],
+          "octatonic h-w": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"],
+          "octatonic w-h": ["1", "2", "b3", "4", "b5", "b6", "6", "7"],
           "enigmatic ascending": ["1", "b2", "3", "#4", "#5", "#6", "7"],
           "enigmatic descending": ["1", "b2", "3", "4", "b6", "b7", "7"],
           "hungarian major": ["1", "b3", "3", "b5", "5", "6", "b7"],
+          "neapolitan": ["1", "b2", "b3", "4", "5", "b6", "7"],
           "neapolitan major": ["1", "b2", "b3", "4", "5", "6", "7"],
           "neapolitan minor": ["1", "b2", "b3", "4", "5", "b6", "7"],
           "prometheus": ["1", "2", "3", "b5", "6", "b7"],
           "mystic": ["1", "2", "3", "b5", "6", "b7"],
-          "prometheus neapolitan": ["1", "b2", "3", "b5", "6", "b7"], # Prometheus with lowered 2
+          "balinese": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"], 
+          "prometheus neapolitan": ["1", "b2", "3", "b5", "6", "b7"], # Prometheus with b2
           "spanish 8 tone": ["1", "b2", "b3", "3", "4", "b5", "b6", "b7"],
+          "9 tone scale": ["1", "2", "#2", "3", "#4", "5", "#5", "6", "7"],
+          "overtone": ["1", "2", "3", "#4", "5", "6", "b7"],
+          "overtone dominant": ["1", "2", "3", "#4", "5", "6", "b7"], # Same as overtone
+          "6 tone symmetrical": ["1", "b2", "3", "4", "#5", "6"],
+          "algerian": ["1", "2", "b3", "4", "#4", "5", "b6", "7"],
+          "arabian a": ["1", "2", "b3", "4", "#4", "#5", "6", "7"],
+          "arabian b": ["1", "2", "3", "4", "#4", "#5", "b7"],
+          "byzantine": ["1", "b2", "3", "4", "5", "b6", "7"],
+          "chinese": ["1", "3", "#4", "5", "7"],
+          "chinese mongolian": ["1", "2", "3", "5", "6"],
+          "egyptian": ["1", "2", "4", "5", "b7"],
+          "hawaiian": ["1", "2", "b3", "4", "5", "6", "7"], # Ionian with b3
+          "hindu": ["1", "2", "3", "4", "5", "b6", "b7"], # Aeolian with 3
+          "javanese": ["1", "b2", "b3", "4", "5", "6", "b7"],
+          "kumoi": ["1", "2", "b3", "5", "6"],
+          "kumoi 2": ["1", "b2", "4", "5", "b6"], # Kumoi with b2 and b6
+          "pelog": ["1", "b2", "b3", "5", "b6"],
+          "pelog 2": ["1", "b2", "b3", "5", "b7"],
+          "persian": ["1", "b2", "3", "4", "b5", "b6", "7"],
+          "roumanian minor": ["1", "2", "b3", "#4", "5", "6", "b7"],
+          "moorish phrygian": ["1", "b2", "b3", "3", "4", "5", "#5", "b7", "7"],
           }
 
 # Invert scales so alternative names can be identified by intervals or name
