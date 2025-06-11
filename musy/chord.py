@@ -57,15 +57,12 @@ class Chord(BasicRepr):
 # %% ../nbs/01_chord.ipynb 29
 @patch
 def __mul__(self:Note, other: Note):
-    """ Multiply two notes to form a chord. """
+    """ Form a chord from two notes. """
     return Chord([self, other])
-
 @patch
-def __mul__(self:Chord, other):
-    if isinstance(other, Note):
-        return Chord(self.notes + [other])
-    else:
-        raise ValueError("Chord objects can only be multiplied with Note or other Chord objects")
+def __mul__(self:Chord, other): 
+    """ Add a note to a chord. """
+    return Chord([*self.notes, other])
 
 # %% ../nbs/01_chord.ipynb 36
 @patch
