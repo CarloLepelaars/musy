@@ -58,8 +58,16 @@ class Piano(Instrument):
         midi_range = range(min(midi_notes or [60]), max(midi_notes or [60]) + 1)
         octaves = range(min(midi_range) // 12, max(midi_range) // 12 + 1)
         white_keys = [(note, Note(note, oct).midi) for oct in octaves for note in ['C', 'D', 'E', 'F', 'G', 'A', 'B']]
-        black_keys = [(sharp, Note(sharp, oct).midi, i + (oct - min(octaves)) * 7) 
-                     for oct in octaves for i, sharp in enumerate(['C#', 'D#', 'F#', 'G#', 'A#'])]
+        black_keys = []
+        for oct in octaves:
+            oct_offset = (oct - min(octaves)) * 7
+            black_keys.extend([
+                ('C#', Note('C#', oct).midi, oct_offset),  # Between C and D
+                ('D#', Note('D#', oct).midi, oct_offset + 1),  # Between D and E
+                ('F#', Note('F#', oct).midi, oct_offset + 3),  # Between F and G
+                ('G#', Note('G#', oct).midi, oct_offset + 4),  # Between G and A
+                ('A#', Note('A#', oct).midi, oct_offset + 5),  # Between A and B
+            ])
         
         css = Style("""
 .piano { background: #222; padding: 20px 0; position: relative; }
