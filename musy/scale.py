@@ -142,7 +142,9 @@ SCALES = {# Major modes
           "lydian #2#6": ["1", "#2", "3", "#4", "5", "#6", "7"],
           "ultraphrygian": ["1", "b2", "b3", "b4", "5", "b6", "6"],
           "hungarian minor": ["1", "2", "b3", "#4", "5", "b6", "7"],
+          "double harmonic minor": ["1", "2", "b3", "#4", "5", "b6", "7"],
           "oriental": ["1", "b2", "3", "4", "b5", "6", "b7"], # Mixolydian b2 with lowered 5
+          "aeolian dominant b5": ["1", "b2", "3", "4", "b5", "6", "b7"],
           "ionian aug#2": ["1", "#2", "3", "4", "#5", "6", "7"],
           "locrian bb3bb7": ["1", "b2", "2", "4", "b5", "b6", "6"],
           # Bebop scales
