@@ -116,6 +116,7 @@ SCALES = {# Major modes
           "locrian 6": ["1", "b2", "b3", "4", "b5", "6", "b7"],
           "ionian augmented": ["1", "2", "3", "4", "#5", "6", "7"],
           "dorian #4": ["1", "2", "b3", "#4", "5", "6", "b7"],
+          "ukranian dorian": ["1", "2", "b3", "#4", "5", "6", "b7"],
           "phrygian major": ["1", "b2", "3", "4", "5", "b6", "b7"],
           "phrygian dominant": ["1", "b2", "3", "4", "5", "b6", "b7"],
           "spanish phrygian": ["1", "b2", "3", "4", "5", "b6", "b7"],
@@ -251,7 +252,7 @@ SCALES = {# Major modes
           "dominant 7th": ["1", "2", "3", "4", "5", "6", "b7"], # Major with b7. i.e. mixolydian.
           "lydian minor": ["1", "2", "3", "#4", "5", "b6", "b7"], # Lydian with b6 and b7.
           "major locrian": ["1", "2", "3", "4", "b5", "b6", "b7"],
-          "ultralocrian": ["1", "b2", "b3", "3", "b5", "b6", "6"],
+          "ultralocrian": ["1", "b2", "b3", "b4", "b5", "b6", "6"],
           "superlocrian": ["1", "b2", "#2", "3", "#4", "#5", "b7"],
           "octatonic h-w": ["1", "b2", "b3", "3", "b5", "5", "6", "b7"],
           "octatonic w-h": ["1", "2", "b3", "4", "b5", "b6", "6", "7"],
