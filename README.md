@@ -7,21 +7,26 @@
 It lays the foundation for the Musy web apps.
 
 At its core it has basic building blocks from which all theory can be
-derived: -
-[`Note`](https://CarloLepelaars.github.io/musy/note.html#note): The
-basic atomic unit of music. -
-[`Chord`](https://CarloLepelaars.github.io/musy/chord.html#chord) and
-[`PolyChord`](https://CarloLepelaars.github.io/musy/chord.html#polychord):
-A stack of notes played together. -
-[`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale): Stack
-of intervals from which harmony, (diatonic) chords, melody, etc. can be
-derived.
+derived:
 
-For visualization these objects can be placed on instrument surfaces: -
-[`Piano`](https://CarloLepelaars.github.io/musy/viz.html#piano): Basic
-key layout -
-[`Guitar`](https://CarloLepelaars.github.io/musy/viz.html#guitar):
-Guitar fretboard
+- [`Note`](https://CarloLepelaars.github.io/musy/note.html#note): The
+  basic atomic unit of music.
+
+- [`Chord`](https://CarloLepelaars.github.io/musy/chord.html#chord) and
+  [`PolyChord`](https://CarloLepelaars.github.io/musy/chord.html#polychord):
+  A stack of notes played together.
+
+- [`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale):
+  Stack of intervals from which harmony, (diatonic) chords, melody, etc.
+  can be derived.
+
+For visualization these objects can be placed on instrument surfaces:
+
+- [`Piano`](https://CarloLepelaars.github.io/musy/viz.html#piano): Basic
+  key layout
+
+- [`Guitar`](https://CarloLepelaars.github.io/musy/viz.html#guitar):
+  Guitar fretboard
 
 # Installation
 
