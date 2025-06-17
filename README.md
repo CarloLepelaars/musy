@@ -479,6 +479,23 @@ dorian.get_triads("D")
      Chord: 'B diminished triad'. Notes: ['B4', 'D5', 'F5'],
      Chord: 'C major triad'. Notes: ['C5', 'E6', 'G6']]
 
+## Secondary Dominants
+
+You can get all the secondary dominants (i.e. `V7` chords) of a given
+[`Scale`](https://CarloLepelaars.github.io/musy/scale.html#scale).
+
+``` python
+Scale("major").secondary_dominants("C")
+```
+
+    [Chord: 'G dominant seventh'. Notes: ['G4', 'B4', 'D5', 'F5'],
+     Chord: 'A dominant seventh'. Notes: ['A4', 'C#5', 'E5', 'G5'],
+     Chord: 'B dominant seventh'. Notes: ['B4', 'D#5', 'F#5', 'A5'],
+     Chord: 'No chord found.'. Notes: ['C5', 'E5', 'G5', 'A#5'],
+     Chord: 'D dominant seventh'. Notes: ['D5', 'F#5', 'A5', 'C6'],
+     Chord: 'E dominant seventh'. Notes: ['E5', 'G#5', 'B5', 'D6'],
+     Chord: 'F# dominant seventh'. Notes: ['F#5', 'A#5', 'C#6', 'E6']]
+
 ## Seventh Chord Generation
 
 ``` python
