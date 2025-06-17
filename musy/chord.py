@@ -12,7 +12,7 @@ from fastcore.all import *
 from IPython.display import Audio
 from mingus.core import chords as mingus_chords
 
-from . import Note, Interval
+from . import Note, Interval, INTERVAL_TO_SEMITONES
 
 # %% ../nbs/01_chord.ipynb 5
 class Chord(BasicRepr):
@@ -81,9 +81,42 @@ def abs_intervals(self:Chord):
 
 # %% ../nbs/01_chord.ipynb 45
 @patch
-def dominant(self: Chord): return Chord([r := self.root.P5(), r.M3(), r.P5(), r.m7()])
+def dominant(self:Chord, dim=False): 
+    if not dim: # V7
+        return Chord([r := self.root.P5(), r.M3(), r.P5(), r.m7()])
+    else: # vii°7
+        return Chord([r := self.root.dm2(), r.m3(), r.TT(), r.M6()])
 
-# %% ../nbs/01_chord.ipynb 51
+# %% ../nbs/01_chord.ipynb 53
+@patch
+def add_interval(self:Chord, semitones: int):
+    """ Add note to existing chord. """
+    new_midi = self.root.midi + semitones
+    notes = self.notes.copy()
+    if new_midi not in self.midi:
+        notes.append(Note.from_midi(new_midi))
+        notes.sort(key=lambda n: n.midi)
+    return Chord(notes)
+@patch
+def add2(self:Chord): return self.add_interval(2)
+@patch
+def add4(self:Chord): return self.add_interval(5)
+@patch
+def add6(self:Chord): return self.add_interval(9)
+@patch
+def add_ext(self:Chord, name: str):
+    semis = INTERVAL_TO_SEMITONES.get(name)
+    if semis is None: raise ValueError(f"Unknown interval: {name}")
+    return self.add_interval(semis)
+@patch
+def remove_ext(self: Chord, name: str):
+    semis = INTERVAL_TO_SEMITONES.get(name)
+    if semis is None: raise ValueError(f"Unknown interval: {name}")
+    target_midi = self.root.midi + semis
+    notes = [n for n in self.notes if n.midi != target_midi]
+    return Chord(notes)
+
+# %% ../nbs/01_chord.ipynb 63
 @patch
 def get_audio_array(self:Chord, length=1):
     return np.sum([n.get_audio_array(length) for n in self.notes], axis=0)
@@ -92,7 +125,7 @@ def get_audio_array(self:Chord, length=1):
 def play(self:Chord, length=1): 
     return Audio(self.get_audio_array(length), rate=44100)
 
-# %% ../nbs/01_chord.ipynb 57
+# %% ../nbs/01_chord.ipynb 69
 @patch
 def to_frame(self:Chord):
     rel_intervals = self.rel_intervals()
@@ -111,19 +144,19 @@ def to_frame(self:Chord):
     }
     return pd.DataFrame(d)
 
-# %% ../nbs/01_chord.ipynb 62
+# %% ../nbs/01_chord.ipynb 74
 class PolyChord(Chord):
     def __init__(self, chords: list[Chord]):
         self.chords = chords
         super().__init__([note for chord in chords for note in chord.notes])
     def __repr__(self): return f"PolyChord: '{'|'.join([c.name for c in self.chords])}'. Notes: {self.oct_s_notes}"
 
-# %% ../nbs/01_chord.ipynb 66
+# %% ../nbs/01_chord.ipynb 78
 @patch
 def invert(self:PolyChord, n: int = 1):
     return PolyChord([c.invert(n) for c in self.chords])
 
-# %% ../nbs/01_chord.ipynb 71
+# %% ../nbs/01_chord.ipynb 83
 @patch
 def to_frame(self:PolyChord) -> list[pd.DataFrame]:
     return [c.to_frame() for c in self.chords]

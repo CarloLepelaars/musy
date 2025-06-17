@@ -231,6 +231,30 @@ cmaj7.root.alt_ext()
 
     [C#5, D#5, F#5, G#5]
 
+Extension can be added and removed.
+
+``` python
+# Cmaj7#9b13
+cmaj7_sharp9_flat13 = cmaj7.add_ext("#9").add_ext("b13")
+cmaj7_sharp9_flat13
+```
+
+    Chord: 'BM6|CM'. Notes: ['C4', 'E4', 'G4', 'B4', 'D#5', 'G#5']
+
+``` python
+# Cmaj7(no3)
+cmaj7.remove_ext("3")
+```
+
+    Chord: 'C major seventh'. Notes: ['C4', 'G4', 'B4']
+
+``` python
+# Cmaj7(add2)
+cmaj7.add2()
+```
+
+    Chord: 'No chord found.'. Notes: ['C4', 'D4', 'E4', 'G4', 'B4']
+
 ## Inversion
 
 Chords can also be inverted with `invert`.
