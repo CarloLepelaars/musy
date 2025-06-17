@@ -198,6 +198,8 @@ def M3(self:Note): return self + 4
 @patch
 def P4(self:Note): return self + 5
 @patch
+def TT(self:Note): return self + 6
+@patch
 def P5(self:Note): return self + 7
 @patch
 def m6(self:Note): return self + 8
@@ -213,28 +215,86 @@ def P8(self:Note): return self + 12
 def m9(self:Note): return self + 13
 @patch
 def M9(self:Note): return self + 14
+@patch
+def A9(self: Note): return self + 15
+@patch
+def P11(self: Note): return self + 17
+@patch
+def A11(self: Note): return self + 18
+@patch
+def m13(self: Note): return self + 20
+@patch
+def M13(self: Note): return self + 21
+@patch
+def ext(self: Note): return [self.m9(), self.M9(), self.A9(), self.P11(), self.A11(), self.m13(), self.M13()]
+@patch
+def alt_ext(self: Note): return [self.m9(), self.A9(), self.A11(), self.m13()]
 
-# %% ../nbs/00_note.ipynb 53
+# %% ../nbs/00_note.ipynb 58
 @patch
 def __sub__(self:Note, other):
     """Subtract n semitones from a note."""
     return Note.from_midi(self.midi - other)
 
-# %% ../nbs/00_note.ipynb 58
+# %% ../nbs/00_note.ipynb 63
 @patch
 def __floordiv__(self:Note, other):
     """Subtract n whole notes"""
     return self - other * 2
 
-# %% ../nbs/00_note.ipynb 64
+# %% ../nbs/00_note.ipynb 68
+@patch
+def dm2(self: Note): return self - 1
+@patch
+def dM2(self: Note): return self - 2
+@patch
+def dm3(self: Note): return self - 3
+@patch
+def dM3(self: Note): return self - 4
+@patch
+def dP4(self: Note): return self - 5
+@patch
+def dTT(self: Note): return self - 6
+@patch
+def dP5(self: Note): return self - 7
+@patch
+def dm6(self: Note): return self - 8
+@patch
+def dM6(self: Note): return self - 9
+@patch
+def dm7(self: Note): return self - 10
+@patch
+def dM7(self: Note): return self - 11
+@patch
+def dP8(self: Note): return self - 12
+@patch
+def dm9(self: Note): return self - 13
+@patch
+def dM9(self: Note): return self - 14
+@patch
+def dA9(self: Note): return self - 15
+@patch
+def dP11(self: Note): return self - 17
+@patch
+def dA11(self: Note): return self - 18
+@patch
+def dm13(self: Note): return self - 20
+@patch
+def dM13(self: Note): return self - 21
+@patch
+def d_ext(self: Note): return [self.dm9(), self.dM9(), self.dA9(), self.dP11(), self.dA11(), self.dm13(), self.dM13()]
+@patch
+def d_alt_ext(self: Note): return [self.dm9(), self.dA9(), self.dA11(), self.dm13()]
+
+# %% ../nbs/00_note.ipynb 75
 @patch
 def minor(self:Note): return self - 3
 
-# %% ../nbs/00_note.ipynb 67
+# %% ../nbs/00_note.ipynb 78
 @patch
 def major(self:Note): return self + 3
 
-# %% ../nbs/00_note.ipynb 71
+# %% ../nbs/00_note.ipynb 82
 @patch 
 def get_audio_array(self:Note, length=1, sr=44100):
     t = np.linspace(0, length, int(sr * length), False)
@@ -248,11 +308,11 @@ def get_audio_bytes(self:Note, length=1, sr=44100):
     buf = io.BytesIO(); wav.write(buf, sr, self.get_audio_array(length, sr))
     return buf.getvalue()
 
-# %% ../nbs/00_note.ipynb 74
+# %% ../nbs/00_note.ipynb 85
 @patch
 def play(self:Note, length=1): return Audio(data=self.get_audio_bytes(length))
 
-# %% ../nbs/00_note.ipynb 83
+# %% ../nbs/00_note.ipynb 94
 class Interval:
     def __init__(self, note1: Note, note2: Note):
         store_attr()
@@ -289,14 +349,14 @@ class Interval:
         c.semitones = abs(c.semitones)
         return c
 
-# %% ../nbs/00_note.ipynb 85
+# %% ../nbs/00_note.ipynb 96
 @patch
 def interval(self:Note, other:Note): return Interval(self, other)
 
 @patch
 def __and__(self:Note, other:Note): return self.interval(other)
 
-# %% ../nbs/00_note.ipynb 106
+# %% ../nbs/00_note.ipynb 117
 @patch
 def type(self:Interval): return INTERVAL_TYPES[abs(self.semitones) % 12]
 
@@ -309,7 +369,7 @@ def is_perfect(self:Interval): return "Perfect" in self.type()
 @patch 
 def is_contextual(self:Interval): return "Contextual" in self.type()
 
-# %% ../nbs/00_note.ipynb 117
+# %% ../nbs/00_note.ipynb 128
 @patch
 def __add__(self:Interval, other):
     return Interval(self.note1, self.note2+other)

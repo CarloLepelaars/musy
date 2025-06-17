@@ -22,9 +22,9 @@ class Chord(BasicRepr):
         self.oct_s_notes = [f"{n.note}{n.oct}" for n in self.notes]
         self.names = mingus_chords.determine(self.s_notes)
         self.name = self.names[0] if self.names else "No chord found."
-        self.first = self.notes[0]
-        self.s_first = str(self.first)
-        self.oct_s_first = f"{self.first.note}{self.first.oct}"
+        self.root = min(self.notes, key=lambda n: n.midi)
+        self.s_root = str(self.root)
+        self.oct_s_root = f"{self.root.note}{self.root.oct}"
 
     @classmethod
     def from_short(cls, c: str): return cls(mingus_chords.from_shorthand(c)) 
@@ -47,14 +47,14 @@ class Chord(BasicRepr):
     def midi(self): return [n.midi for n in self.notes]
     
     def _compare_notes(self, other, op): return all(op(n1, n2) for n1, n2 in zip(self.notes, other.notes))
-    def __eq__(self, other): return self.first == other.first and self._compare_notes(other, lambda x, y: x == y)
+    def __eq__(self, other): return self.root == other.root and self._compare_notes(other, lambda x, y: x == y)
     def __ne__(self, other): return not self == other
-    def __lt__(self, other): return self.first < other.first or (self.first == other.first and self._compare_notes(other, lambda x, y: x < y))
-    def __le__(self, other): return self.first < other.first or (self.first == other.first and self._compare_notes(other, lambda x, y: x <= y))
-    def __gt__(self, other): return self.first > other.first or (self.first == other.first and self._compare_notes(other, lambda x, y: x > y))
-    def __ge__(self, other): return self.first > other.first or (self.first == other.first and self._compare_notes(other, lambda x, y: x >= y))
+    def __lt__(self, other): return self.root < other.root or (self.root == other.root and self._compare_notes(other, lambda x, y: x < y))
+    def __le__(self, other): return self.root < other.root or (self.root == other.root and self._compare_notes(other, lambda x, y: x <= y))
+    def __gt__(self, other): return self.root > other.root or (self.root == other.root and self._compare_notes(other, lambda x, y: x > y))
+    def __ge__(self, other): return self.root > other.root or (self.root == other.root and self._compare_notes(other, lambda x, y: x >= y))
 
-# %% ../nbs/01_chord.ipynb 29
+# %% ../nbs/01_chord.ipynb 31
 @patch
 def __mul__(self:Note, other: Note):
     """ Form a chord from two notes. """
@@ -64,13 +64,13 @@ def __mul__(self:Chord, other):
     """ Add a note to a chord. """
     return Chord([*self.notes, other])
 
-# %% ../nbs/01_chord.ipynb 36
+# %% ../nbs/01_chord.ipynb 38
 @patch
 def invert(self:Chord, n: int = 1):
     assert n > 0 and n < len(self.s_notes), f"Invalid inversion '{n}' for chord with '{len(self.s_notes)}' notes."
     return Chord(self.notes[n:] + [Note(str(note), oct=note.oct + 1) for note in self.notes[:n]])
 
-# %% ../nbs/01_chord.ipynb 39
+# %% ../nbs/01_chord.ipynb 41
 @patch
 def rel_intervals(self:Chord):
     return [Interval(self.notes[0], n) for n in self.notes[1:]]
@@ -79,7 +79,11 @@ def rel_intervals(self:Chord):
 def abs_intervals(self:Chord):
     return [Interval(n1, n2) for n1, n2 in zip(self.notes, self.notes[1:])]
 
-# %% ../nbs/01_chord.ipynb 43
+# %% ../nbs/01_chord.ipynb 45
+@patch
+def dominant(self: Chord): return Chord([r := self.root.P5(), r.M3(), r.P5(), r.m7()])
+
+# %% ../nbs/01_chord.ipynb 51
 @patch
 def get_audio_array(self:Chord, length=1):
     return np.sum([n.get_audio_array(length) for n in self.notes], axis=0)
@@ -88,7 +92,7 @@ def get_audio_array(self:Chord, length=1):
 def play(self:Chord, length=1): 
     return Audio(self.get_audio_array(length), rate=44100)
 
-# %% ../nbs/01_chord.ipynb 49
+# %% ../nbs/01_chord.ipynb 57
 @patch
 def to_frame(self:Chord):
     rel_intervals = self.rel_intervals()
@@ -107,19 +111,19 @@ def to_frame(self:Chord):
     }
     return pd.DataFrame(d)
 
-# %% ../nbs/01_chord.ipynb 54
+# %% ../nbs/01_chord.ipynb 62
 class PolyChord(Chord):
     def __init__(self, chords: list[Chord]):
         self.chords = chords
         super().__init__([note for chord in chords for note in chord.notes])
     def __repr__(self): return f"PolyChord: '{'|'.join([c.name for c in self.chords])}'. Notes: {self.oct_s_notes}"
 
-# %% ../nbs/01_chord.ipynb 58
+# %% ../nbs/01_chord.ipynb 66
 @patch
 def invert(self:PolyChord, n: int = 1):
     return PolyChord([c.invert(n) for c in self.chords])
 
-# %% ../nbs/01_chord.ipynb 63
+# %% ../nbs/01_chord.ipynb 71
 @patch
 def to_frame(self:PolyChord) -> list[pd.DataFrame]:
     return [c.to_frame() for c in self.chords]

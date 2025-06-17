@@ -197,6 +197,40 @@ cmaj7
 
     Chord: 'C major seventh'. Notes: ['C4', 'E4', 'G4', 'B4']
 
+## Analysis
+
+You can easily retrieve intervals, related chords and extensions from a
+[`Chord`](https://CarloLepelaars.github.io/musy/chord.html#chord)
+object.
+
+``` python
+# Root of Cmaj7 -> C
+cmaj7.root
+```
+
+    C4
+
+``` python
+# Dominant (V7) chord of Cmaj7 -> G7.
+cmaj7.dominant()
+```
+
+    Chord: 'G dominant seventh'. Notes: ['G4', 'B4', 'D5', 'F5']
+
+``` python
+# Upper extensions (b9, 9, #9, b11, #11, b13, #13)
+cmaj7.root.ext()
+```
+
+    [C#5, D5, D#5, F5, F#5, G#5, A5]
+
+``` python
+# Altered extensions (b9, #9, #11, b13)
+cmaj7.root.alt_ext()
+```
+
+    [C#5, D#5, F#5, G#5]
+
 ## Inversion
 
 Chords can also be inverted with `invert`.
@@ -595,21 +629,6 @@ For scale visualization on
 parameter.
 
 ``` python
-Piano().visualize_scale(Scale("major"), root="D")
-```
-
-<style>
-.piano { background: #222; padding: 20px 0; position: relative; }
-.white-keys { display: flex; }
-.white-key, .black-key { text-align: center; font-family: Arial; position: relative; }
-.white-key { width: 40px; height: 125px; background: #fff; border: 1px solid #000; 
-    color: #111; font-size: 18px; line-height: 200px; z-index: 1; }
-.black-key { width: 20px; height: 80px; background: #000; color: #fff; border: 1px solid #333;
-    position: absolute; z-index: 2; line-height: 100px; font-size: 14px; top: 20px; }
-.highlight { background: #ff0 !important; color: #000 !important; }
-</style><div class="piano" style="width:840px"><div class="white-keys"><div class="white-key">C</div><div class="white-key highlight">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key highlight">G</div><div class="white-key highlight">A</div><div class="white-key highlight">B</div><div class="white-key">C</div><div class="white-key highlight">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key highlight">G</div><div class="white-key highlight">A</div><div class="white-key highlight">B</div><div class="white-key">C</div><div class="white-key">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="white-key">G</div><div class="white-key">A</div><div class="white-key">B</div></div><div class="black-key" style="left:29px">C#</div><div class="black-key" style="left:69px">D#</div><div class="black-key highlight" style="left:149px">F#</div><div class="black-key" style="left:189px">G#</div><div class="black-key" style="left:229px">A#</div><div class="black-key highlight" style="left:309px">C#</div><div class="black-key" style="left:349px">D#</div><div class="black-key highlight" style="left:429px">F#</div><div class="black-key" style="left:469px">G#</div><div class="black-key" style="left:509px">A#</div><div class="black-key highlight" style="left:589px">C#</div><div class="black-key" style="left:629px">D#</div><div class="black-key" style="left:709px">F#</div><div class="black-key" style="left:749px">G#</div><div class="black-key" style="left:789px">A#</div></div>
-
-``` python
 Piano().visualize_scale(Scale("double harmonic major"), root="C", octs=3)
 ```
 
@@ -646,27 +665,6 @@ Guitar().visualize_note(Note("C", oct=4))
 .guitar-cell { border-bottom: 1.2px solid #bbb; background: none; }
 .guitar-note { background: rgba(255, 255, 0, 0.7); color: #222; 
 </style><div class="guitar-fretboard"><div class="guitar-fret-nums"><div class="guitar-string-name"></div><div class="guitar-fret-num">0</div><div class="guitar-fret-num">1</div><div class="guitar-fret-num">2</div><div class="guitar-fret-num">3</div><div class="guitar-fret-num">4</div><div class="guitar-fret-num">5</div><div class="guitar-fret-num">6</div><div class="guitar-fret-num">7</div><div class="guitar-fret-num">8</div><div class="guitar-fret-num">9</div><div class="guitar-fret-num">10</div><div class="guitar-fret-num">11</div><div class="guitar-fret-num">12</div><div class="guitar-fret-num">13</div><div class="guitar-fret-num">14</div><div class="guitar-fret-num">15</div><div class="guitar-fret-num">16</div><div class="guitar-fret-num">17</div><div class="guitar-fret-num">18</div><div class="guitar-fret-num">19</div><div class="guitar-fret-num">20</div><div class="guitar-fret-num">21</div><div class="guitar-fret-num">22</div></div><div class="guitar-row"><div class="guitar-string-name">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">B</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">A</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div></div>
-
-You can for example get
-[`Note`](https://CarloLepelaars.github.io/musy/note.html#note) objects
-with different octaves to shows all notes on the fretboard. For example
-all `D` notes.
-
-``` python
-Guitar().visualize_notes([Note("D", n) for n in range(1, 8)])
-```
-
-<style>
-.guitar-fretboard { background: #c49e60; border-radius: 8px; padding: 8px; display: inline-block; }
-.guitar-fret-nums { display: flex; font-size: 12px; color: #333; margin-bottom: 2px; }
-.guitar-fret-num { width: 32px; text-align: center; font-weight: bold; border-right: 2.5px solid #888; }
-.guitar-dot { height: 6px; text-align: center; color: #444; font-size: 10px; }
-.guitar-row { display: flex; align-items: center; position: relative; }
-.guitar-string-name { width: 24px; text-align: right; margin-right: 0px; font-weight: bold; color: #444; }
-.guitar-cell, .guitar-note { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-right: 2.5px solid #888; position: relative; }
-.guitar-cell { border-bottom: 1.2px solid #bbb; background: none; }
-.guitar-note { background: rgba(255, 255, 0, 0.7); color: #222; 
-</style><div class="guitar-fretboard"><div class="guitar-fret-nums"><div class="guitar-string-name"></div><div class="guitar-fret-num">0</div><div class="guitar-fret-num">1</div><div class="guitar-fret-num">2</div><div class="guitar-fret-num">3</div><div class="guitar-fret-num">4</div><div class="guitar-fret-num">5</div><div class="guitar-fret-num">6</div><div class="guitar-fret-num">7</div><div class="guitar-fret-num">8</div><div class="guitar-fret-num">9</div><div class="guitar-fret-num">10</div><div class="guitar-fret-num">11</div><div class="guitar-fret-num">12</div><div class="guitar-fret-num">13</div><div class="guitar-fret-num">14</div><div class="guitar-fret-num">15</div><div class="guitar-fret-num">16</div><div class="guitar-fret-num">17</div><div class="guitar-fret-num">18</div><div class="guitar-fret-num">19</div><div class="guitar-fret-num">20</div><div class="guitar-fret-num">21</div><div class="guitar-fret-num">22</div></div><div class="guitar-row"><div class="guitar-string-name">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">D</div></div><div class="guitar-row"><div class="guitar-string-name">B</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">D</div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">A</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">D</div></div></div>
 
 `visualize_chord` shows you all the notes across octaves so you can spot
 different voicings.
