@@ -434,6 +434,11 @@ def play_triads(self:Scale, root):
 
 # %% ../nbs/02_scale.ipynb 83
 @patch
+def secondary_dominants(self: Scale, root: str):
+    return [t.dominant() for t in self.get_triads(root)]
+
+# %% ../nbs/02_scale.ipynb 87
+@patch
 def get_sevenths(self:Scale, root):
     """Get all seventh chords in scale starting from root note."""
     notes = self.get_notes(root)
@@ -443,13 +448,13 @@ def get_sevenths(self:Scale, root):
                   Note(str(notes[(i+6)%7]), oct=notes[i].oct + (i+6)//7)]) 
             for i in range(len(notes))]
 
-# %% ../nbs/02_scale.ipynb 86
+# %% ../nbs/02_scale.ipynb 90
 @patch
 def play_sevenths(self:Scale, root):
     """Play all seventh chords in scale starting from root note."""
     return Audio(np.concatenate([c.get_audio_array() for c in self.get_sevenths(root)]), rate=44100)
 
-# %% ../nbs/02_scale.ipynb 90
+# %% ../nbs/02_scale.ipynb 94
 @patch
 def to_frame(self:Scale, root=None):
     d = {
