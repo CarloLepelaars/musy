@@ -152,7 +152,7 @@ SCALES = {# Major modes
           "bebop major": ["1", "2", "3", "4", "5", "b6", "6", "7"],
           "bebop blues": ["1", "2", "b3", "3", "4", "5", "6", "b7"],
           "bebop melodic minor": ["1", "2", "b3", "4", "5", "b6", "6", "7"],
-          # Pentatonic scales
+          # Western pentatonic scales
           "pentatonic major": ["1", "2", "3", "5", "6"],
           "major pentatonic": ["1", "2", "3", "5", "6"],
           "pentatonic minor": ["1", "b3", "4", "5", "b7"],
@@ -290,6 +290,42 @@ SCALES = {# Major modes
           "persian": ["1", "b2", "3", "4", "b5", "b6", "7"],
           "roumanian minor": ["1", "2", "b3", "#4", "5", "6", "b7"],
           "moorish phrygian": ["1", "b2", "b3", "3", "4", "5", "#5", "b7", "7"],
+          # TODO: Add Ethio-jazz scales
+          # Ethiopian pentatonic scales (Ethio-jazz)
+          # Reference: https://youtu.be/x-_R9sycN7w
+          "tizita major": ["1", "2", "3", "5", "6"], # Same as pentatonic major
+          "tizita minor": ["1", "2", "b3", "5", "b6"],
+          "tizita dorian": ["1", "2", "b3", "5", "6"],
+          "tizita dorian b2": ["1", "b2", "b3", "5", "6"],
+          "tizita phrygian": ["1", "b2", "b3", "5", "b6"],
+          "tizita major b6": ["1", "2", "3", "5", "b6"],
+          "tizita major b2": ["1", "b2", "3", "5", "6"],
+          "tizita major #2": ["1", "#2", "3", "5", "6"],
+          "bati major": ["1", "3", "4", "5", "7"],
+          "bati minor": ["1", "b3", "4", "5", "b7"],
+          "bati lydian": ["1", "3", "#4", "5", "7"], # Bati major with #4
+          "bati minor b4": ["1", "b3", "b4", "5", "b7"],
+          "bati minor #4": ["1", "b3", "#4", "5", "b7"],
+          "bati mixolydian": ["1", "3", "4", "5", "b7"],
+          "bati harmonic": ["1", "b3", "4", "5", "7"],
+          "bati lydian b7": ["1", "3", "#4", "5", "b7"],
+          "ambassel major": ["1", "2", "4", "5", "6"],
+          "ambassel minor": ["1", "b2", "4", "5", "b6"],
+          "ambassel aeolian": ["1", "2", "4", "5", "b6"],
+          "ambassel major b2": ["1", "b2", "4", "5", "6"],
+          "ambassel lydian": ["1", "2", "#4", "5", "6"],
+          "ambassel lydian #2": ["1", "#2", "#4", "5", "6"],
+          "yematibela wef": ["1", "2", "4", "5", "b7"],
+          "wef": ["1", "2", "4", "5", "b7"],
+          "wef minor": ["1", "b2", "4", "5", "b7"],
+          "wef minor b4": ["1", "b2", "b4", "5", "b7"],
+          "wef major": ["1", "2", "4", "5", "7"],
+          "wef lydian": ["1", "2", "4", "b5", "7"],
+          "wef lydian b7": ["1", "2", "4", "b5", "b7"],
+          "shegaye": ["1", "b3", "4", "b6", "b7"],
+          "anchihoye traditional": ["1", "b2", "4", "b5", "6"],
+          "anchihoye major": ["1", "b2", "3", "5", "b6"],
+          "anchihoye minor": ["1", "b3", "#4", "5", "7"],
           }
 
 # Invert scales so alternative names can be identified by intervals or name
@@ -416,7 +452,7 @@ def get_audio_array(self:Scale, root, oct=4, length=0.3):
 def play(self:Scale, root, oct=4, length=0.3): 
     return Audio(self.get_audio_array(root, oct=oct, length=length), rate=44100)
 
-# %% ../nbs/02_scale.ipynb 76
+# %% ../nbs/02_scale.ipynb 77
 @patch
 def get_triads(self:Scale, root):
     """Get all triads in scale starting from root note."""
@@ -426,18 +462,18 @@ def get_triads(self:Scale, root):
                   Note(str(notes[(i+4)%7]), oct=notes[i].oct + (i+4)//7)]) 
             for i in range(len(notes))]
 
-# %% ../nbs/02_scale.ipynb 80
+# %% ../nbs/02_scale.ipynb 81
 @patch
 def play_triads(self:Scale, root):
     """Play all triads in scale starting from root note."""
     return Audio(np.concatenate([c.get_audio_array() for c in self.get_triads(root)]), rate=44100)
 
-# %% ../nbs/02_scale.ipynb 83
+# %% ../nbs/02_scale.ipynb 84
 @patch
 def secondary_dominants(self: Scale, root: str):
     return [t.dominant() for t in self.get_triads(root)]
 
-# %% ../nbs/02_scale.ipynb 87
+# %% ../nbs/02_scale.ipynb 88
 @patch
 def get_sevenths(self:Scale, root):
     """Get all seventh chords in scale starting from root note."""
@@ -448,13 +484,13 @@ def get_sevenths(self:Scale, root):
                   Note(str(notes[(i+6)%7]), oct=notes[i].oct + (i+6)//7)]) 
             for i in range(len(notes))]
 
-# %% ../nbs/02_scale.ipynb 90
+# %% ../nbs/02_scale.ipynb 91
 @patch
 def play_sevenths(self:Scale, root):
     """Play all seventh chords in scale starting from root note."""
     return Audio(np.concatenate([c.get_audio_array() for c in self.get_sevenths(root)]), rate=44100)
 
-# %% ../nbs/02_scale.ipynb 94
+# %% ../nbs/02_scale.ipynb 95
 @patch
 def to_frame(self:Scale, root=None):
     d = {
