@@ -1,0 +1,672 @@
+[
+  {
+    "objectID": "viz.html",
+    "href": "viz.html",
+    "title": "Visualization",
+    "section": "",
+    "text": "Here we will create an Instrument base class to for code reusability.\n\nsource\n\n\n\n Instrument ()\n\nInitialize self. See help(type(self)) for accurate signature.",
+    "crumbs": [
+      "Visualization"
+    ]
+  },
+  {
+    "objectID": "viz.html#initialization",
+    "href": "viz.html#initialization",
+    "title": "Visualization",
+    "section": "Initialization",
+    "text": "Initialization\nTo get an empty piano, just call on an initialized Piano object without arguments.\n\npiano = Piano()\npiano()\n\nCDEFGABC#D#F#G#A#",
+    "crumbs": [
+      "Visualization"
+    ]
+  },
+  {
+    "objectID": "viz.html#highlighting",
+    "href": "viz.html#highlighting",
+    "title": "Visualization",
+    "section": "Highlighting",
+    "text": "Highlighting\nWe can highlight single Note objects with the visualize_note method.\nFor example, here we highlight the C# notes on the piano.\n\npiano.visualize_note(Note(\"C#\"))\n\nCDEFGABC#D#F#G#A#\n\n\nChord objects can be visualized on the piano by passing a chord to visualize_chord.\n\n# Notes for a Cmaj7 chord\nchord = Chord.from_short(\"Cmaj7\")\nchord.notes\n\n[C4, E4, G4, B4]\n\n\n\npiano.visualize_chord(chord)\n\nCDEFGABC#D#F#G#A#\n\n\nA scale can be highlighted by calling visualize_scale with a Scale object and a root note.\n\nmajor = Scale(\"major\")\npiano.visualize_scale(major, root=\"D\")\n\nCDEFGABCDEFGABCDEFGABC#D#F#G#A#C#D#F#G#A#C#D#F#G#A#\n\n\nYou can decide to visualize more octaves with the octs parameter.\n\ndouble_harmonic_major = Scale(\"double harmonic major\")\npiano.visualize_scale(double_harmonic_major, root=\"C\", octs=3)\n\nCDEFGABCDEFGABCDEFGABC#D#F#G#A#C#D#F#G#A#C#D#F#G#A#",
+    "crumbs": [
+      "Visualization"
+    ]
+  },
+  {
+    "objectID": "scale.html",
+    "href": "scale.html",
+    "title": "Scale",
+    "section": "",
+    "text": "The Scale object is a collection of intervals and agnostic to any key. From the basic scale, notes can be derived by providing a root note.\nsource",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#initialization",
+    "href": "scale.html#initialization",
+    "title": "Scale",
+    "section": "Initialization",
+    "text": "Initialization\nThe Scale representation gives you the name and intervals of the scale.\n\nmajor = Scale(\"major\")\nmajor\n\nScale: Major. Intervals: ['1', '2', '3', '4', '5', '6', '7']\n\n\n\ndorian = Scale(\"dorian\")\ndorian\n\nScale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7']\n\n\n\nlydian = Scale(\"lydian\")\nlydian\n\nScale: Lydian. Intervals: ['1', '2', '3', '#4', '5', '6', '7']\n\n\n\nProperties\nThe Scale object stores how many flats, sharps and naturals are in the key.\nFor example, a major scale contains only naturals. No flats or sharps.\n\nmajor.naturals, major.sharps, major.flats\n\n(7, 0, 0)\n\n\nA dorian scale has 2 flats (the 3rd and 7th degrees).\n\ndorian.flats\n\n2\n\n\nA lydian scale has 1 sharp (the 4th degree).\n\nlydian.sharps\n\n1\n\n\nListify the scale to get the intervals or call .intervals.\n\nlist(lydian)\n\n['1', '2', '3', '#4', '5', '6', '7']\n\n\nSemitones for the invervals in a scale can be retrieved in an absolute (intervals between notes) or relative (intervals from root).\n\nassert major.rel_semitones == [0, 2, 4, 5, 7, 9, 11]\nmajor.rel_semitones\n\n[0, 2, 4, 5, 7, 9, 11]\n\n\n\nassert major.abs_semitones == [2, 2, 1, 2, 2, 2, 1]\nassert sum(major.abs_semitones) == 12\nmajor.abs_semitones\n\n[2, 2, 1, 2, 2, 2, 1]",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#comparison",
+    "href": "scale.html#comparison",
+    "title": "Scale",
+    "section": "Comparison",
+    "text": "Comparison\nScales can be compared to each other.\n\nassert Scale(\"minor\") == Scale(\"aeolian\") == Scale(\"natural minor\")\nassert not major == dorian\nassert lydian != dorian\nassert lydian == lydian\nassert Scale(\"minor\") == Scale(\"aeolian\")",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#custom-scales",
+    "href": "scale.html#custom-scales",
+    "title": "Scale",
+    "section": "Custom Scales",
+    "text": "Custom Scales\nAlmost all scales are available to initialize by name, but custom scales can be created with from_intervals. Consult Scale.available_scales to get the built-in scales.\nFor example, we can create a custom persian scale.\n\npersian = Scale.from_intervals([\"1\", \"b2\", \"3\", \"4\", \"b5\", \"b6\", \"7\"], \"persian\")\npersian\n\nScale: Persian. Intervals: ['1', 'b2', '3', '4', 'b5', 'b6', '7']\n\n\nIf no name is given, Scale will try to infer the name.\n\nmel_minor = Scale.from_intervals([\"1\", \"2\", \"b3\", \"4\", \"5\", \"6\", \"7\"])\nassert mel_minor.name == \"melodic minor\"\nmel_minor\n\nScale: Melodic Minor. Intervals: ['1', '2', 'b3', '4', '5', '6', '7']",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#note-generation",
+    "href": "scale.html#note-generation",
+    "title": "Scale",
+    "section": "Note Generation",
+    "text": "Note Generation\nFrom a Scale object, we can get the notes given a root note.\n\nsource\n\nScale.get_notes\n\n Scale.get_notes (root, oct=4)\n\nGet the notes of a scale from a root note.\n\nc_major = Scale(\"major\").get_notes(\"C\")\nassert [str(n) for n in c_major] == ['C', 'D', 'E', 'F', 'G', 'A', 'B']\nc_major\n\n[C4, D4, E4, F4, G4, A4, B4]\n\n\n\ng_major = Scale(\"major\").get_notes(\"G\")\ng_major\n\n[G4, A4, B4, C5, D5, E5, F#5]\n\n\n\nc_dorian = Scale(\"dorian\").get_notes(\"C\")\nassert [str(n) for n in c_dorian] == ['C', 'D', 'D#', 'F', 'G', 'A', 'A#']\nc_dorian\n\n[C4, D4, D#4, F4, G4, A4, A#4]",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#exhaustive-diatonic-chords",
+    "href": "scale.html#exhaustive-diatonic-chords",
+    "title": "Scale",
+    "section": "Exhaustive Diatonic Chords",
+    "text": "Exhaustive Diatonic Chords\nWe can get all diatonic chords in the scale with get_diatonic_chords.\n\nsource\n\nScale.get_diatonic_chords\n\n Scale.get_diatonic_chords (root, min_notes=3)\n\nFor example, let’s look at all the diatonic E chords in the C major scale we can identify.\n\n[c for c in Scale(\"major\").get_diatonic_chords(\"C\") if \"E\" in c.name]\n\n[Chord: 'E minor seventh, second inversion'. Notes: ['D4', 'E4', 'G4'],\n Chord: 'E minor seventh, second inversion'. Notes: ['D4', 'E4', 'B4'],\n Chord: 'E minor triad'. Notes: ['E4', 'G4', 'B4'],\n Chord: 'E suspended fourth triad'. Notes: ['E4', 'A4', 'B4'],\n Chord: 'Esus4|CM6'. Notes: ['C4', 'E4', 'A4', 'B4'],\n Chord: 'E suspended seventh, third inversion'. Notes: ['D4', 'E4', 'A4', 'B4']]",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#interval-names",
+    "href": "scale.html#interval-names",
+    "title": "Scale",
+    "section": "Interval Names",
+    "text": "Interval Names\nYou can easily get relative and absolute interval names. Both shorthand and full names are available.\n\nsource\n\nScale.abs_interval_names\n\n Scale.abs_interval_names (short=False)\n\n\nsource\n\n\nScale.rel_interval_names\n\n Scale.rel_interval_names (short=False)\n\n\nassert major.rel_interval_names() == ['major second', 'major third', 'perfect fourth', 'perfect fifth', 'major sixth', 'major seventh']\nassert major.rel_interval_names(short=True) == ['1', '2', '3', '4', '5', '6', '7']\nassert major.abs_interval_names() == ['major second', 'major second', 'minor second', 'major second', 'major second', 'major second', 'minor second']\nassert major.abs_interval_names(short=True) == ['2', '2', 'b2', '2', '2', '2', 'b2']\nmajor.rel_interval_names()\n\n['major second',\n 'major third',\n 'perfect fourth',\n 'perfect fifth',\n 'major sixth',\n 'major seventh']\n\n\n\nScale(\"locrian\").rel_interval_names()\n\n['minor second',\n 'minor third',\n 'perfect fourth',\n 'diminished fifth',\n 'minor sixth',\n 'minor seventh']",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#alternative-scale-names",
+    "href": "scale.html#alternative-scale-names",
+    "title": "Scale",
+    "section": "Alternative Scale Names",
+    "text": "Alternative Scale Names\nMany scales have alternative names. We can derive them using get_scale_names.\n\nsource\n\nScale.get_scale_names\n\n Scale.get_scale_names ()\n\n\nassert major.get_scale_names() == [\"ionian\", \"major\"]\nmajor.get_scale_names()\n\n['ionian', 'major']",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#modes-of-scale",
+    "href": "scale.html#modes-of-scale",
+    "title": "Scale",
+    "section": "Modes of scale",
+    "text": "Modes of scale\nA mode is a scale derived from a note on the scale. We can build a new Scale on every step of a Scale by cycling through the modes.\nFor this to work, we first need to shift the semitones of our scale and get a new set of relative semitones.\n\nassert major.abs_semitones == [2, 2, 1, 2, 2, 2, 1]\nassert major._shift_abs_semitones(1) == [2, 1, 2, 2, 2, 1, 2]\n# Semitones for dorian scale (shift semitones 1 to the left)\nmajor._shift_abs_semitones(1)\n\n[2, 1, 2, 2, 2, 1, 2]\n\n\nWhen we accumulate the absolute semitones of a scale, we get the relative semitones.\n\nassert major.rel_semitones == [0, 2, 4, 5, 7, 9, 11]\nassert major._shift_rel_semitones(1) == [0, 2, 3, 5, 7, 9, 10]\n# Relative semitones for dorian scale\nmajor._shift_rel_semitones(1)\n\n[0, 2, 3, 5, 7, 9, 10]\n\n\nWe can now reconstruct the intervals from the relative semitones.\n\nsource\n\nsemi_to_intvals\n\n semi_to_intvals (semitones)\n\nConvert relative semitone values to interval names.\n\ndorian_intervals = semi_to_intvals(major._shift_rel_semitones(1))\nassert dorian_intervals == ['1', '2', 'b3', '4', '5', '6', 'b7']\ndorian_intervals\n\n['1', '2', 'b3', '4', '5', '6', 'b7']\n\n\nNow let’s reconstruct a new Scale object from these intervals.\n\ndorian = Scale.from_intervals(dorian_intervals)\nassert dorian.name == \"dorian\"\ndorian\n\nScale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7']\n\n\nNow we can create a method to retrieve all modes for any given Scale.\n\nsource\n\n\nScale.get_modes\n\n Scale.get_modes ()\n\n\nsource\n\n\nScale.shift_intvals\n\n Scale.shift_intvals (n:int)\n\nShift the intervals of a scale by n steps.\nThe most well known modes are the modes of the major scale, which are: 1. Ionian (Major) 2. Dorian 3. Phrygian 4. Lydian 5. Mixolydian 6. Aeolian (Natural Minor) 7. Locrian\n\nmaj_modes = major.get_modes()\nassert [m.name for m in maj_modes] == [\"ionian\", \"dorian\", \"phrygian\", \"lydian\", \"mixolydian\", \"minor\", \"locrian\"]\nmaj_modes\n\n[Scale: Ionian. Intervals: ['1', '2', '3', '4', '5', '6', '7'],\n Scale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7'],\n Scale: Phrygian. Intervals: ['1', 'b2', 'b3', '4', '5', 'b6', 'b7'],\n Scale: Lydian. Intervals: ['1', '2', '3', '#4', '5', '6', '7'],\n Scale: Mixolydian. Intervals: ['1', '2', '3', '4', '5', '6', 'b7'],\n Scale: Minor. Intervals: ['1', '2', 'b3', '4', '5', 'b6', 'b7'],\n Scale: Locrian. Intervals: ['1', 'b2', 'b3', '4', 'b5', 'b6', 'b7']]\n\n\nIf we take the modes of one of these modes we get the same modes in a different order. For example, the phrygian modes are: 1. Phrygian 2. Lydian 3. Mixolydian 4. Aeolian (Natural Minor) 5. Locrian 6. Ionian (Major)\n\nphrygian = maj_modes[2]\nphrygian_modes = phrygian.get_modes()\nassert [m.name for m in phrygian_modes] == [\"phrygian\", \"lydian\", \"mixolydian\", \"minor\", \"locrian\", \"ionian\", \"dorian\"]\nphrygian_modes\n\n[Scale: Phrygian. Intervals: ['1', 'b2', 'b3', '4', '5', 'b6', 'b7'],\n Scale: Lydian. Intervals: ['1', '2', '3', '#4', '5', '6', '7'],\n Scale: Mixolydian. Intervals: ['1', '2', '3', '4', '5', '6', 'b7'],\n Scale: Minor. Intervals: ['1', '2', 'b3', '4', '5', 'b6', 'b7'],\n Scale: Locrian. Intervals: ['1', 'b2', 'b3', '4', 'b5', 'b6', 'b7'],\n Scale: Ionian. Intervals: ['1', '2', '3', '4', '5', '6', '7'],\n Scale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7']]\n\n\nLet’s take a more complicated example, like the Double Harmonic Major scale. The modes of this scale are: 1. Double Harmonic Major 2. Lydian with #2 and #6 3. Ultraphrygian 4. Hungarian Minor 5. Oriental 6. Ionian with #2 and #5 (i.e. aug#2) 7. Locrian with bb3 and bb7\n\ndhm = Scale(\"double harmonic major\")\ndhm\n\nScale: Double Harmonic Major. Intervals: ['1', 'b2', '3', '4', '5', 'b6', '7']\n\n\n\ndhm_modes = dhm.get_modes()\nassert [m.name for m in dhm_modes] == [\"double harmonic major\", \"lydian #2#6\", \"ultraphrygian\", \"hungarian minor\", \"oriental\", \"ionian aug#2\", \"locrian bb3bb7\"]\ndhm_modes\n\n[Scale: Double Harmonic Major. Intervals: ['1', 'b2', '3', '4', '5', 'b6', '7'],\n Scale: Lydian #2#6. Intervals: ['1', '#2', '3', '#4', '5', '#6', '7'],\n Scale: Ultraphrygian. Intervals: ['1', 'b2', 'b3', 'b4', '5', 'b6', '6'],\n Scale: Hungarian Minor. Intervals: ['1', '2', 'b3', '#4', '5', 'b6', '7'],\n Scale: Oriental. Intervals: ['1', 'b2', '3', '4', 'b5', '6', 'b7'],\n Scale: Ionian Aug#2. Intervals: ['1', '#2', '3', '4', '#5', '6', '7'],\n Scale: Locrian Bb3Bb7. Intervals: ['1', 'b2', '2', '4', 'b5', 'b6', '6']]",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#scale-audio",
+    "href": "scale.html#scale-audio",
+    "title": "Scale",
+    "section": "Scale Audio",
+    "text": "Scale Audio\nLike with Note and Chord objects, Scale objects can be played in any given key with the play method.\n\nsource\n\nScale.play\n\n Scale.play (root, oct=4, length=0.3)\n\n\nsource\n\n\nScale.get_audio_array\n\n Scale.get_audio_array (root, oct=4, length=0.3)\n\n\nmajor.play(\"C\")\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\n\npersian.play(\"C\")\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\nlength and oct can be customized for the play method.\n\nScale(\"altered\").play(\"C\", length=0.2, oct=3)\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\n\nScale(\"aeolian dominant\").play(\"C\", length=0.2, oct=3)\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\n\nScale(\"bati lydian\").play(\"C#\", length=0.1, oct=4)\n\n\n                \n                    \n                    Your browser does not support the audio element.",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#triads",
+    "href": "scale.html#triads",
+    "title": "Scale",
+    "section": "Triads",
+    "text": "Triads\nWe can derive all triads in the Scale.\n\nDerive Triads\n\nsource\n\n\nScale.get_triads\n\n Scale.get_triads (root)\n\nGet all triads in scale starting from root note.\n\nmajor.get_triads(\"C\")\n\n[Chord: 'C major triad'. Notes: ['C4', 'E4', 'G4'],\n Chord: 'D minor triad'. Notes: ['D4', 'F4', 'A4'],\n Chord: 'E minor triad'. Notes: ['E4', 'G4', 'B4'],\n Chord: 'F major triad'. Notes: ['F4', 'A4', 'C5'],\n Chord: 'G major triad'. Notes: ['G4', 'B4', 'D5'],\n Chord: 'A minor triad'. Notes: ['A4', 'C5', 'E5'],\n Chord: 'B diminished triad'. Notes: ['B4', 'D5', 'F5']]\n\n\n\nScale(\"phrygian\").get_triads(\"D\")\n\n[Chord: 'D minor triad'. Notes: ['D4', 'F4', 'A4'],\n Chord: 'No chord found.'. Notes: ['D#4', 'G4', 'A#4'],\n Chord: 'F major triad'. Notes: ['F4', 'A4', 'C4'],\n Chord: 'No chord found.'. Notes: ['G4', 'A#4', 'D5'],\n Chord: 'No chord found.'. Notes: ['A4', 'C4', 'D#5'],\n Chord: 'No chord found.'. Notes: ['A#4', 'D5', 'F5'],\n Chord: 'No chord found.'. Notes: ['C5', 'D#6', 'G6']]\n\n\n\n\nAudio Triads\nAll triads in a given Scale can be played.\n\nsource\n\n\nScale.play_triads\n\n Scale.play_triads (root)\n\nPlay all triads in scale starting from root note.\n\nmajor.play_triads(\"C\")\n\n\n                \n                    \n                    Your browser does not support the audio element.",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#secondary-dominants",
+    "href": "scale.html#secondary-dominants",
+    "title": "Scale",
+    "section": "Secondary Dominants",
+    "text": "Secondary Dominants\nNow that we can get all the triads, we can also get all the secondary dominants within a given Scale. These are V7 chords based on each Chord in the Scale.\n\nsource\n\nScale.secondary_dominants\n\n Scale.secondary_dominants (root:str)\n\nWe expect that the secondary dominant roots are all a fifth above the underlying root and that all chords are dominant seventh chords.\n\nnormal_roots = [n.root for n in major.get_triads(\"C\")]\nsec_dom_roots = [n.root for n in major.secondary_dominants(\"C\")]\nassert all([n == c.P5() for n, c in zip(sec_dom_roots, normal_roots)])\nmajor.secondary_dominants(\"C\")\n\n[Chord: 'G dominant seventh'. Notes: ['G4', 'B4', 'D5', 'F5'],\n Chord: 'A dominant seventh'. Notes: ['A4', 'C#5', 'E5', 'G5'],\n Chord: 'B dominant seventh'. Notes: ['B4', 'D#5', 'F#5', 'A5'],\n Chord: 'No chord found.'. Notes: ['C5', 'E5', 'G5', 'A#5'],\n Chord: 'D dominant seventh'. Notes: ['D5', 'F#5', 'A5', 'C6'],\n Chord: 'E dominant seventh'. Notes: ['E5', 'G#5', 'B5', 'D6'],\n Chord: 'F# dominant seventh'. Notes: ['F#5', 'A#5', 'C#6', 'E6']]",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#scale-seventh-chords",
+    "href": "scale.html#scale-seventh-chords",
+    "title": "Scale",
+    "section": "Scale Seventh Chords",
+    "text": "Scale Seventh Chords\n\nDeriving Seventh Chords\nWe can also get all seventh chords in the Scale.\n\nsource\n\n\nScale.get_sevenths\n\n Scale.get_sevenths (root)\n\nGet all seventh chords in scale starting from root note.\n\nc_seventh_triads = major.get_sevenths(\"C\")\nc_seventh_triads\n\n[Chord: 'C major seventh'. Notes: ['C4', 'E4', 'G4', 'B4'],\n Chord: 'D minor seventh'. Notes: ['D4', 'F4', 'A4', 'C5'],\n Chord: 'E minor seventh'. Notes: ['E4', 'G4', 'B4', 'D5'],\n Chord: 'F major seventh'. Notes: ['F4', 'A4', 'C5', 'E5'],\n Chord: 'G dominant seventh'. Notes: ['G4', 'B4', 'D5', 'F5'],\n Chord: 'A minor seventh'. Notes: ['A4', 'C5', 'E5', 'G5'],\n Chord: 'B half diminished seventh'. Notes: ['B4', 'D5', 'F5', 'A5']]\n\n\n\n\nAudio Seventh Chords\n\nsource\n\n\nScale.play_sevenths\n\n Scale.play_sevenths (root)\n\nPlay all seventh chords in scale starting from root note.\n\nmajor.play_sevenths(\"C\")\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\n\nlydian.get_sevenths(\"D\")\n\n[Chord: 'D major seventh'. Notes: ['D4', 'F#4', 'A4', 'C#4'],\n Chord: 'E dominant seventh'. Notes: ['E4', 'G#4', 'B4', 'D5'],\n Chord: 'F# minor seventh'. Notes: ['F#4', 'A4', 'C#4', 'E5'],\n Chord: 'G# half diminished seventh'. Notes: ['G#4', 'B4', 'D5', 'F#5'],\n Chord: 'A major seventh'. Notes: ['A4', 'C#4', 'E5', 'G#5'],\n Chord: 'B minor seventh'. Notes: ['B4', 'D5', 'F#5', 'A5'],\n Chord: 'C# minor seventh'. Notes: ['C#5', 'E6', 'G#6', 'B6']]",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "scale.html#scale-table",
+    "href": "scale.html#scale-table",
+    "title": "Scale",
+    "section": "Scale Table",
+    "text": "Scale Table\nWe can display all relevant information from the scale in a Pandas DataFrame table.\n\nsource\n\nScale.to_frame\n\n Scale.to_frame (root=None)\n\nThe to_frame method can be called without a root note, but is most informative when given a root note. In that case it shows additional information such as the triads and seventh chords.\n\nmajor.to_frame(root=\"D\")\n\n\n\n\n\n\n\n\nDegree\nRelative Interval\nMode\nRelative Semitones\nAbsolute Semitones\nNotes\nTriad\nSeventh Chord\n\n\n\n\n0\n1\nunison\nionian\n0\n2\nD\nD major triad\nD major seventh\n\n\n1\n2\nmajor second\ndorian\n2\n2\nE\nE minor triad\nE minor seventh\n\n\n2\n3\nmajor third\nphrygian\n4\n1\nF#\nF# minor triad\nF# minor seventh\n\n\n3\n4\nperfect fourth\nlydian\n5\n2\nG\nG major triad\nG major seventh\n\n\n4\n5\nperfect fifth\nmixolydian\n7\n2\nA\nA major triad\nA dominant seventh\n\n\n5\n6\nmajor sixth\nminor\n9\n2\nB\nB minor triad\nB minor seventh\n\n\n6\n7\nmajor seventh\nlocrian\n11\n1\nC#\nC# diminished triad\nC# half diminished seventh\n\n\n\n\n\n\n\nTODO: Comparison method for scales",
+    "crumbs": [
+      "Scale"
+    ]
+  },
+  {
+    "objectID": "midi.html",
+    "href": "midi.html",
+    "title": "midi",
+    "section": "",
+    "text": ".mid files can be loaded locally or from a URL and played in a Jupyter notebook with MIDIPlayer.\nThis tests loads a basic sequence of notes from a URL.\n\nsource\n\ntest_midi\n\n test_midi ()\n\n\ntest_midi()\n\n'\n            \n\n\n\n# TODO: MIDI tools for converting Notes, Chords, Scales and Songs to MIDI.",
+    "crumbs": [
+      "midi"
+    ]
+  },
+  {
+    "objectID": "chord.html",
+    "href": "chord.html",
+    "title": "Chord",
+    "section": "",
+    "text": "The Chord class is a collection of notes played together. The name of the chord is automatically inferred from the notes.\nsource",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "chord.html#initialization",
+    "href": "chord.html#initialization",
+    "title": "Chord",
+    "section": "Initialization",
+    "text": "Initialization\n\nc_major = Chord([\"C\", \"E\", \"G\"])\nassert c_major.name == \"C major triad\"\nassert c_major.oct_s_notes == [\"C4\", \"E4\", \"G4\"]\nc_major\n\nChord: 'C major triad'. Notes: ['C4', 'E4', 'G4']\n\n\nChord objects can be created from a string.\n\ncmaj7 = Chord.from_short(\"Cmaj7\")\nassert cmaj7.name == \"C major seventh\"\ncmaj7\n\nChord: 'C major seventh'. Notes: ['C4', 'E4', 'G4', 'B4']\n\n\nChord objects can also be created from MIDI.\n\ncmaj9_midi = [60, 64, 67, 71, 74]\ncmaj9 = Chord.from_midi(cmaj9_midi)\nassert cmaj9.midi == cmaj9_midi\nassert cmaj9.s_notes == [\"C\", \"E\", \"G\", \"B\", \"D\"]\nassert cmaj9.oct_s_notes == [\"C5\", \"E5\", \"G5\", \"B5\", \"D6\"]\nassert cmaj9.name == \"C major ninth\"\nassert cmaj9.root == Note(\"C\", oct=5)\nassert cmaj9.s_root == \"C\"\nassert cmaj9.oct_s_root == \"C5\"\n\nWe can get the MIDI numbers for each note in a chord.\n\nassert cmaj7.midi == [48, 52, 55, 59]\ncmaj7.midi\n\n[48, 52, 55, 59]\n\n\nThere is also the option to get a unique binary representation of a chord.\n\nbin(cmaj7)\n\n'0b100010010001000000000000000000000000000000000000000000000000'\n\n\n\nhex(cmaj7)\n\n'0x891000000000000'\n\n\nWe will treat the lowest note of a Chord as the root.\n\ncmaj7.root\n\nC4",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "chord.html#comparison",
+    "href": "chord.html#comparison",
+    "title": "Chord",
+    "section": "Comparison",
+    "text": "Comparison\nChord objects can be compared to each other using familiar Python operators. The length of the chords and the underlying notes are compared. For example, A C major chord is technically lower than a C major 7th chord. The 1st 3 notes are the same, but Cmaj7 has an additional 4th note.\n\nassert c_major &lt;= cmaj7\n\nLength is only a tie breaker in this example. For example, an E major chord is higher than a D major 7 chord, because its root note is higher.\n\nassert Chord.from_short(\"E\") &gt;= Chord.from_short(\"Dmaj7\")",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "chord.html#transposition",
+    "href": "chord.html#transposition",
+    "title": "Chord",
+    "section": "Transposition",
+    "text": "Transposition\n\nSemitones\nChord objects can be transposed in the same way as Note objects.\n\n# Cmaj2 + 2 semitones == Dmaj7\ncmaj7 + 2\n\nChord: 'D major seventh'. Notes: ['D4', 'F#4', 'A4', 'C#5']\n\n\n\n# Dmaj7 &gt; Cmaj7\ncmaj7 + 2 &gt; cmaj7\n\nTrue\n\n\n\n# Cmaj7 - 1 == Bmaj7\ncmaj7 - 1\n\nChord: 'B major seventh'. Notes: ['B3', 'D#4', 'F#4', 'A#4']\n\n\n\n\nWhole Notes\nAs with Note objects, there are shortcuts for transposing whole notes up and down by using the % and // operators, respectively.\n\nassert cmaj7 + 2 == cmaj7 % 1\n# Transpose up 1 whole note\ncmaj7 % 1\n\nChord: 'D major seventh'. Notes: ['D4', 'F#4', 'A4', 'C#5']\n\n\n\n# Transpose down 5 whole notes (Same Dmaj7 chord but 1 octave lower)\ncmaj7 // 5\n\nChord: 'D major seventh'. Notes: ['D3', 'F#3', 'A3', 'C#4']\n\n\n\n\nNote/Note and Chord/Note Multiplication\nNote objects can be multiplied with other Note objects to form a Chord. Multiplying Chord objects with Note objects will add the note to the chord.\n\nsource\n\n\nChord.__mul__\n\n Chord.__mul__ (other)\n\nAdd a note to a chord.\n\nsource\n\n\nNote.__mul__\n\n Note.__mul__ (other:musy.note.Note)\n\nForm a chord from two notes.\n\n# C/Eb slash chord\nc_over_eb = Note(\"Eb\", oct=3) * Note(\"C\", oct=4) * Note(\"E\", oct=4) * Note(\"G\", oct=4)\nc_over_eb\n\nChord: 'No chord found.'. Notes: ['Eb3', 'C4', 'E4', 'G4']\n\n\nUsing the syntax above, we can for example define the “mu chord” (major with add2) made famous by Steely Dan with concise code.\n\ndef mu(root: Note): return root * (root % 1) * (root % 2) * (root + 7)\n\nc_mu = mu(Note(\"C\"))\nc_mu.notes\n\n[C4, D4, E4, G4]\n\n\nAlternatively, we can use Note shortcuts to define the same Chord.\n\ndef mu2(root: Note): return root * root.M2() * root.M3() * root.P5()\n\nc_mu2 = mu2(Note(\"C\"))\nassert c_mu == c_mu2\nc_mu2.notes\n\n[C4, D4, E4, G4]",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "chord.html#inversion",
+    "href": "chord.html#inversion",
+    "title": "Chord",
+    "section": "Inversion",
+    "text": "Inversion\nChord objects can be inverted with invert.\n\nsource\n\nChord.invert\n\n Chord.invert (n:int=1)\n\n\ncmaj7.invert(2)\n\nChord: 'C major seventh, second inversion'. Notes: ['G4', 'B4', 'C5', 'E5']",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "chord.html#intervals",
+    "href": "chord.html#intervals",
+    "title": "Chord",
+    "section": "Intervals",
+    "text": "Intervals\nInterval objects can be obtained for a Chord.\nRelative intervals means we start from the root note and calculate all the intervals from it.\nAbsolute intervals means we calculate the intervals between the notes.\n\nsource\n\nChord.abs_intervals\n\n Chord.abs_intervals ()\n\n\nsource\n\n\nChord.rel_intervals\n\n Chord.rel_intervals ()\n\n\ncmaj7_rel_intvals = cmaj7.rel_intervals()\nassert len(cmaj7_rel_intvals) == 3\nassert cmaj7_rel_intvals[-1].short == \"7\"\ncmaj7_rel_intvals\n\n[major third (3), perfect fifth (5), major seventh (7)]\n\n\n\ncmaj7_abs_intvals = cmaj7.abs_intervals()\nassert len(cmaj7_abs_intvals) == 3\nassert cmaj7_abs_intvals[-1].short == \"3\"\ncmaj7_abs_intvals\n\n[major third (3), minor third (b3), major third (3)]",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "chord.html#dominant",
+    "href": "chord.html#dominant",
+    "title": "Chord",
+    "section": "Dominant",
+    "text": "Dominant\nWe create a single .dominant method to get the dominant chord that resolves to a given Chord. This is handy for analyzing secondary dominants and ii-V-I progressions.\nBy default, the dominant 7th chord (V7) is returned. If dim=True, the diminished 7th chord (vii°7) is returned.\nWe assume that the 1st note of the chord is the root.\n\nsource\n\nChord.dominant\n\n Chord.dominant (dim=False)\n\nThe dominant of a D major chord is A7.\n\nd = Chord.from_short(\"D\")\nassert d.dominant() == Chord([Note(\"A\", oct=4), Note(\"C#\", oct=5), Note(\"E\", oct=5), Note(\"G\", oct=5)])\nd.dominant()\n\nChord: 'A dominant seventh'. Notes: ['A4', 'C#5', 'E5', 'G5']\n\n\nThe diminished dominant (vii°7) of D major is C#°7.\n\nassert d.dominant(dim=True) == Chord([Note(\"C#\", oct=4), Note(\"E\", oct=4), Note(\"G\", oct=4), Note(\"A#\", oct=4)])\nassert d.dominant(dim=True).root == Note(\"C#\", oct=4)\nd.dominant(dim=True)\n\nChord: 'A# diminished seventh, first inversion'. Notes: ['C#4', 'E4', 'G4', 'A#4']\n\n\nThe dominant of Cmaj7 is G7.\n\nassert cmaj7.dominant() == Chord([Note(\"G\", oct=4), Note(\"B\", oct=4), Note(\"D\", oct=5), Note(\"F\", oct=5)])\nassert cmaj7.dominant().root == Note(\"G\", oct=4)\ncmaj7.dominant()\n\nChord: 'G dominant seventh'. Notes: ['G4', 'B4', 'D5', 'F5']",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "chord.html#added-note-chords",
+    "href": "chord.html#added-note-chords",
+    "title": "Chord",
+    "section": "Added-Note Chords",
+    "text": "Added-Note Chords\nAdded-note chords are generally triads on which a 2nd (add2), 4th (add4) or 6th (add6) is added. We have method add2, add4 and add6 that adds an interval to a Chord if it doesn’t exist yet.\nWe also add support for upper extensions with add_ext and for removing notes with remove_ext.\n\nsource\n\nChord.remove_ext\n\n Chord.remove_ext (name:str)\n\n\nsource\n\n\nChord.add_ext\n\n Chord.add_ext (name:str)\n\n\nsource\n\n\nChord.add6\n\n Chord.add6 ()\n\n\nsource\n\n\nChord.add4\n\n Chord.add4 ()\n\n\nsource\n\n\nChord.add2\n\n Chord.add2 ()\n\n\nsource\n\n\nChord.add_interval\n\n Chord.add_interval (semitones:int)\n\nAdd note to existing chord.\nAn added 6th yields a 6th chord.\n\nassert d.add6().name == \"D major sixth\"\nd.add6()\n\nChord: 'D major sixth'. Notes: ['D4', 'F#4', 'A4', 'B4']\n\n\nA major triad with an added 2 creates a Mu Chord, made popular by Steely Dan.\n\nassert list(d.add2()) == [Note(\"D\"), Note(\"E\"), Note(\"F#\"), Note(\"A\")]\nd.add2()\n\nChord: 'No chord found.'. Notes: ['D4', 'E4', 'F#4', 'A4']\n\n\nYou can also get upper extensions with a more general method add_ext. These methods can be chained.\nFor example, this line of code yields a Dadd#9addb13 chord.\n\nd_sharp9_flat13 = d.add_ext(\"#9\").add_ext(\"b13\")\nassert d_sharp9_flat13.root == Note(\"D\", oct=4)\nassert d_sharp9_flat13.notes == [Note(\"D\", oct=4), Note(\"F#\", oct=4), Note(\"A\", oct=4), Note(\"F\", oct=5), Note(\"A#\", oct=5)]\nd_sharp9_flat13\n\nChord: 'No chord found.'. Notes: ['D4', 'F#4', 'A4', 'F5', 'A#5']\n\n\nExtensions can be removed with remove_ext.\nHere we remove the upper extensions as well as the third to get a D power chord (D5).\n\nd5 = d_sharp9_flat13.remove_ext(\"2\").remove_ext(\"3\").remove_ext(\"#9\").remove_ext(\"b13\")\nassert d5.notes == [Note(\"D\", oct=4), Note(\"A\", oct=4)]\nd5\n\nChord: 'perfect fifth'. Notes: ['D4', 'A4']",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "chord.html#audio",
+    "href": "chord.html#audio",
+    "title": "Chord",
+    "section": "Audio",
+    "text": "Audio\nChord objects can be played, just like Note objects.\n\nsource\n\nChord.play\n\n Chord.play (length=1)\n\n\nsource\n\n\nChord.get_audio_array\n\n Chord.get_audio_array (length=1)\n\n\ncmaj7.play()\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\n\ncmaj7.invert(1).play()\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\n\nc_over_eb.play()\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\n\nChord.from_short(\"Dbdim7\").play()\n\n\n                \n                    \n                    Your browser does not support the audio element.",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "chord.html#chord-table",
+    "href": "chord.html#chord-table",
+    "title": "Chord",
+    "section": "Chord Table",
+    "text": "Chord Table\nWe can display all the relevant information about a chord in a Pandas DataFrame table.\n\nsource\n\nChord.to_frame\n\n Chord.to_frame ()\n\n\ncmaj7.to_frame()\n\n\n\n\n\n\n\n\nNotes\nRelative Degree\nRelative Interval\nAbsolute Interval\nAbsolute Degree\n\n\n\n\n0\nC\n1\nunison\nunison\n1\n\n\n1\nE\n3\nmajor third\nmajor third\n3\n\n\n2\nG\n5\nperfect fifth\nminor third\nb3\n\n\n3\nB\n7\nmajor seventh\nmajor third\n3\n\n\n\n\n\n\n\nVisualizing the chord as a table gives us a nice overview for analysis.\nFor example, in the table for the Cdim6maj7 chord below we can readily see that it constitutes of: - A diminished triad (minor third (b3), and tritone (b5)), - a major sixth (6) and - a major seventh (maj7).\n\nCdim6maj7 = Chord([Note(\"C\"), Note(\"D#\"), Note(\"F#\"), Note(\"A\"), Note(\"B\")])\nCdim6maj7.to_frame()\n\n\n\n\n\n\n\n\nNotes\nRelative Degree\nRelative Interval\nAbsolute Interval\nAbsolute Degree\n\n\n\n\n0\nC\n1\nunison\nunison\n1\n\n\n1\nD#\nb3\nminor third\nminor third\nb3\n\n\n2\nF#\nb5\ntritone\nminor third\nb3\n\n\n3\nA\n6\nmajor sixth\nminor third\nb3\n\n\n4\nB\n7\nmajor seventh\nmajor second\n2",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "chord.html#initialization-1",
+    "href": "chord.html#initialization-1",
+    "title": "Chord",
+    "section": "Initialization",
+    "text": "Initialization\n\nasus4 = Chord(Note(n, oct=5) for n in [\"A\", \"D\", \"E\"])\npoly_chord = PolyChord([cmaj7, asus4])\npoly_chord\n\nPolyChord: 'C major seventh|A suspended fourth triad'. Notes: ['C4', 'E4', 'G4', 'B4', 'A5', 'D5', 'E5']",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "chord.html#inversion-1",
+    "href": "chord.html#inversion-1",
+    "title": "Chord",
+    "section": "Inversion",
+    "text": "Inversion\nLike Chord objects, PolyChord objects can be inverted.\n\nsource\n\nPolyChord.invert\n\n PolyChord.invert (n:int=1)\n\n\npoly_chord.invert(1)\n\nPolyChord: 'C major seventh, first inversion|D suspended second triad'. Notes: ['E4', 'G4', 'B4', 'C5', 'D5', 'E5', 'A6']\n\n\n\npoly_chord.rel_intervals()\n\n[major third (3),\n perfect fifth (5),\n major seventh (7),\n minor thirteenth (b13),\n major ninth (9),\n major tenth (10)]\n\n\n\npoly_chord.play()\n\n\n                \n                    \n                    Your browser does not support the audio element.",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "chord.html#table",
+    "href": "chord.html#table",
+    "title": "Chord",
+    "section": "Table",
+    "text": "Table\nFor the table display of a PolyChord we analyze the underlying chords separately.\n\nsource\n\nPolyChord.to_frame\n\n PolyChord.to_frame ()\n\n\n[display(t) for t in poly_chord.to_frame()];\n\n\n\n\n\n\n\n\nNotes\nRelative Degree\nRelative Interval\nAbsolute Interval\nAbsolute Degree\n\n\n\n\n0\nC\n1\nunison\nunison\n1\n\n\n1\nE\n3\nmajor third\nmajor third\n3\n\n\n2\nG\n5\nperfect fifth\nminor third\nb3\n\n\n3\nB\n7\nmajor seventh\nmajor third\n3\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNotes\nRelative Degree\nRelative Interval\nAbsolute Interval\nAbsolute Degree\n\n\n\n\n0\nA\n1\nunison\nunison\n1\n\n\n1\nD\n5\nperfect fifth\nperfect fifth\n5\n\n\n2\nE\n4\nperfect fourth\nmajor second\n2\n\n\n\n\n\n\n\nTODO: Check which scales/modes the chord belongs to.\nFIX: Identify all diatonic chords in a scale.\nTODO: Check if chord is diatonic within a scale.",
+    "crumbs": [
+      "Chord"
+    ]
+  },
+  {
+    "objectID": "note.html",
+    "href": "note.html",
+    "title": "Note",
+    "section": "",
+    "text": "The Note is the basic atomic unit in music.\nsource",
+    "crumbs": [
+      "Note"
+    ]
+  },
+  {
+    "objectID": "note.html#initialization",
+    "href": "note.html#initialization",
+    "title": "Note",
+    "section": "Initialization",
+    "text": "Initialization\nEvery note has an accompanying octave oct associated with it. This is useful later for determining intervals and playing the sound of the notes.\n\na_sharp = Note(\"A#\")\na_sharp\n\nA#4",
+    "crumbs": [
+      "Note"
+    ]
+  },
+  {
+    "objectID": "note.html#integer-representation",
+    "href": "note.html#integer-representation",
+    "title": "Note",
+    "section": "Integer Representation",
+    "text": "Integer Representation\nEach note has an integer value which shows its place in a C octave (C == 0, C# == 1, B == 11, etc.)\nIn this example A# should denote 10 as its integer value.\n\na_sharp\n\nA#4\n\n\n\nassert int(a_sharp) == 10\nint(a_sharp)\n\n10\n\n\nYou can also do the inverse and initialize from an integer or MIDI note number.\n\nten = Note.from_int(10)\nassert ten == a_sharp\na_sharp.from_int(10)\n\nA#4\n\n\nIf you would like to take the octave into account, you can use the midi property to get the MIDI note number.\n\na_sharp.midi\n\n58\n\n\nAnd initialize from a MIDI note number.\n\nfifthy_eight = Note.from_midi(58)\nassert fifthy_eight == a_sharp\nfifthy_eight.from_int(10)\n\nA#4",
+    "crumbs": [
+      "Note"
+    ]
+  },
+  {
+    "objectID": "note.html#string-representation",
+    "href": "note.html#string-representation",
+    "title": "Note",
+    "section": "String Representation",
+    "text": "String Representation\n\nassert str(a_sharp) == \"A#\"\na_sharp.note\n\n'A#'\n\n\n\nc_sharp = Note(\"C#\")\nc_sharp\n\nC#4",
+    "crumbs": [
+      "Note"
+    ]
+  },
+  {
+    "objectID": "note.html#binary-representation",
+    "href": "note.html#binary-representation",
+    "title": "Note",
+    "section": "Binary representation",
+    "text": "Binary representation\nWe use the MIDI note number to represent notes.\nUsing the MIDI note number we can get binary representations to convert to other formats. It also allows for very compact representations.\n\nc_sharp.midi\n\n49\n\n\n\nbin(c_sharp)\n\n'0b110001'\n\n\n\nhex(c_sharp)\n\n'0x31'",
+    "crumbs": [
+      "Note"
+    ]
+  },
+  {
+    "objectID": "note.html#basic-properties",
+    "href": "note.html#basic-properties",
+    "title": "Note",
+    "section": "Basic Properties",
+    "text": "Basic Properties\nThere are a number of ways to analyze Note objects.\nEach Note has an accompanying octave number.\n\nc_sharp.oct\n\n4\n\n\nC# has a single sharp, is not a natural, has an accidental.\n\nassert c_sharp.sharp\nassert not c_sharp.natural\nassert c_sharp.accidental\nassert c_sharp.num_sharps == 1\nc_sharp.sharp, c_sharp.natural, c_sharp.accidental, c_sharp.num_sharps\n\n(True, False, True, 1)\n\n\n\nDbb = Note(\"Dbb\")\nassert Dbb.double_flat\nassert not Dbb.double_sharp\nassert Dbb.double_accidental\nassert Dbb.num_flats == 2\nassert Dbb.num_sharps == 0\nDbb.double_flat, Dbb.double_sharp, Dbb.double_accidental, Dbb.num_flats, Dbb.num_sharps\n\n(True, False, True, 2, 0)",
+    "crumbs": [
+      "Note"
+    ]
+  },
+  {
+    "objectID": "note.html#comparison",
+    "href": "note.html#comparison",
+    "title": "Note",
+    "section": "Comparison",
+    "text": "Comparison\nNotes can be compared with each other using familiar Python operators. Here are some examples of comparison between Note objects.\n\nassert Note(\"E#\") == Note(\"F\")\nassert Note(\"B#\") == Note(\"C\")\nassert Note(\"C##\") == Note(\"D\")\nassert Note(\"Fb\") == Note(\"E\")\nassert Note(\"Abb\") == Note(\"G\")\nassert Note(\"Bbb\") == Note(\"A\")\nassert Note(\"Cb\") == Note(\"B\")\nassert Note(\"C\") == Note(\"C\")\nassert Note(\"E#\") == Note(\"F\")\nassert Note(\"A#\") != Note(\"B\")\nassert Note(\"F\") &gt; Note(\"C#\")\nassert Note(\"B#\") &lt;= Note(\"C\")\nassert Note(\"C\") &lt; Note(\"B\")\nassert Note(\"E\") &gt;= Note(\"E\")\nassert Note(\"C\", oct=4) &gt; Note(\"B\", oct=3)\nassert Note(\"C\", oct=4) != Note(\"C\", oct=5)\nassert Note(\"C\", oct=4) &lt; Note(\"C\", oct=5)",
+    "crumbs": [
+      "Note"
+    ]
+  },
+  {
+    "objectID": "note.html#adding",
+    "href": "note.html#adding",
+    "title": "Note",
+    "section": "Adding",
+    "text": "Adding\n\nSemitones\nAdding semitones to a note will return a new note with n semitones added above the original note.\nFor example, adding 1 semitone to A# (A Sharp) will return B.\nAdding Note objects together will form a Chord. More on that in the Chord section.\n\nsource\n\n\nNote.__add__\n\n Note.__add__ (other)\n\nAdd n semitones.\n\nfor i in range(1, 13):\n    print(a_sharp+i)\n\nB\nC\nC#\nD\nD#\nE\nF\nF#\nG\nG#\nA\nA#\n\n\nThe octave of the note is automatically updated when adding.\n\nassert (a_sharp+1).oct == a_sharp.oct\nassert (a_sharp+2).oct == a_sharp.oct + 1\nassert (Note(\"C\")+11).oct == Note(\"C\").oct\nassert (Note(\"C\")+14).oct &gt; Note(\"C\").oct\n\n\nassert Note(\"C\")+11 == Note(\"B\")\nassert str(a_sharp+1) == \"B\"\nassert str(a_sharp+11) == \"A\"\nassert str(a_sharp+12) == \"A#\"\nassert str(a_sharp+13) == \"B\"\nassert str(a_sharp+47) == \"A\"\nassert str(a_sharp+0) == \"A#\"\n\n\n\nWhole Notes\nThe % operator is a shortcut for adding whole notes.\n\nsource\n\n\nNote.__mod__\n\n Note.__mod__ (other)\n\nAdd n whole notes.\n\nassert a_sharp % 1 == Note(\"C\", oct=5)\na_sharp % 1\n\nC5\n\n\n\nfor i in range(1, 7):\n    print(a_sharp % i)\n\nC\nD\nE\nF#\nG#\nA#\n\n\n\nassert str(a_sharp % 1) == \"C\"\nassert str(a_sharp % 0) == \"A#\"\nassert str(a_sharp % 6) == \"A#\"\nassert str(a_sharp % 6 + 1) == \"B\"\n\nWe define some shortcuts to do common transpositions.\n\nsource\n\n\nNote.alt_ext\n\n Note.alt_ext ()\n\n\nsource\n\n\nNote.ext\n\n Note.ext ()\n\n\nsource\n\n\nNote.M13\n\n Note.M13 ()\n\n\nsource\n\n\nNote.m13\n\n Note.m13 ()\n\n\nsource\n\n\nNote.A11\n\n Note.A11 ()\n\n\nsource\n\n\nNote.P11\n\n Note.P11 ()\n\n\nsource\n\n\nNote.A9\n\n Note.A9 ()\n\n\nsource\n\n\nNote.M9\n\n Note.M9 ()\n\n\nsource\n\n\nNote.m9\n\n Note.m9 ()\n\n\nsource\n\n\nNote.P8\n\n Note.P8 ()\n\n\nsource\n\n\nNote.M7\n\n Note.M7 ()\n\n\nsource\n\n\nNote.m7\n\n Note.m7 ()\n\n\nsource\n\n\nNote.M6\n\n Note.M6 ()\n\n\nsource\n\n\nNote.m6\n\n Note.m6 ()\n\n\nsource\n\n\nNote.P5\n\n Note.P5 ()\n\n\nsource\n\n\nNote.TT\n\n Note.TT ()\n\n\nsource\n\n\nNote.P4\n\n Note.P4 ()\n\n\nsource\n\n\nNote.M3\n\n Note.M3 ()\n\n\nsource\n\n\nNote.m3\n\n Note.m3 ()\n\n\nsource\n\n\nNote.M2\n\n Note.M2 ()\n\n\nsource\n\n\nNote.m2\n\n Note.m2 ()\n\n\nc = Note(\"C\")\nassert c.m2() == Note(\"C#\")\nassert c.M2() == Note(\"D\")\nassert c.m3() == Note(\"Eb\")\nassert c.M3() == Note(\"E\")\nassert c.P4() == Note(\"F\")\nassert c.TT() == Note(\"F#\")\nassert c.P5() == Note(\"G\")\nassert c.m6() == Note(\"Ab\")\nassert c.M6() == Note(\"A\")\nassert c.m7() == Note(\"Bb\")\nassert c.M7() == Note(\"B\")\nassert c.P8() == Note(\"C\", oct=c.oct+1)\nassert c.m9() == Note(\"Db\", oct=c.oct+1)\nassert c.M9() == Note(\"D\", oct=c.oct+1)\nassert c.A9() == Note(\"D#\", oct=c.oct+1)\nassert c.P11() == Note(\"F\", oct=c.oct+1)\nassert c.A11() == Note(\"F#\", oct=c.oct+1)\nassert c.m13() == Note(\"G#\", oct=c.oct+1)\nassert c.M13() == Note(\"A\", oct=c.oct+1)\n\nFor quick analysis of upper extensions o a Chord, we add an ext and alt_ext method.\nUpper extensions -&gt; b9, 9, #9, 11, #11, b13, #13\n\nassert c.ext() == [c.m9(), c.M9(), c.A9(), c.P11(), c.A11(), c.m13(), c.M13()]\nc.ext()\n\n[C#5, D5, D#5, F5, F#5, G#5, A5]\n\n\nAltered extensions -&gt; b9, #9, #11, b13\n\nassert c.alt_ext() == [c.m9(), c.A9(), c.A11(), c.m13()]\nc.alt_ext()\n\n[C#5, D#5, F#5, G#5]",
+    "crumbs": [
+      "Note"
+    ]
+  },
+  {
+    "objectID": "note.html#subtraction",
+    "href": "note.html#subtraction",
+    "title": "Note",
+    "section": "Subtraction",
+    "text": "Subtraction\n\nSemitones\nSubtracting semitones from a Note returns a new note with n semitones subtracted from the original note.\nFor example, subtracting 1 semitone from C returns B. Subtracting 1 semitone from A# returns A.\n\nsource\n\n\nNote.__sub__\n\n Note.__sub__ (other)\n\nSubtract n semitones from a note.\n\nfor i in range(1, 13):\n    print(a_sharp-i)\n\nA\nG#\nG\nF#\nF\nE\nD#\nD\nC#\nC\nB\nA#\n\n\n\nassert (a_sharp-1).oct == a_sharp.oct\nassert (a_sharp-11).oct == a_sharp.oct - 1\nassert (a_sharp-6).oct == a_sharp.oct\nassert (a_sharp-12).oct == a_sharp.oct - 1\n\n\nassert str(a_sharp-0) == \"A#\"\nassert str(a_sharp-1) == \"A\"\nassert str(a_sharp-11) == \"B\"\nassert str(a_sharp-12) == \"A#\"\nassert str(a_sharp-13) == \"A\"\nassert str(a_sharp-25) == \"A\"\n\n\n\nWhole Notes\nThe // operator is a shortcut for subtracting whole notes.\n\nsource\n\n\nNote.__floordiv__\n\n Note.__floordiv__ (other)\n\nSubtract n whole notes\n\nassert a_sharp // 1 == Note(\"G#\", oct=4)\na_sharp // 1\n\nG#4\n\n\n\nfor i in range(1, 7):\n    print(a_sharp // i)\n\nG#\nF#\nE\nD\nC\nA#\n\n\n\nassert str(a_sharp // 1) == \"G#\"\nassert str(a_sharp // 0) == \"A#\"\nassert str(a_sharp // 6) == \"A#\"\nassert str(a_sharp // 6 + 1) == \"B\"\n\nWe also define shortcuts for downward intervals with d{INTERVAL}.\n\nsource\n\n\nNote.d_alt_ext\n\n Note.d_alt_ext ()\n\n\nsource\n\n\nNote.d_ext\n\n Note.d_ext ()\n\n\nsource\n\n\nNote.dM13\n\n Note.dM13 ()\n\n\nsource\n\n\nNote.dm13\n\n Note.dm13 ()\n\n\nsource\n\n\nNote.dA11\n\n Note.dA11 ()\n\n\nsource\n\n\nNote.dP11\n\n Note.dP11 ()\n\n\nsource\n\n\nNote.dA9\n\n Note.dA9 ()\n\n\nsource\n\n\nNote.dM9\n\n Note.dM9 ()\n\n\nsource\n\n\nNote.dm9\n\n Note.dm9 ()\n\n\nsource\n\n\nNote.dP8\n\n Note.dP8 ()\n\n\nsource\n\n\nNote.dM7\n\n Note.dM7 ()\n\n\nsource\n\n\nNote.dm7\n\n Note.dm7 ()\n\n\nsource\n\n\nNote.dM6\n\n Note.dM6 ()\n\n\nsource\n\n\nNote.dm6\n\n Note.dm6 ()\n\n\nsource\n\n\nNote.dP5\n\n Note.dP5 ()\n\n\nsource\n\n\nNote.dTT\n\n Note.dTT ()\n\n\nsource\n\n\nNote.dP4\n\n Note.dP4 ()\n\n\nsource\n\n\nNote.dM3\n\n Note.dM3 ()\n\n\nsource\n\n\nNote.dm3\n\n Note.dm3 ()\n\n\nsource\n\n\nNote.dM2\n\n Note.dM2 ()\n\n\nsource\n\n\nNote.dm2\n\n Note.dm2 ()\n\n\nb = Note(\"B\")\nassert b.dm2() == Note(\"A#\")\nassert b.dM2() == Note(\"A\")\nassert b.dm3() == Note(\"G#\")\nassert b.dM3() == Note(\"G\")\nassert b.dP4() == Note(\"F#\")\nassert b.dTT() == Note(\"F\")\nassert b.dP5() == Note(\"E\")\nassert b.dm6() == Note(\"D#\")\nassert b.dM6() == Note(\"D\")\nassert b.dm7() == Note(\"C#\")\nassert b.dM7() == Note(\"C\")\nassert b.dP8() == Note(\"B\", oct=b.oct-1)\nassert b.dm9() == Note(\"A#\", oct=b.oct-1)\nassert b.dM9() == Note(\"A\", oct=b.oct-1)\nassert b.dA9() == Note(\"G#\", oct=b.oct-1)\nassert b.dP11() == Note(\"F#\", oct=b.oct-1)\nassert b.dA11() == Note(\"F\", oct=b.oct-1)\nassert b.dm13() == Note(\"D#\", oct=b.oct-1)\nassert b.dM13() == Note(\"D\", oct=b.oct-1)\n\nAs with the upper extensions, we also add methods to get the descending extensions with d_ext and d_alt_ext.\n\nassert c.d_ext() == [c.dm9(), c.dM9(), c.dA9(), c.dP11(), c.dA11(), c.dm13(), c.dM13()]\nc.d_ext()\n\n[B2, A#2, A2, G2, F#2, E2, D#2]\n\n\n\nassert c.d_alt_ext() == [c.dm9(), c.dA9(), c.dA11(), c.dm13()]\nc.d_alt_ext()\n\n[B2, A2, F#2, E2]",
+    "crumbs": [
+      "Note"
+    ]
+  },
+  {
+    "objectID": "note.html#relative-conversion",
+    "href": "note.html#relative-conversion",
+    "title": "Note",
+    "section": "Relative Conversion",
+    "text": "Relative Conversion\nNote objects can be converted to its relative major or minor. How this is converted is visualized on the circle of fifths.\n\nFor example, the relative minor of C is A. The relative major of C# is E.\n\nRelative Minor\nminor converts an arbitrary note to its relative minor. This means 3 semitones are subtracted from the note.\n\nsource\n\n\nNote.minor\n\n Note.minor ()\n\n\nc = Note(\"C\")\nassert str(c.minor()) == \"A\"\nc.minor()\n\nA3\n\n\n\n\nRelative Major\nmajor converts an arbitrary note to its relative major. This means 3 semitones are added to the note.\n\nsource\n\n\nNote.major\n\n Note.major ()\n\n\nassert str(c_sharp.major()) == \"E\"\nc_sharp.major()\n\nE4",
+    "crumbs": [
+      "Note"
+    ]
+  },
+  {
+    "objectID": "note.html#audio",
+    "href": "note.html#audio",
+    "title": "Note",
+    "section": "Audio",
+    "text": "Audio\nEvery Note can be played as audio. A Note is first transformed into a bytestring.\n\nsource\n\nNote.get_audio_bytes\n\n Note.get_audio_bytes (length=1, sr=44100)\n\n\nsource\n\n\nNote.get_audio_array\n\n Note.get_audio_array (length=1, sr=44100)\n\n\nc.get_audio_bytes(length=5)[:50]\n\nb'RIFF\\xcc\\xba\\x06\\x00WAVEfmt \\x10\\x00\\x00\\x00\\x01\\x00\\x01\\x00D\\xac\\x00\\x00\\x88X\\x01\\x00\\x02\\x00\\x10\\x00data\\xa8\\xba\\x06\\x00\\x00\\x00\\xc5\\x04\\x88\\t'\n\n\nFor convenience, we can also play the audio directly.\n\nsource\n\n\nNote.play\n\n Note.play (length=1)\n\n\nc.play()\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\nThe length of a specific note can be specified for the audio.\n\nc.play(length=2)\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\n\na_sharp.play()\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\nAlso here, method chaining is possible.\n\n(a_sharp - 6).play()\n\n\n                \n                    \n                    Your browser does not support the audio element.",
+    "crumbs": [
+      "Note"
+    ]
+  },
+  {
+    "objectID": "note.html#interval",
+    "href": "note.html#interval",
+    "title": "Note",
+    "section": "Interval",
+    "text": "Interval\nTwo Note objects can be combined to form an Interval.\n\nsource\n\nInterval\n\n Interval (note1:__main__.Note, note2:__main__.Note)\n\nInitialize self. See help(type(self)) for accurate signature.\n\n\nInitialization\nCalling interval on a Note object requires providing another Note object and returns an Interval object. A shortcut is to use the & operator and has the same effect.\n\nsource\n\n\nNote.__and__\n\n Note.__and__ (other:__main__.Note)\n\n\nsource\n\n\nNote.interval\n\n Note.interval (other:__main__.Note)\n\n\n\nComparison\nThe full name of the interval between A# and B is a minor second.\n\nb = Note(\"B\")\nm2 = a_sharp.interval(b)\nm2\n\nminor second (b2)\n\n\nFrom here on in these docs we’ll use the more compact & syntax.\n\nassert m2 == a_sharp & b\na_sharp & b\n\nminor second (b2)\n\n\n\nassert m2.semitones == 1\nm2.semitones\n\n1\n\n\nThe shorthand for a minor second interval is b2.\n\nassert m2.long == \"minor second\"\nm2.long\n\n'minor second'\n\n\n\nassert m2.short == \"b2\"\nm2.short\n\n'b2'\n\n\nInterval objects work on upper extensions up to 2 octaves.\n\nninth = Note(\"G#\", oct=5) & Note(\"A\", oct=6)\nassert ninth.semitones == 13\nassert ninth.long == \"minor ninth\"\nassert ninth.short == \"b9\"\nninth\n\nminor ninth (b9)\n\n\nInterval objects can be compared with each other.\n\nassert m2 &lt;= ninth\nassert m2 != ninth\nassert not m2 &gt; ninth\n\nC# compared with A# is treated as a (negative) minor 3rd.\n\nlow_a_sharp = Note(\"A#\", oct=3)\nneg_m3 = c_sharp & low_a_sharp\nneg_m3\n\nminor third (b3)\n\n\n\nneg_m3.semitones\n\n-3\n\n\n\nassert neg_m3 &lt; m2\nassert neg_m3 != m2\n\n\nassert (Note(\"C\", oct=5) & Note(\"D\", oct=5)).semitones == 2\nassert (Note(\"C\", oct=2) & Note(\"E\", oct=2)).short == \"3\"\nassert (Note(\"C\", oct=5) & Note(\"C\", oct=5)).long == \"unison\"\nassert (Note(\"C\", oct=5) & Note(\"A\", oct=5)).long == \"major sixth\"\nassert (Note(\"C\", oct=5) & Note(\"B\", oct=5)).long == \"major seventh\"\nassert (Note(\"C\", oct=5) & Note(\"D\", oct=5)).long == \"major second\"\nassert (Note(\"C\", oct=5) & Note(\"C\", oct=6)).long == \"octave\"\nassert (Note(\"C\", oct=5) & Note(\"B\", oct=7)).long == \"major seventh\"\nassert (Note(\"C\", oct=5) & Note(\"F\", oct=8)).long == \"perfect eleventh\"\nassert (Note(\"C\", oct=5) & Note(\"D\", oct=6)).notes == [Note(\"C\", oct=5), Note(\"D\", oct=6)]\nassert (Note(\"C\", oct=5) & Note(\"D\", oct=5)).notes == [Note(\"C\", oct=5), Note(\"D\", oct=5)]\n\n\n\nInterval Type\nAn Interval can also determine its type. An interval can be:\n\nPerfect consonant (Unison, Octave and 5th)\nSoft consonant (3rds and 6ths),\nMild Dissonant (Minor 7th and Major 2nd),\nSharp Dissonant (Major 7th and Minor 2nd),\nContextual (4th)\nNeutral (Tritone).\n\n\nsource\n\n\nInterval.is_contextual\n\n Interval.is_contextual ()\n\n\nsource\n\n\nInterval.is_perfect\n\n Interval.is_perfect ()\n\n\nsource\n\n\nInterval.is_dissonant\n\n Interval.is_dissonant ()\n\n\nsource\n\n\nInterval.is_consonant\n\n Interval.is_consonant ()\n\n\nsource\n\n\nInterval.type\n\n Interval.type ()\n\nA fifth is a Perfect Consonant.\n\nfifth = Note(\"C\") & Note(\"G\")\nassert fifth.type() == \"Perfect Consonant\"\nassert fifth.is_consonant() and fifth.is_perfect()\nfifth.type()\n\n'Perfect Consonant'\n\n\nA minor second is Sharp Dissonant.\n\nm2 = Note(\"C\") & Note(\"C#\")\nassert m2.type() == \"Sharp Dissonant\"\nassert m2.is_dissonant() and not m2.is_perfect()\nm2.type()\n\n'Sharp Dissonant'\n\n\nA special case is the fourth which is Contextual. This can be soft consonant or dissonant depending on the context of harmonic movement and is not feasible to determine within one interval.\n\nfourth = Note(\"C\") & Note(\"F\")\nassert fourth.type() == \"Contextual\"\nassert fourth.is_contextual()\nfourth.type()\n\n'Contextual'\n\n\nThe Interval.type method handles upper extensions by comparing it within the same octave. For example a flat 9 (b9) is treated as a minor second and therefore Sharp Dissonant.\n\nninth = Note(\"B\", oct=4) & Note(\"C\", oct=5)\nninth.type()\n\n'Sharp Dissonant'\n\n\n\n\nAdding and subtracting\nYou can add to Interval objects to augment or diminish them.\n\nsource\n\n\nInterval.__sub__\n\n Interval.__sub__ (other)\n\n\nsource\n\n\nInterval.__add__\n\n Interval.__add__ (other)\n\nIn this example, we augment a minor 9th interval to a major ninth (m9 -&gt; 9).\n\nm9 = Note(\"C\", oct=4) & Note(\"C#\", oct=5)\nm9\n\nminor ninth (b9)\n\n\n\nassert (m9+1).long == \"major ninth\"\nm9+1\n\nmajor ninth (9)\n\n\nIf we diminish the minor 9th interval it becomes an octave.\n\nassert (m9 - 1).long == \"octave\"\nm9 - 1\n\noctave (8)",
+    "crumbs": [
+      "Note"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "musy",
+    "section": "",
+    "text": "musy is a comprehensive toolbox for analyzing and visualizing music. It lays the foundation for the Musy web apps.\nAt its core it has basic building blocks from which all theory can be derived:\nFor visualization these objects can be placed on instrument surfaces:",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#initialization",
+    "href": "index.html#initialization",
+    "title": "musy",
+    "section": "Initialization",
+    "text": "Initialization\nThe Note is the basic building block from which you can create chords, scales, intervals and songs.\n\nfrom musy import Note\n\nc_sharp = Note(\"C#\")\nc_sharp\n\nC#4\n\n\nYou can get compact representations of Note objects. For example, their MIDI numbers and binary representations.\n\nc_sharp.midi, bin(c_sharp), hex(c_sharp)\n\n(49, '0b110001', '0x31')",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#addition-and-subtraction",
+    "href": "index.html#addition-and-subtraction",
+    "title": "musy",
+    "section": "Addition and subtraction",
+    "text": "Addition and subtraction\nNotes can be added and subtracted to form new notes. Each added integer represents a semitone.\n\nc_sharp + 1\n\nD4\n\n\n\nc_sharp - 1\n\nC4\n\n\n\nc_sharp + 14\n\nD#5",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#comparison",
+    "href": "index.html#comparison",
+    "title": "musy",
+    "section": "Comparison",
+    "text": "Comparison\nNotes can be compared using familiar Python operators.\n\nc = Note(\"C\")\ng = Note(\"G\")\n\nc &lt; g\n\nTrue\n\n\nOctaves can make a difference in comparisons.\n\nNote(\"C\", oct=4) &gt;= Note(\"G\", oct=3)\n\nTrue",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#relative-majorminor",
+    "href": "index.html#relative-majorminor",
+    "title": "musy",
+    "section": "Relative Major/Minor",
+    "text": "Relative Major/Minor\nNotes can be converted to its relative major or minor. As can be found on the circle of fifths.\n\nNote(\"C\").minor()\n\nA3\n\n\n\nNote(\"C#\").major()\n\nE4",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#initialization-1",
+    "href": "index.html#initialization-1",
+    "title": "musy",
+    "section": "Initialization",
+    "text": "Initialization\nInterval objects can be obtained by calling interval on two notes or using the & operator.\n\nf_sharp = Note(\"F#\")\n\nP4 = c_sharp & f_sharp\nP4\n\nperfect fourth (4)\n\n\n\nP4.semitones, P4.long, P4.short, P4.type(), P4.is_contextual(), P4.is_consonant()\n\n(5, 'perfect fourth', '4', 'Contextual', True, False)",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#comparison-1",
+    "href": "index.html#comparison-1",
+    "title": "musy",
+    "section": "Comparison",
+    "text": "Comparison\nIntervals can also be compared.\n\nP5 = c & g\nP5\n\nperfect fifth (5)\n\n\n\nP5.semitones, P5.long, P5.short, P5.type(), P5.is_consonant(), P5.is_perfect()\n\n(7, 'perfect fifth', '5', 'Perfect Consonant', True, True)\n\n\n\nP4 != P5\n\nTrue\n\n\n\nP4 &lt; P5\n\nTrue",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#initialization-2",
+    "href": "index.html#initialization-2",
+    "title": "musy",
+    "section": "Initialization",
+    "text": "Initialization\nThe Chord is a stack of Note objects played together.\n\nfrom musy import Chord\n\nc_major = Chord([\"C\", \"E\", \"G\"])\nc_major\n\nChord: 'C major triad'. Notes: ['C4', 'E4', 'G4']\n\n\nChord objects can be initialized from shorthand notation.\n\ncmaj7 = Chord.from_short(\"Cmaj7\")\ncmaj7\n\nChord: 'C major seventh'. Notes: ['C4', 'E4', 'G4', 'B4']",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#analysis",
+    "href": "index.html#analysis",
+    "title": "musy",
+    "section": "Analysis",
+    "text": "Analysis\nYou can easily retrieve intervals, related chords and extensions from a Chord object.\n\n# Root of Cmaj7 -&gt; C\ncmaj7.root\n\nC4\n\n\n\n# Dominant (V7) chord of Cmaj7 -&gt; G7.\ncmaj7.dominant()\n\nChord: 'G dominant seventh'. Notes: ['G4', 'B4', 'D5', 'F5']\n\n\n\n# Upper extensions (b9, 9, #9, b11, #11, b13, #13)\ncmaj7.root.ext()\n\n[C#5, D5, D#5, F5, F#5, G#5, A5]\n\n\n\n# Altered extensions (b9, #9, #11, b13)\ncmaj7.root.alt_ext()\n\n[C#5, D#5, F#5, G#5]\n\n\nExtension can be added and removed.\n\n# Cmaj7#9b13\ncmaj7_sharp9_flat13 = cmaj7.add_ext(\"#9\").add_ext(\"b13\")\ncmaj7_sharp9_flat13\n\nChord: 'BM6|CM'. Notes: ['C4', 'E4', 'G4', 'B4', 'D#5', 'G#5']\n\n\n\n# Cmaj7(no3)\ncmaj7.remove_ext(\"3\")\n\nChord: 'C major seventh'. Notes: ['C4', 'G4', 'B4']\n\n\n\n# Cmaj7(add2)\ncmaj7.add2()\n\nChord: 'No chord found.'. Notes: ['C4', 'D4', 'E4', 'G4', 'B4']",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#inversion",
+    "href": "index.html#inversion",
+    "title": "musy",
+    "section": "Inversion",
+    "text": "Inversion\nChords can also be inverted with invert.\n\n# Get 1st inversion chord of C major 7th\ncmaj7.invert(1)\n\nChord: 'C major seventh, first inversion'. Notes: ['E4', 'G4', 'B4', 'C5']",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#transposition",
+    "href": "index.html#transposition",
+    "title": "musy",
+    "section": "Transposition",
+    "text": "Transposition\nLike Note objects, Chord objects can be added and subtracted to transpose them.\n\ncmaj7 + 2\n\nChord: 'D major seventh'. Notes: ['D4', 'F#4', 'A4', 'C#5']\n\n\nNotes can be multiplied to create chords.\n\nNote(\"C\") * Note(\"E\") * Note(\"G\")\n\nChord: 'C major triad'. Notes: ['C4', 'E4', 'G4']",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#table",
+    "href": "index.html#table",
+    "title": "musy",
+    "section": "Table",
+    "text": "Table\nEach chord can be displayed in a Pandas DataFrame table, which gives a quick overview of the notes and intervals in the chord.\n\ncmaj7.to_frame()\n\n\n\n\n\n\n\n\nNotes\nRelative Degree\nRelative Interval\nAbsolute Interval\nAbsolute Degree\n\n\n\n\n0\nC\n1\nunison\nunison\n1\n\n\n1\nE\n3\nmajor third\nmajor third\n3\n\n\n2\nG\n5\nperfect fifth\nminor third\nb3\n\n\n3\nB\n7\nmajor seventh\nmajor third\n3\n\n\n\n\n\n\n\nThis get more interesting when we want to analyze more complicated chords and progressions. Take for example this chord:\n\nCdim6maj7 = Chord([Note(\"C\"), Note(\"D#\"), Note(\"F#\"), Note(\"A\"), Note(\"B\")])\nCdim6maj7.to_frame()\n\n\n\n\n\n\n\n\nNotes\nRelative Degree\nRelative Interval\nAbsolute Interval\nAbsolute Degree\n\n\n\n\n0\nC\n1\nunison\nunison\n1\n\n\n1\nD#\nb3\nminor third\nminor third\nb3\n\n\n2\nF#\nb5\ntritone\nminor third\nb3\n\n\n3\nA\n6\nmajor sixth\nminor third\nb3\n\n\n4\nB\n7\nmajor seventh\nmajor second\n2\n\n\n\n\n\n\n\nWe can immediately see that there are 2 minor 3rds (i.e. b3 and b5) so the base is a diminished chord (Cdim or C°). It is extended with a major 6th (6) and a major 7th (maj7). So we can describe this as a C°6maj7 chord.",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#initialization-3",
+    "href": "index.html#initialization-3",
+    "title": "musy",
+    "section": "Initialization",
+    "text": "Initialization\nFor polyphonic use cases you can create PolyChord objects. This objects inherits the same functionality as Chord objects.\n\nfrom musy import PolyChord\n\nc = Chord.from_short(\"C\")\nbbmaj7_3_inv = Chord.from_short(\"Bbmaj7\").invert(3)\n\npoly_chord = PolyChord([c, bbmaj7_3_inv])\npoly_chord\n\nPolyChord: 'C major triad|Bb major seventh, third inversion'. Notes: ['C4', 'E4', 'G4', 'A4', 'Bb5', 'D5', 'F5']\n\n\nWithin PolyChord objects we can treat it as a single chord or analyze the underlying chords separately. For example, here we display 2 tables to analyze the underlying chords of the PolyChord object.\n\npoly_chord_tables = poly_chord.to_frame()\nprint(f\"Chord 1: {poly_chord.chords[0].name}\")\ndisplay(poly_chord_tables[0])\nprint(f\"Chord 2: {poly_chord.chords[1].name}\")\ndisplay(poly_chord_tables[1])\n\nChord 1: C major triad\n\n\n\n\n\n\n\n\n\nNotes\nRelative Degree\nRelative Interval\nAbsolute Interval\nAbsolute Degree\n\n\n\n\n0\nC\n1\nunison\nunison\n1\n\n\n1\nE\n3\nmajor third\nmajor third\n3\n\n\n2\nG\n5\nperfect fifth\nminor third\nb3\n\n\n\n\n\n\n\nChord 2: Bb major seventh, third inversion\n\n\n\n\n\n\n\n\n\nNotes\nRelative Degree\nRelative Interval\nAbsolute Interval\nAbsolute Degree\n\n\n\n\n0\nA\n1\nunison\nunison\n1\n\n\n1\nBb\nb9\nminor ninth\nminor ninth\nb9\n\n\n2\nD\n4\nperfect fourth\nminor sixth\nb6\n\n\n3\nF\nb6\nminor sixth\nminor third\nb3",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#initialization-4",
+    "href": "index.html#initialization-4",
+    "title": "musy",
+    "section": "Initialization",
+    "text": "Initialization\nScale objects are collections of intervals from which we can generate notes and chords around a root note.\n\nfrom musy import Scale\n\ndorian = Scale(\"dorian\")\ndorian\n\nScale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7']",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#note-generation",
+    "href": "index.html#note-generation",
+    "title": "musy",
+    "section": "Note Generation",
+    "text": "Note Generation\nWhen given a root note, Scale generates the notes of the scale.\n\ndorian.get_notes(\"C\")\n\n[C4, D4, D#4, F4, G4, A4, A#4]",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#mode-generation",
+    "href": "index.html#mode-generation",
+    "title": "musy",
+    "section": "Mode Generation",
+    "text": "Mode Generation\nAll the modes of any Scale can be generated.\n\ndorian.get_modes()\n\n[Scale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7'],\n Scale: Phrygian. Intervals: ['1', 'b2', 'b3', '4', '5', 'b6', 'b7'],\n Scale: Lydian. Intervals: ['1', '2', '3', '#4', '5', '6', '7'],\n Scale: Mixolydian. Intervals: ['1', '2', '3', '4', '5', '6', 'b7'],\n Scale: Minor. Intervals: ['1', '2', 'b3', '4', '5', 'b6', 'b7'],\n Scale: Locrian. Intervals: ['1', 'b2', 'b3', '4', 'b5', 'b6', 'b7'],\n Scale: Ionian. Intervals: ['1', '2', '3', '4', '5', '6', '7']]",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#triad-generation",
+    "href": "index.html#triad-generation",
+    "title": "musy",
+    "section": "Triad Generation",
+    "text": "Triad Generation\nTriads and seventh chords in the scale can be generated around a root note.\n\ndorian.get_triads(\"D\")\n\n[Chord: 'D minor triad'. Notes: ['D4', 'F4', 'A4'],\n Chord: 'E minor triad'. Notes: ['E4', 'G4', 'B4'],\n Chord: 'F major triad'. Notes: ['F4', 'A4', 'C4'],\n Chord: 'G major triad'. Notes: ['G4', 'B4', 'D5'],\n Chord: 'A minor triad'. Notes: ['A4', 'C4', 'E5'],\n Chord: 'B diminished triad'. Notes: ['B4', 'D5', 'F5'],\n Chord: 'C major triad'. Notes: ['C5', 'E6', 'G6']]",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#secondary-dominants",
+    "href": "index.html#secondary-dominants",
+    "title": "musy",
+    "section": "Secondary Dominants",
+    "text": "Secondary Dominants\nYou can get all the secondary dominants (i.e. V7 chords) of a given Scale.\n\nScale(\"major\").secondary_dominants(\"C\")\n\n[Chord: 'G dominant seventh'. Notes: ['G4', 'B4', 'D5', 'F5'],\n Chord: 'A dominant seventh'. Notes: ['A4', 'C#5', 'E5', 'G5'],\n Chord: 'B dominant seventh'. Notes: ['B4', 'D#5', 'F#5', 'A5'],\n Chord: 'No chord found.'. Notes: ['C5', 'E5', 'G5', 'A#5'],\n Chord: 'D dominant seventh'. Notes: ['D5', 'F#5', 'A5', 'C6'],\n Chord: 'E dominant seventh'. Notes: ['E5', 'G#5', 'B5', 'D6'],\n Chord: 'F# dominant seventh'. Notes: ['F#5', 'A#5', 'C#6', 'E6']]",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#seventh-chord-generation",
+    "href": "index.html#seventh-chord-generation",
+    "title": "musy",
+    "section": "Seventh Chord Generation",
+    "text": "Seventh Chord Generation\n\ndorian.get_sevenths(\"E\")\n\n[Chord: 'E minor seventh'. Notes: ['E4', 'G4', 'B4', 'D4'],\n Chord: 'F# minor seventh'. Notes: ['F#4', 'A4', 'C#4', 'E5'],\n Chord: 'G major seventh'. Notes: ['G4', 'B4', 'D4', 'F#5'],\n Chord: 'A dominant seventh'. Notes: ['A4', 'C#4', 'E5', 'G5'],\n Chord: 'B minor seventh'. Notes: ['B4', 'D4', 'F#5', 'A5'],\n Chord: 'C# half diminished seventh'. Notes: ['C#5', 'E6', 'G6', 'B6'],\n Chord: 'D major seventh'. Notes: ['D5', 'F#6', 'A6', 'C#6']]\n\n\nAll information can be conveniently retrieved and displayed as a Pandas DataFrame with to_frame.",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#table-1",
+    "href": "index.html#table-1",
+    "title": "musy",
+    "section": "Table",
+    "text": "Table\n\ndorian.to_frame(root=\"E\")\n\n\n\n\n\n\n\n\nDegree\nRelative Interval\nMode\nRelative Semitones\nAbsolute Semitones\nNotes\nTriad\nSeventh Chord\n\n\n\n\n0\n1\nunison\ndorian\n0\n2\nE\nE minor triad\nE minor seventh\n\n\n1\n2\nmajor second\nphrygian\n2\n1\nF#\nF# minor triad\nF# minor seventh\n\n\n2\nb3\nminor third\nlydian\n3\n2\nG\nG major triad\nG major seventh\n\n\n3\n4\nperfect fourth\nmixolydian\n5\n2\nA\nA major triad\nA dominant seventh\n\n\n4\n5\nperfect fifth\nminor\n7\n2\nB\nB minor triad\nB minor seventh\n\n\n5\n6\nmajor sixth\nlocrian\n9\n1\nC#\nC# diminished triad\nC# half diminished seventh\n\n\n6\nb7\nminor seventh\nionian\n10\n2\nD\nD major triad\nD major seventh",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#custom-scales",
+    "href": "index.html#custom-scales",
+    "title": "musy",
+    "section": "Custom Scales",
+    "text": "Custom Scales\nConsult Scale.available_scales for a list of available scales. If a scale is not available, you can create your own scale from intervals.\n\npersian = Scale.from_intervals([\"1\", \"b2\", \"3\", \"4\", \"b5\", \"b6\", \"7\"], \"persian\")\npersian\n\nScale: Persian. Intervals: ['1', 'b2', '3', '4', 'b5', 'b6', '7']\n\n\n\npersian.get_notes(\"C\")\n\n[C4, C#4, E4, F4, F#4, G#4, B4]\n\n\n\npersian.get_triads(\"C\")\n\n[Chord: 'No chord found.'. Notes: ['C4', 'E4', 'F#4'],\n Chord: 'No chord found.'. Notes: ['C#4', 'F4', 'G#4'],\n Chord: 'E suspended second triad'. Notes: ['E4', 'F#4', 'B4'],\n Chord: 'No chord found.'. Notes: ['F4', 'G#4', 'C5'],\n Chord: 'F# suspended fourth triad'. Notes: ['F#4', 'B4', 'C#5'],\n Chord: 'C augmented triad, second inversion'. Notes: ['G#4', 'C5', 'E5'],\n Chord: 'No chord found.'. Notes: ['B4', 'C#5', 'F5']]",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#listening",
+    "href": "index.html#listening",
+    "title": "musy",
+    "section": "Listening",
+    "text": "Listening\nNote, Chord, PolyChord and Scale objects can all be heard by calling the play method on them. Check out the musy documentation on Note, Chord, PolyChord and Scale for example code and audio playbacks.",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#piano",
+    "href": "index.html#piano",
+    "title": "musy",
+    "section": "Piano",
+    "text": "Piano\nmusy will show the minimum octaves on the piano needed to show the object. Here for example a single C# on one octave.\n\nfrom musy.viz import Piano\n\nPiano().visualize_note(Note(\"C#\"))\n\nCDEFGABC#D#F#G#A#\n\n\nHere is an example of visualizing a Cadd9/F chord where we need multiple octaves.\n\ncadd9_over_f = Chord([Note(\"F\", 2), Note(\"C\", 3), Note(\"E\", 3), Note(\"G\", 3), Note(\"D\", 4)])\nPiano().visualize_chord(cadd9_over_f)\n\nCDEFGABCDEFGABCDEFGABC#D#F#G#A#C#D#F#G#A#C#D#F#G#A#\n\n\nFor scale visualization on Piano we show 2 octaves by default. The number of octaves can be controlled with the octs parameter.\n\nPiano().visualize_scale(Scale(\"double harmonic major\"), root=\"C\", octs=3)\n\nCDEFGABCDEFGABCDEFGABC#D#F#G#A#C#D#F#G#A#C#D#F#G#A#",
+    "crumbs": [
+      "musy"
+    ]
+  },
+  {
+    "objectID": "index.html#guitar",
+    "href": "index.html#guitar",
+    "title": "musy",
+    "section": "Guitar",
+    "text": "Guitar\nvisualize_note shows options for a given note in a certain octave. For example a C4 is shown below.\n\nfrom musy.viz import Guitar\n\nGuitar().visualize_note(Note(\"C\", oct=4))\n\n012345678910111213141516171819202122EBGDACEC\n\n\nvisualize_chord shows you all the notes across octaves to spot different voicings.\n\nGuitar().visualize_chord(Chord.from_short(\"Cmaj9\"))\n\n012345678910111213141516171819202122EEGBCDEGBCDBBCDEGBCDEGGGBCDEGBCDEDDEGBCDEGBCABCDEGBCDEGEEGBCDEGBCD\n\n\nvisualize_scale shows all notes in the scale from a given root note.\n\nGuitar().visualize_scale(Scale(\"phrygian dominant\"), root=\"C\")\n\n012345678910111213141516171819202122EEFGG#A#CC#EFGG#A#CC#BCC#EFGG#A#CC#EFGG#GGG#A#CC#EFGG#A#CC#EFDEFGG#A#CC#EFGG#A#CAA#CC#EFGG#A#CC#EFGEEFGG#A#CC#EFGG#A#CC#",
+    "crumbs": [
+      "musy"
+    ]
+  }
+]

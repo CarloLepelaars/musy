@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Python toolbox for analyzing, creating and visualizing music.">
+
+<title>musy</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-e16dd29f819a46fcdaa82e3575888691.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="musy">
+<meta property="og:description" content="Python toolbox for analyzing, creating and visualizing music.">
+<meta property="og:site_name" content="musy">
+<meta name="twitter:title" content="musy">
+<meta name="twitter:description" content="Python toolbox for analyzing, creating and visualizing music.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">musy</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">musy</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">musy</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./note.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Note</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chord.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chord</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./scale.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Scale</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./viz.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Visualization</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./midi.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">midi</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a></li>
+  <li><a href="#note" id="toc-note" class="nav-link" data-scroll-target="#note">Note</a>
+  <ul class="collapse">
+  <li><a href="#initialization" id="toc-initialization" class="nav-link" data-scroll-target="#initialization">Initialization</a></li>
+  <li><a href="#addition-and-subtraction" id="toc-addition-and-subtraction" class="nav-link" data-scroll-target="#addition-and-subtraction">Addition and subtraction</a></li>
+  <li><a href="#comparison" id="toc-comparison" class="nav-link" data-scroll-target="#comparison">Comparison</a></li>
+  <li><a href="#relative-majorminor" id="toc-relative-majorminor" class="nav-link" data-scroll-target="#relative-majorminor">Relative Major/Minor</a></li>
+  </ul></li>
+  <li><a href="#interval" id="toc-interval" class="nav-link" data-scroll-target="#interval">Interval</a>
+  <ul class="collapse">
+  <li><a href="#initialization-1" id="toc-initialization-1" class="nav-link" data-scroll-target="#initialization-1">Initialization</a></li>
+  <li><a href="#comparison-1" id="toc-comparison-1" class="nav-link" data-scroll-target="#comparison-1">Comparison</a></li>
+  </ul></li>
+  <li><a href="#chord" id="toc-chord" class="nav-link" data-scroll-target="#chord">Chord</a>
+  <ul class="collapse">
+  <li><a href="#initialization-2" id="toc-initialization-2" class="nav-link" data-scroll-target="#initialization-2">Initialization</a></li>
+  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a></li>
+  <li><a href="#inversion" id="toc-inversion" class="nav-link" data-scroll-target="#inversion">Inversion</a></li>
+  <li><a href="#transposition" id="toc-transposition" class="nav-link" data-scroll-target="#transposition">Transposition</a></li>
+  <li><a href="#table" id="toc-table" class="nav-link" data-scroll-target="#table">Table</a></li>
+  </ul></li>
+  <li><a href="#polychord" id="toc-polychord" class="nav-link" data-scroll-target="#polychord">PolyChord</a>
+  <ul class="collapse">
+  <li><a href="#initialization-3" id="toc-initialization-3" class="nav-link" data-scroll-target="#initialization-3">Initialization</a></li>
+  </ul></li>
+  <li><a href="#scale" id="toc-scale" class="nav-link" data-scroll-target="#scale">Scale</a>
+  <ul class="collapse">
+  <li><a href="#initialization-4" id="toc-initialization-4" class="nav-link" data-scroll-target="#initialization-4">Initialization</a></li>
+  <li><a href="#note-generation" id="toc-note-generation" class="nav-link" data-scroll-target="#note-generation">Note Generation</a></li>
+  <li><a href="#mode-generation" id="toc-mode-generation" class="nav-link" data-scroll-target="#mode-generation">Mode Generation</a></li>
+  <li><a href="#triad-generation" id="toc-triad-generation" class="nav-link" data-scroll-target="#triad-generation">Triad Generation</a></li>
+  <li><a href="#secondary-dominants" id="toc-secondary-dominants" class="nav-link" data-scroll-target="#secondary-dominants">Secondary Dominants</a></li>
+  <li><a href="#seventh-chord-generation" id="toc-seventh-chord-generation" class="nav-link" data-scroll-target="#seventh-chord-generation">Seventh Chord Generation</a></li>
+  <li><a href="#table-1" id="toc-table-1" class="nav-link" data-scroll-target="#table-1">Table</a></li>
+  <li><a href="#custom-scales" id="toc-custom-scales" class="nav-link" data-scroll-target="#custom-scales">Custom Scales</a></li>
+  <li><a href="#listening" id="toc-listening" class="nav-link" data-scroll-target="#listening">Listening</a></li>
+  </ul></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a>
+  <ul class="collapse">
+  <li><a href="#piano" id="toc-piano" class="nav-link" data-scroll-target="#piano">Piano</a></li>
+  <li><a href="#guitar" id="toc-guitar" class="nav-link" data-scroll-target="#guitar">Guitar</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/CarloLepelaars/musy/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">musy</h1>
+</div>
+
+<div>
+  <div class="description">
+    Python toolbox for analyzing, creating and visualizing music.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p><code>musy</code> is a comprehensive toolbox for analyzing and visualizing music. It lays the foundation for the Musy web apps.</p>
+<p>At its core it has basic building blocks from which all theory can be derived:</p>
+<ul>
+<li><p><a href="https://CarloLepelaars.github.io/musy/note.html#note"><code>Note</code></a>: The basic atomic unit of music.</p></li>
+<li><p><a href="https://CarloLepelaars.github.io/musy/chord.html#chord"><code>Chord</code></a> and <a href="https://CarloLepelaars.github.io/musy/chord.html#polychord"><code>PolyChord</code></a>: A stack of notes played together.</p></li>
+<li><p><a href="https://CarloLepelaars.github.io/musy/scale.html#scale"><code>Scale</code></a>: Stack of intervals from which harmony, (diatonic) chords, melody, etc. can be derived.</p></li>
+</ul>
+<p>For visualization these objects can be placed on instrument surfaces:</p>
+<ul>
+<li><p><a href="https://CarloLepelaars.github.io/musy/viz.html#piano"><code>Piano</code></a>: Basic key layout</p></li>
+<li><p><a href="https://CarloLepelaars.github.io/musy/viz.html#guitar"><code>Guitar</code></a>: Guitar fretboard</p></li>
+</ul>
+<section id="installation" class="level1">
+<h1>Installation</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install musy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="note" class="level1">
+<h1>Note</h1>
+<section id="initialization" class="level2">
+<h2 class="anchored" data-anchor-id="initialization">Initialization</h2>
+<p>The <a href="https://CarloLepelaars.github.io/musy/note.html#note"><code>Note</code></a> is the basic building block from which you can create chords, scales, intervals and songs.</p>
+<div id="cell-6" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> musy <span class="im">import</span> Note</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>c_sharp <span class="op">=</span> Note(<span class="st">"C#"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>c_sharp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>C#4</code></pre>
+</div>
+</div>
+<p>You can get compact representations of <a href="https://CarloLepelaars.github.io/musy/note.html#note"><code>Note</code></a> objects. For example, their MIDI numbers and binary representations.</p>
+<div id="cell-8" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>c_sharp.midi, <span class="bu">bin</span>(c_sharp), <span class="bu">hex</span>(c_sharp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(49, '0b110001', '0x31')</code></pre>
+</div>
+</div>
+</section>
+<section id="addition-and-subtraction" class="level2">
+<h2 class="anchored" data-anchor-id="addition-and-subtraction">Addition and subtraction</h2>
+<p>Notes can be added and subtracted to form new notes. Each added integer represents a semitone.</p>
+<div id="cell-11" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>c_sharp <span class="op">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>D4</code></pre>
+</div>
+</div>
+<div id="cell-12" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>c_sharp <span class="op">-</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>C4</code></pre>
+</div>
+</div>
+<div id="cell-13" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>c_sharp <span class="op">+</span> <span class="dv">14</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>D#5</code></pre>
+</div>
+</div>
+</section>
+<section id="comparison" class="level2">
+<h2 class="anchored" data-anchor-id="comparison">Comparison</h2>
+<p>Notes can be compared using familiar Python operators.</p>
+<div id="cell-15" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> Note(<span class="st">"C"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> Note(<span class="st">"G"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>c <span class="op">&lt;</span> g</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p>Octaves can make a difference in comparisons.</p>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Note(<span class="st">"C"</span>, <span class="bu">oct</span><span class="op">=</span><span class="dv">4</span>) <span class="op">&gt;=</span> Note(<span class="st">"G"</span>, <span class="bu">oct</span><span class="op">=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>True</code></pre>
+</div>
+</div>
+</section>
+<section id="relative-majorminor" class="level2">
+<h2 class="anchored" data-anchor-id="relative-majorminor">Relative Major/Minor</h2>
+<p>Notes can be converted to its relative major or minor. As can be found on the circle of fifths.</p>
+<div id="cell-19" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Note(<span class="st">"C"</span>).minor()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>A3</code></pre>
+</div>
+</div>
+<div id="cell-20" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Note(<span class="st">"C#"</span>).major()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>E4</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="interval" class="level1">
+<h1>Interval</h1>
+<section id="initialization-1" class="level2">
+<h2 class="anchored" data-anchor-id="initialization-1">Initialization</h2>
+<p><a href="https://CarloLepelaars.github.io/musy/note.html#interval"><code>Interval</code></a> objects can be obtained by calling <code>interval</code> on two notes or using the <code>&amp;</code> operator.</p>
+<div id="cell-22" class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>f_sharp <span class="op">=</span> Note(<span class="st">"F#"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>P4 <span class="op">=</span> c_sharp <span class="op">&amp;</span> f_sharp</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>P4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>perfect fourth (4)</code></pre>
+</div>
+</div>
+<div id="cell-23" class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>P4.semitones, P4.<span class="bu">long</span>, P4.short, P4.<span class="bu">type</span>(), P4.is_contextual(), P4.is_consonant()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(5, 'perfect fourth', '4', 'Contextual', True, False)</code></pre>
+</div>
+</div>
+</section>
+<section id="comparison-1" class="level2">
+<h2 class="anchored" data-anchor-id="comparison-1">Comparison</h2>
+<p>Intervals can also be compared.</p>
+<div id="cell-26" class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>P5 <span class="op">=</span> c <span class="op">&amp;</span> g</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>P5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>perfect fifth (5)</code></pre>
+</div>
+</div>
+<div id="cell-27" class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>P5.semitones, P5.<span class="bu">long</span>, P5.short, P5.<span class="bu">type</span>(), P5.is_consonant(), P5.is_perfect()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(7, 'perfect fifth', '5', 'Perfect Consonant', True, True)</code></pre>
+</div>
+</div>
+<div id="cell-28" class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>P4 <span class="op">!=</span> P5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>True</code></pre>
+</div>
+</div>
+<div id="cell-29" class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>P4 <span class="op">&lt;</span> P5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>True</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="chord" class="level1">
+<h1>Chord</h1>
+<section id="initialization-2" class="level2">
+<h2 class="anchored" data-anchor-id="initialization-2">Initialization</h2>
+<p>The <a href="https://CarloLepelaars.github.io/musy/chord.html#chord"><code>Chord</code></a> is a stack of <a href="https://CarloLepelaars.github.io/musy/note.html#note"><code>Note</code></a> objects played together.</p>
+<div id="cell-33" class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> musy <span class="im">import</span> Chord</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>c_major <span class="op">=</span> Chord([<span class="st">"C"</span>, <span class="st">"E"</span>, <span class="st">"G"</span>])</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>c_major</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'C major triad'. Notes: ['C4', 'E4', 'G4']</code></pre>
+</div>
+</div>
+<p><a href="https://CarloLepelaars.github.io/musy/chord.html#chord"><code>Chord</code></a> objects can be initialized from shorthand notation.</p>
+<div id="cell-35" class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>cmaj7 <span class="op">=</span> Chord.from_short(<span class="st">"Cmaj7"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>cmaj7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'C major seventh'. Notes: ['C4', 'E4', 'G4', 'B4']</code></pre>
+</div>
+</div>
+</section>
+<section id="analysis" class="level2">
+<h2 class="anchored" data-anchor-id="analysis">Analysis</h2>
+<p>You can easily retrieve intervals, related chords and extensions from a <a href="https://CarloLepelaars.github.io/musy/chord.html#chord"><code>Chord</code></a> object.</p>
+<div id="cell-38" class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Root of Cmaj7 -&gt; C</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>cmaj7.root</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>C4</code></pre>
+</div>
+</div>
+<div id="cell-39" class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dominant (V7) chord of Cmaj7 -&gt; G7.</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>cmaj7.dominant()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'G dominant seventh'. Notes: ['G4', 'B4', 'D5', 'F5']</code></pre>
+</div>
+</div>
+<div id="cell-40" class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Upper extensions (b9, 9, #9, b11, #11, b13, #13)</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>cmaj7.root.ext()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[C#5, D5, D#5, F5, F#5, G#5, A5]</code></pre>
+</div>
+</div>
+<div id="cell-41" class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Altered extensions (b9, #9, #11, b13)</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>cmaj7.root.alt_ext()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[C#5, D#5, F#5, G#5]</code></pre>
+</div>
+</div>
+<p>Extension can be added and removed.</p>
+<div id="cell-43" class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cmaj7#9b13</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>cmaj7_sharp9_flat13 <span class="op">=</span> cmaj7.add_ext(<span class="st">"#9"</span>).add_ext(<span class="st">"b13"</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>cmaj7_sharp9_flat13</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'BM6|CM'. Notes: ['C4', 'E4', 'G4', 'B4', 'D#5', 'G#5']</code></pre>
+</div>
+</div>
+<div id="cell-44" class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cmaj7(no3)</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>cmaj7.remove_ext(<span class="st">"3"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'C major seventh'. Notes: ['C4', 'G4', 'B4']</code></pre>
+</div>
+</div>
+<div id="cell-45" class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cmaj7(add2)</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>cmaj7.add2()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'No chord found.'. Notes: ['C4', 'D4', 'E4', 'G4', 'B4']</code></pre>
+</div>
+</div>
+</section>
+<section id="inversion" class="level2">
+<h2 class="anchored" data-anchor-id="inversion">Inversion</h2>
+<p>Chords can also be inverted with <code>invert</code>.</p>
+<div id="cell-48" class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get 1st inversion chord of C major 7th</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>cmaj7.invert(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'C major seventh, first inversion'. Notes: ['E4', 'G4', 'B4', 'C5']</code></pre>
+</div>
+</div>
+</section>
+<section id="transposition" class="level2">
+<h2 class="anchored" data-anchor-id="transposition">Transposition</h2>
+<p>Like <a href="https://CarloLepelaars.github.io/musy/note.html#note"><code>Note</code></a> objects, <a href="https://CarloLepelaars.github.io/musy/chord.html#chord"><code>Chord</code></a> objects can be added and subtracted to transpose them.</p>
+<div id="cell-51" class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>cmaj7 <span class="op">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'D major seventh'. Notes: ['D4', 'F#4', 'A4', 'C#5']</code></pre>
+</div>
+</div>
+<p>Notes can be multiplied to create chords.</p>
+<div id="cell-53" class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>Note(<span class="st">"C"</span>) <span class="op">*</span> Note(<span class="st">"E"</span>) <span class="op">*</span> Note(<span class="st">"G"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Chord: 'C major triad'. Notes: ['C4', 'E4', 'G4']</code></pre>
+</div>
+</div>
+</section>
+<section id="table" class="level2">
+<h2 class="anchored" data-anchor-id="table">Table</h2>
+<p>Each chord can be displayed in a Pandas DataFrame table, which gives a quick overview of the notes and intervals in the chord.</p>
+<div id="cell-55" class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>cmaj7.to_frame()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Notes</th>
+<th data-quarto-table-cell-role="th">Relative Degree</th>
+<th data-quarto-table-cell-role="th">Relative Interval</th>
+<th data-quarto-table-cell-role="th">Absolute Interval</th>
+<th data-quarto-table-cell-role="th">Absolute Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>C</td>
+<td>1</td>
+<td>unison</td>
+<td>unison</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>E</td>
+<td>3</td>
+<td>major third</td>
+<td>major third</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>G</td>
+<td>5</td>
+<td>perfect fifth</td>
+<td>minor third</td>
+<td>b3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>B</td>
+<td>7</td>
+<td>major seventh</td>
+<td>major third</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>This get more interesting when we want to analyze more complicated chords and progressions. Take for example this chord:</p>
+<div id="cell-57" class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>Cdim6maj7 <span class="op">=</span> Chord([Note(<span class="st">"C"</span>), Note(<span class="st">"D#"</span>), Note(<span class="st">"F#"</span>), Note(<span class="st">"A"</span>), Note(<span class="st">"B"</span>)])</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>Cdim6maj7.to_frame()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Notes</th>
+<th data-quarto-table-cell-role="th">Relative Degree</th>
+<th data-quarto-table-cell-role="th">Relative Interval</th>
+<th data-quarto-table-cell-role="th">Absolute Interval</th>
+<th data-quarto-table-cell-role="th">Absolute Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>C</td>
+<td>1</td>
+<td>unison</td>
+<td>unison</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>D#</td>
+<td>b3</td>
+<td>minor third</td>
+<td>minor third</td>
+<td>b3</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>F#</td>
+<td>b5</td>
+<td>tritone</td>
+<td>minor third</td>
+<td>b3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>A</td>
+<td>6</td>
+<td>major sixth</td>
+<td>minor third</td>
+<td>b3</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>B</td>
+<td>7</td>
+<td>major seventh</td>
+<td>major second</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>We can immediately see that there are 2 minor 3rds (i.e.&nbsp;<code>b3</code> and <code>b5</code>) so the base is a diminished chord (<code>Cdim</code> or <code>C°</code>). It is extended with a major 6th (<code>6</code>) and a major 7th (<code>maj7</code>). So we can describe this as a <code>C°6maj7</code> chord.</p>
+</section>
+</section>
+<section id="polychord" class="level1">
+<h1>PolyChord</h1>
+<section id="initialization-3" class="level2">
+<h2 class="anchored" data-anchor-id="initialization-3">Initialization</h2>
+<p>For polyphonic use cases you can create <a href="https://CarloLepelaars.github.io/musy/chord.html#polychord"><code>PolyChord</code></a> objects. This objects inherits the same functionality as <a href="https://CarloLepelaars.github.io/musy/chord.html#chord"><code>Chord</code></a> objects.</p>
+<div id="cell-60" class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> musy <span class="im">import</span> PolyChord</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> Chord.from_short(<span class="st">"C"</span>)</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>bbmaj7_3_inv <span class="op">=</span> Chord.from_short(<span class="st">"Bbmaj7"</span>).invert(<span class="dv">3</span>)</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>poly_chord <span class="op">=</span> PolyChord([c, bbmaj7_3_inv])</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>poly_chord</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>PolyChord: 'C major triad|Bb major seventh, third inversion'. Notes: ['C4', 'E4', 'G4', 'A4', 'Bb5', 'D5', 'F5']</code></pre>
+</div>
+</div>
+<p>Within <a href="https://CarloLepelaars.github.io/musy/chord.html#polychord"><code>PolyChord</code></a> objects we can treat it as a single chord or analyze the underlying chords separately. For example, here we display 2 tables to analyze the underlying chords of the <a href="https://CarloLepelaars.github.io/musy/chord.html#polychord"><code>PolyChord</code></a> object.</p>
+<div id="cell-62" class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>poly_chord_tables <span class="op">=</span> poly_chord.to_frame()</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Chord 1: </span><span class="sc">{</span>poly_chord<span class="sc">.</span>chords[<span class="dv">0</span>]<span class="sc">.</span>name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>display(poly_chord_tables[<span class="dv">0</span>])</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Chord 2: </span><span class="sc">{</span>poly_chord<span class="sc">.</span>chords[<span class="dv">1</span>]<span class="sc">.</span>name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>display(poly_chord_tables[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Chord 1: C major triad</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Notes</th>
+<th data-quarto-table-cell-role="th">Relative Degree</th>
+<th data-quarto-table-cell-role="th">Relative Interval</th>
+<th data-quarto-table-cell-role="th">Absolute Interval</th>
+<th data-quarto-table-cell-role="th">Absolute Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>C</td>
+<td>1</td>
+<td>unison</td>
+<td>unison</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>E</td>
+<td>3</td>
+<td>major third</td>
+<td>major third</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>G</td>
+<td>5</td>
+<td>perfect fifth</td>
+<td>minor third</td>
+<td>b3</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Chord 2: Bb major seventh, third inversion</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Notes</th>
+<th data-quarto-table-cell-role="th">Relative Degree</th>
+<th data-quarto-table-cell-role="th">Relative Interval</th>
+<th data-quarto-table-cell-role="th">Absolute Interval</th>
+<th data-quarto-table-cell-role="th">Absolute Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>A</td>
+<td>1</td>
+<td>unison</td>
+<td>unison</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Bb</td>
+<td>b9</td>
+<td>minor ninth</td>
+<td>minor ninth</td>
+<td>b9</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>D</td>
+<td>4</td>
+<td>perfect fourth</td>
+<td>minor sixth</td>
+<td>b6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>F</td>
+<td>b6</td>
+<td>minor sixth</td>
+<td>minor third</td>
+<td>b3</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="scale" class="level1">
+<h1>Scale</h1>
+<section id="initialization-4" class="level2">
+<h2 class="anchored" data-anchor-id="initialization-4">Initialization</h2>
+<p><a href="https://CarloLepelaars.github.io/musy/scale.html#scale"><code>Scale</code></a> objects are collections of intervals from which we can generate notes and chords around a root note.</p>
+<div id="cell-64" class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> musy <span class="im">import</span> Scale</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>dorian <span class="op">=</span> Scale(<span class="st">"dorian"</span>)</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>dorian</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Scale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7']</code></pre>
+</div>
+</div>
+</section>
+<section id="note-generation" class="level2">
+<h2 class="anchored" data-anchor-id="note-generation">Note Generation</h2>
+<p>When given a root note, <a href="https://CarloLepelaars.github.io/musy/scale.html#scale"><code>Scale</code></a> generates the notes of the scale.</p>
+<div id="cell-67" class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>dorian.get_notes(<span class="st">"C"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[C4, D4, D#4, F4, G4, A4, A#4]</code></pre>
+</div>
+</div>
+</section>
+<section id="mode-generation" class="level2">
+<h2 class="anchored" data-anchor-id="mode-generation">Mode Generation</h2>
+<p>All the modes of any <a href="https://CarloLepelaars.github.io/musy/scale.html#scale"><code>Scale</code></a> can be generated.</p>
+<div id="cell-69" class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>dorian.get_modes()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[Scale: Dorian. Intervals: ['1', '2', 'b3', '4', '5', '6', 'b7'],
+ Scale: Phrygian. Intervals: ['1', 'b2', 'b3', '4', '5', 'b6', 'b7'],
+ Scale: Lydian. Intervals: ['1', '2', '3', '#4', '5', '6', '7'],
+ Scale: Mixolydian. Intervals: ['1', '2', '3', '4', '5', '6', 'b7'],
+ Scale: Minor. Intervals: ['1', '2', 'b3', '4', '5', 'b6', 'b7'],
+ Scale: Locrian. Intervals: ['1', 'b2', 'b3', '4', 'b5', 'b6', 'b7'],
+ Scale: Ionian. Intervals: ['1', '2', '3', '4', '5', '6', '7']]</code></pre>
+</div>
+</div>
+</section>
+<section id="triad-generation" class="level2">
+<h2 class="anchored" data-anchor-id="triad-generation">Triad Generation</h2>
+<p>Triads and seventh chords in the scale can be generated around a root note.</p>
+<div id="cell-72" class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>dorian.get_triads(<span class="st">"D"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[Chord: 'D minor triad'. Notes: ['D4', 'F4', 'A4'],
+ Chord: 'E minor triad'. Notes: ['E4', 'G4', 'B4'],
+ Chord: 'F major triad'. Notes: ['F4', 'A4', 'C4'],
+ Chord: 'G major triad'. Notes: ['G4', 'B4', 'D5'],
+ Chord: 'A minor triad'. Notes: ['A4', 'C4', 'E5'],
+ Chord: 'B diminished triad'. Notes: ['B4', 'D5', 'F5'],
+ Chord: 'C major triad'. Notes: ['C5', 'E6', 'G6']]</code></pre>
+</div>
+</div>
+</section>
+<section id="secondary-dominants" class="level2">
+<h2 class="anchored" data-anchor-id="secondary-dominants">Secondary Dominants</h2>
+<p>You can get all the secondary dominants (i.e.&nbsp;<code>V7</code> chords) of a given <a href="https://CarloLepelaars.github.io/musy/scale.html#scale"><code>Scale</code></a>.</p>
+<div id="cell-74" class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>Scale(<span class="st">"major"</span>).secondary_dominants(<span class="st">"C"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[Chord: 'G dominant seventh'. Notes: ['G4', 'B4', 'D5', 'F5'],
+ Chord: 'A dominant seventh'. Notes: ['A4', 'C#5', 'E5', 'G5'],
+ Chord: 'B dominant seventh'. Notes: ['B4', 'D#5', 'F#5', 'A5'],
+ Chord: 'No chord found.'. Notes: ['C5', 'E5', 'G5', 'A#5'],
+ Chord: 'D dominant seventh'. Notes: ['D5', 'F#5', 'A5', 'C6'],
+ Chord: 'E dominant seventh'. Notes: ['E5', 'G#5', 'B5', 'D6'],
+ Chord: 'F# dominant seventh'. Notes: ['F#5', 'A#5', 'C#6', 'E6']]</code></pre>
+</div>
+</div>
+</section>
+<section id="seventh-chord-generation" class="level2">
+<h2 class="anchored" data-anchor-id="seventh-chord-generation">Seventh Chord Generation</h2>
+<div id="cell-76" class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>dorian.get_sevenths(<span class="st">"E"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[Chord: 'E minor seventh'. Notes: ['E4', 'G4', 'B4', 'D4'],
+ Chord: 'F# minor seventh'. Notes: ['F#4', 'A4', 'C#4', 'E5'],
+ Chord: 'G major seventh'. Notes: ['G4', 'B4', 'D4', 'F#5'],
+ Chord: 'A dominant seventh'. Notes: ['A4', 'C#4', 'E5', 'G5'],
+ Chord: 'B minor seventh'. Notes: ['B4', 'D4', 'F#5', 'A5'],
+ Chord: 'C# half diminished seventh'. Notes: ['C#5', 'E6', 'G6', 'B6'],
+ Chord: 'D major seventh'. Notes: ['D5', 'F#6', 'A6', 'C#6']]</code></pre>
+</div>
+</div>
+<p>All information can be conveniently retrieved and displayed as a Pandas DataFrame with <code>to_frame</code>.</p>
+</section>
+<section id="table-1" class="level2">
+<h2 class="anchored" data-anchor-id="table-1">Table</h2>
+<div id="cell-79" class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>dorian.to_frame(root<span class="op">=</span><span class="st">"E"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Degree</th>
+<th data-quarto-table-cell-role="th">Relative Interval</th>
+<th data-quarto-table-cell-role="th">Mode</th>
+<th data-quarto-table-cell-role="th">Relative Semitones</th>
+<th data-quarto-table-cell-role="th">Absolute Semitones</th>
+<th data-quarto-table-cell-role="th">Notes</th>
+<th data-quarto-table-cell-role="th">Triad</th>
+<th data-quarto-table-cell-role="th">Seventh Chord</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>unison</td>
+<td>dorian</td>
+<td>0</td>
+<td>2</td>
+<td>E</td>
+<td>E minor triad</td>
+<td>E minor seventh</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>major second</td>
+<td>phrygian</td>
+<td>2</td>
+<td>1</td>
+<td>F#</td>
+<td>F# minor triad</td>
+<td>F# minor seventh</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>b3</td>
+<td>minor third</td>
+<td>lydian</td>
+<td>3</td>
+<td>2</td>
+<td>G</td>
+<td>G major triad</td>
+<td>G major seventh</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>perfect fourth</td>
+<td>mixolydian</td>
+<td>5</td>
+<td>2</td>
+<td>A</td>
+<td>A major triad</td>
+<td>A dominant seventh</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>perfect fifth</td>
+<td>minor</td>
+<td>7</td>
+<td>2</td>
+<td>B</td>
+<td>B minor triad</td>
+<td>B minor seventh</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>6</td>
+<td>major sixth</td>
+<td>locrian</td>
+<td>9</td>
+<td>1</td>
+<td>C#</td>
+<td>C# diminished triad</td>
+<td>C# half diminished seventh</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>b7</td>
+<td>minor seventh</td>
+<td>ionian</td>
+<td>10</td>
+<td>2</td>
+<td>D</td>
+<td>D major triad</td>
+<td>D major seventh</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="custom-scales" class="level2">
+<h2 class="anchored" data-anchor-id="custom-scales">Custom Scales</h2>
+<p>Consult <a href="https://CarloLepelaars.github.io/musy/scale.html#scale.available_scales"><code>Scale.available_scales</code></a> for a list of available scales. If a scale is not available, you can create your own scale from intervals.</p>
+<div id="cell-81" class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>persian <span class="op">=</span> Scale.from_intervals([<span class="st">"1"</span>, <span class="st">"b2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"b5"</span>, <span class="st">"b6"</span>, <span class="st">"7"</span>], <span class="st">"persian"</span>)</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>persian</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Scale: Persian. Intervals: ['1', 'b2', '3', '4', 'b5', 'b6', '7']</code></pre>
+</div>
+</div>
+<div id="cell-82" class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>persian.get_notes(<span class="st">"C"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[C4, C#4, E4, F4, F#4, G#4, B4]</code></pre>
+</div>
+</div>
+<div id="cell-83" class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>persian.get_triads(<span class="st">"C"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[Chord: 'No chord found.'. Notes: ['C4', 'E4', 'F#4'],
+ Chord: 'No chord found.'. Notes: ['C#4', 'F4', 'G#4'],
+ Chord: 'E suspended second triad'. Notes: ['E4', 'F#4', 'B4'],
+ Chord: 'No chord found.'. Notes: ['F4', 'G#4', 'C5'],
+ Chord: 'F# suspended fourth triad'. Notes: ['F#4', 'B4', 'C#5'],
+ Chord: 'C augmented triad, second inversion'. Notes: ['G#4', 'C5', 'E5'],
+ Chord: 'No chord found.'. Notes: ['B4', 'C#5', 'F5']]</code></pre>
+</div>
+</div>
+</section>
+<section id="listening" class="level2">
+<h2 class="anchored" data-anchor-id="listening">Listening</h2>
+<p><a href="https://CarloLepelaars.github.io/musy/note.html#note"><code>Note</code></a>, <a href="https://CarloLepelaars.github.io/musy/chord.html#chord"><code>Chord</code></a>, <a href="https://CarloLepelaars.github.io/musy/chord.html#polychord"><code>PolyChord</code></a> and <a href="https://CarloLepelaars.github.io/musy/scale.html#scale"><code>Scale</code></a> objects can all be heard by calling the <code>play</code> method on them. Check out the <a href="https://carlolepelaars.github.io/musy">musy documentation</a> on <a href="https://CarloLepelaars.github.io/musy/note.html#note"><code>Note</code></a>, <a href="https://CarloLepelaars.github.io/musy/chord.html#chord"><code>Chord</code></a>, <a href="https://CarloLepelaars.github.io/musy/chord.html#polychord"><code>PolyChord</code></a> and <a href="https://CarloLepelaars.github.io/musy/scale.html#scale"><code>Scale</code></a> for example code and audio playbacks.</p>
+</section>
+</section>
+<section id="visualization" class="level1">
+<h1>Visualization</h1>
+<p><code>musy</code> objects can be visualized on a piano or guitar by providing a list of <a href="https://CarloLepelaars.github.io/musy/note.html#note"><code>Note</code></a> objects to the rendering method. Notes can easily be retrieved from <a href="https://CarloLepelaars.github.io/musy/chord.html#chord"><code>Chord</code></a> and <a href="https://CarloLepelaars.github.io/musy/scale.html#scale"><code>Scale</code></a> objects.</p>
+<section id="piano" class="level2">
+<h2 class="anchored" data-anchor-id="piano">Piano</h2>
+<p><code>musy</code> will show the minimum octaves on the piano needed to show the object. Here for example a single <code>C#</code> on one octave.</p>
+<div id="cell-88" class="cell">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> musy.viz <span class="im">import</span> Piano</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>Piano().visualize_note(Note(<span class="st">"C#"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.piano { background: #222; padding: 20px 0; position: relative; }
+.white-keys { display: flex; }
+.white-key, .black-key { text-align: center; font-family: Arial; position: relative; }
+.white-key { width: 40px; height: 125px; background: #fff; border: 1px solid #000; 
+    color: #111; font-size: 18px; line-height: 200px; z-index: 1; }
+.black-key { width: 20px; height: 80px; background: #000; color: #fff; border: 1px solid #333;
+    position: absolute; z-index: 2; line-height: 100px; font-size: 14px; top: 20px; }
+.highlight { background: #ff0 !important; color: #000 !important; }
+</style><div class="piano" style="width:280px"><div class="white-keys"><div class="white-key">C</div><div class="white-key">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="white-key">G</div><div class="white-key">A</div><div class="white-key">B</div></div><div class="black-key highlight" style="left:29px">C#</div><div class="black-key" style="left:69px">D#</div><div class="black-key" style="left:149px">F#</div><div class="black-key" style="left:189px">G#</div><div class="black-key" style="left:229px">A#</div></div>
+</div>
+</div>
+<p>Here is an example of visualizing a <code>Cadd9/F</code> chord where we need multiple octaves.</p>
+<div id="cell-90" class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>cadd9_over_f <span class="op">=</span> Chord([Note(<span class="st">"F"</span>, <span class="dv">2</span>), Note(<span class="st">"C"</span>, <span class="dv">3</span>), Note(<span class="st">"E"</span>, <span class="dv">3</span>), Note(<span class="st">"G"</span>, <span class="dv">3</span>), Note(<span class="st">"D"</span>, <span class="dv">4</span>)])</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>Piano().visualize_chord(cadd9_over_f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.piano { background: #222; padding: 20px 0; position: relative; }
+.white-keys { display: flex; }
+.white-key, .black-key { text-align: center; font-family: Arial; position: relative; }
+.white-key { width: 40px; height: 125px; background: #fff; border: 1px solid #000; 
+    color: #111; font-size: 18px; line-height: 200px; z-index: 1; }
+.black-key { width: 20px; height: 80px; background: #000; color: #fff; border: 1px solid #333;
+    position: absolute; z-index: 2; line-height: 100px; font-size: 14px; top: 20px; }
+.highlight { background: #ff0 !important; color: #000 !important; }
+</style><div class="piano" style="width:840px"><div class="white-keys"><div class="white-key">C</div><div class="white-key">D</div><div class="white-key">E</div><div class="white-key highlight">F</div><div class="white-key">G</div><div class="white-key">A</div><div class="white-key">B</div><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key">F</div><div class="white-key highlight">G</div><div class="white-key">A</div><div class="white-key">B</div><div class="white-key">C</div><div class="white-key highlight">D</div><div class="white-key">E</div><div class="white-key">F</div><div class="white-key">G</div><div class="white-key">A</div><div class="white-key">B</div></div><div class="black-key" style="left:29px">C#</div><div class="black-key" style="left:69px">D#</div><div class="black-key" style="left:149px">F#</div><div class="black-key" style="left:189px">G#</div><div class="black-key" style="left:229px">A#</div><div class="black-key" style="left:309px">C#</div><div class="black-key" style="left:349px">D#</div><div class="black-key" style="left:429px">F#</div><div class="black-key" style="left:469px">G#</div><div class="black-key" style="left:509px">A#</div><div class="black-key" style="left:589px">C#</div><div class="black-key" style="left:629px">D#</div><div class="black-key" style="left:709px">F#</div><div class="black-key" style="left:749px">G#</div><div class="black-key" style="left:789px">A#</div></div>
+</div>
+</div>
+<p>For scale visualization on <a href="https://CarloLepelaars.github.io/musy/viz.html#piano"><code>Piano</code></a> we show 2 octaves by default. The number of octaves can be controlled with the <code>octs</code> parameter.</p>
+<div id="cell-92" class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>Piano().visualize_scale(Scale(<span class="st">"double harmonic major"</span>), root<span class="op">=</span><span class="st">"C"</span>, octs<span class="op">=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.piano { background: #222; padding: 20px 0; position: relative; }
+.white-keys { display: flex; }
+.white-key, .black-key { text-align: center; font-family: Arial; position: relative; }
+.white-key { width: 40px; height: 125px; background: #fff; border: 1px solid #000; 
+    color: #111; font-size: 18px; line-height: 200px; z-index: 1; }
+.black-key { width: 20px; height: 80px; background: #000; color: #fff; border: 1px solid #333;
+    position: absolute; z-index: 2; line-height: 100px; font-size: 14px; top: 20px; }
+.highlight { background: #ff0 !important; color: #000 !important; }
+</style><div class="piano" style="width:840px"><div class="white-keys"><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key highlight">F</div><div class="white-key highlight">G</div><div class="white-key">A</div><div class="white-key highlight">B</div><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key highlight">F</div><div class="white-key highlight">G</div><div class="white-key">A</div><div class="white-key highlight">B</div><div class="white-key highlight">C</div><div class="white-key">D</div><div class="white-key highlight">E</div><div class="white-key highlight">F</div><div class="white-key highlight">G</div><div class="white-key">A</div><div class="white-key highlight">B</div></div><div class="black-key highlight" style="left:29px">C#</div><div class="black-key" style="left:69px">D#</div><div class="black-key" style="left:149px">F#</div><div class="black-key highlight" style="left:189px">G#</div><div class="black-key" style="left:229px">A#</div><div class="black-key highlight" style="left:309px">C#</div><div class="black-key" style="left:349px">D#</div><div class="black-key" style="left:429px">F#</div><div class="black-key highlight" style="left:469px">G#</div><div class="black-key" style="left:509px">A#</div><div class="black-key highlight" style="left:589px">C#</div><div class="black-key" style="left:629px">D#</div><div class="black-key" style="left:709px">F#</div><div class="black-key highlight" style="left:749px">G#</div><div class="black-key" style="left:789px">A#</div></div>
+</div>
+</div>
+</section>
+<section id="guitar" class="level2">
+<h2 class="anchored" data-anchor-id="guitar">Guitar</h2>
+<p><code>visualize_note</code> shows options for a given note in a certain octave. For example a <code>C4</code> is shown below.</p>
+<div id="cell-95" class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> musy.viz <span class="im">import</span> Guitar</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>Guitar().visualize_note(Note(<span class="st">"C"</span>, <span class="bu">oct</span><span class="op">=</span><span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.guitar-fretboard { background: #c49e60; border-radius: 8px; padding: 8px; display: inline-block; }
+.guitar-fret-nums { display: flex; font-size: 12px; color: #333; margin-bottom: 2px; }
+.guitar-fret-num { width: 32px; text-align: center; font-weight: bold; border-right: 2.5px solid #888; }
+.guitar-dot { height: 6px; text-align: center; color: #444; font-size: 10px; }
+.guitar-row { display: flex; align-items: center; position: relative; }
+.guitar-string-name { width: 24px; text-align: right; margin-right: 0px; font-weight: bold; color: #444; }
+.guitar-cell, .guitar-note { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-right: 2.5px solid #888; position: relative; }
+.guitar-cell { border-bottom: 1.2px solid #bbb; background: none; }
+.guitar-note { background: rgba(255, 255, 0, 0.7); color: #222; 
+</style><div class="guitar-fretboard"><div class="guitar-fret-nums"><div class="guitar-string-name"></div><div class="guitar-fret-num">0</div><div class="guitar-fret-num">1</div><div class="guitar-fret-num">2</div><div class="guitar-fret-num">3</div><div class="guitar-fret-num">4</div><div class="guitar-fret-num">5</div><div class="guitar-fret-num">6</div><div class="guitar-fret-num">7</div><div class="guitar-fret-num">8</div><div class="guitar-fret-num">9</div><div class="guitar-fret-num">10</div><div class="guitar-fret-num">11</div><div class="guitar-fret-num">12</div><div class="guitar-fret-num">13</div><div class="guitar-fret-num">14</div><div class="guitar-fret-num">15</div><div class="guitar-fret-num">16</div><div class="guitar-fret-num">17</div><div class="guitar-fret-num">18</div><div class="guitar-fret-num">19</div><div class="guitar-fret-num">20</div><div class="guitar-fret-num">21</div><div class="guitar-fret-num">22</div></div><div class="guitar-row"><div class="guitar-string-name">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">B</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">A</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div></div></div>
+</div>
+</div>
+<p><code>visualize_chord</code> shows you all the notes across octaves to spot different voicings.</p>
+<div id="cell-97" class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>Guitar().visualize_chord(Chord.from_short(<span class="st">"Cmaj9"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.guitar-fretboard { background: #c49e60; border-radius: 8px; padding: 8px; display: inline-block; }
+.guitar-fret-nums { display: flex; font-size: 12px; color: #333; margin-bottom: 2px; }
+.guitar-fret-num { width: 32px; text-align: center; font-weight: bold; border-right: 2.5px solid #888; }
+.guitar-dot { height: 6px; text-align: center; color: #444; font-size: 10px; }
+.guitar-row { display: flex; align-items: center; position: relative; }
+.guitar-string-name { width: 24px; text-align: right; margin-right: 0px; font-weight: bold; color: #444; }
+.guitar-cell, .guitar-note { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-right: 2.5px solid #888; position: relative; }
+.guitar-cell { border-bottom: 1.2px solid #bbb; background: none; }
+.guitar-note { background: rgba(255, 255, 0, 0.7); color: #222; 
+</style><div class="guitar-fretboard"><div class="guitar-fret-nums"><div class="guitar-string-name"></div><div class="guitar-fret-num">0</div><div class="guitar-fret-num">1</div><div class="guitar-fret-num">2</div><div class="guitar-fret-num">3</div><div class="guitar-fret-num">4</div><div class="guitar-fret-num">5</div><div class="guitar-fret-num">6</div><div class="guitar-fret-num">7</div><div class="guitar-fret-num">8</div><div class="guitar-fret-num">9</div><div class="guitar-fret-num">10</div><div class="guitar-fret-num">11</div><div class="guitar-fret-num">12</div><div class="guitar-fret-num">13</div><div class="guitar-fret-num">14</div><div class="guitar-fret-num">15</div><div class="guitar-fret-num">16</div><div class="guitar-fret-num">17</div><div class="guitar-fret-num">18</div><div class="guitar-fret-num">19</div><div class="guitar-fret-num">20</div><div class="guitar-fret-num">21</div><div class="guitar-fret-num">22</div></div><div class="guitar-row"><div class="guitar-string-name">E</div><div class="guitar-note">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">B</div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">B</div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-note">D</div></div><div class="guitar-row"><div class="guitar-string-name">B</div><div class="guitar-note">B</div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">B</div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">G</div><div class="guitar-note">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">B</div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">B</div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">D</div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">B</div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">B</div><div class="guitar-note">C</div></div><div class="guitar-row"><div class="guitar-string-name">A</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">B</div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">B</div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">G</div></div><div class="guitar-row"><div class="guitar-string-name">E</div><div class="guitar-note">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">B</div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-note">D</div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">B</div><div class="guitar-note">C</div><div class="guitar-cell"></div><div class="guitar-note">D</div></div></div>
+</div>
+</div>
+<p><code>visualize_scale</code> shows all notes in the scale from a given root note.</p>
+<div id="cell-99" class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>Guitar().visualize_scale(Scale(<span class="st">"phrygian dominant"</span>), root<span class="op">=</span><span class="st">"C"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.guitar-fretboard { background: #c49e60; border-radius: 8px; padding: 8px; display: inline-block; }
+.guitar-fret-nums { display: flex; font-size: 12px; color: #333; margin-bottom: 2px; }
+.guitar-fret-num { width: 32px; text-align: center; font-weight: bold; border-right: 2.5px solid #888; }
+.guitar-dot { height: 6px; text-align: center; color: #444; font-size: 10px; }
+.guitar-row { display: flex; align-items: center; position: relative; }
+.guitar-string-name { width: 24px; text-align: right; margin-right: 0px; font-weight: bold; color: #444; }
+.guitar-cell, .guitar-note { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-right: 2.5px solid #888; position: relative; }
+.guitar-cell { border-bottom: 1.2px solid #bbb; background: none; }
+.guitar-note { background: rgba(255, 255, 0, 0.7); color: #222; 
+</style><div class="guitar-fretboard"><div class="guitar-fret-nums"><div class="guitar-string-name"></div><div class="guitar-fret-num">0</div><div class="guitar-fret-num">1</div><div class="guitar-fret-num">2</div><div class="guitar-fret-num">3</div><div class="guitar-fret-num">4</div><div class="guitar-fret-num">5</div><div class="guitar-fret-num">6</div><div class="guitar-fret-num">7</div><div class="guitar-fret-num">8</div><div class="guitar-fret-num">9</div><div class="guitar-fret-num">10</div><div class="guitar-fret-num">11</div><div class="guitar-fret-num">12</div><div class="guitar-fret-num">13</div><div class="guitar-fret-num">14</div><div class="guitar-fret-num">15</div><div class="guitar-fret-num">16</div><div class="guitar-fret-num">17</div><div class="guitar-fret-num">18</div><div class="guitar-fret-num">19</div><div class="guitar-fret-num">20</div><div class="guitar-fret-num">21</div><div class="guitar-fret-num">22</div></div><div class="guitar-row"><div class="guitar-string-name">E</div><div class="guitar-note">E</div><div class="guitar-note">F</div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-note">G#</div><div class="guitar-cell"></div><div class="guitar-note">A#</div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-note">C#</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-note">F</div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-note">G#</div><div class="guitar-cell"></div><div class="guitar-note">A#</div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-note">C#</div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">B</div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-note">C#</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-note">F</div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-note">G#</div><div class="guitar-cell"></div><div class="guitar-note">A#</div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-note">C#</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-note">F</div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-note">G#</div><div class="guitar-cell"></div></div><div class="guitar-row"><div class="guitar-string-name">G</div><div class="guitar-note">G</div><div class="guitar-note">G#</div><div class="guitar-cell"></div><div class="guitar-note">A#</div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-note">C#</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-note">F</div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-note">G#</div><div class="guitar-cell"></div><div class="guitar-note">A#</div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-note">C#</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-note">F</div></div><div class="guitar-row"><div class="guitar-string-name">D</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-note">F</div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-note">G#</div><div class="guitar-cell"></div><div class="guitar-note">A#</div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-note">C#</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-note">F</div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-note">G#</div><div class="guitar-cell"></div><div class="guitar-note">A#</div><div class="guitar-cell"></div><div class="guitar-note">C</div></div><div class="guitar-row"><div class="guitar-string-name">A</div><div class="guitar-cell"></div><div class="guitar-note">A#</div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-note">C#</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-note">F</div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-note">G#</div><div class="guitar-cell"></div><div class="guitar-note">A#</div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-note">C#</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-note">F</div><div class="guitar-cell"></div><div class="guitar-note">G</div></div><div class="guitar-row"><div class="guitar-string-name">E</div><div class="guitar-note">E</div><div class="guitar-note">F</div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-note">G#</div><div class="guitar-cell"></div><div class="guitar-note">A#</div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-note">C#</div><div class="guitar-cell"></div><div class="guitar-cell"></div><div class="guitar-note">E</div><div class="guitar-note">F</div><div class="guitar-cell"></div><div class="guitar-note">G</div><div class="guitar-note">G#</div><div class="guitar-cell"></div><div class="guitar-note">A#</div><div class="guitar-cell"></div><div class="guitar-note">C</div><div class="guitar-note">C#</div><div class="guitar-cell"></div></div></div>
+</div>
+</div>
+<hr>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/CarloLepelaars\.github\.io\/musy");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/CarloLepelaars/musy/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
